@@ -82,7 +82,7 @@ class Board:
     
     def get_pawn_position(self, pawn) -> tuple[int, int]:
         for pos, tile in self.grid.items():
-            
+            pass
 
 @dataclass
 class Game:
