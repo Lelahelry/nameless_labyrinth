@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+import json
 
 @dataclass(frozen=True)
 class Treasure:
@@ -87,10 +87,18 @@ class Game:
     hand: MovingTile # Tile that last slid out of the board, returned by Board.slide_tile method
 
     def __init__(self, datapath: str, playernames: list[str]):
-        pass
+        '''initialize the game'''
+        with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
+            data_st = json.load(jsonfile)
+            data_st = data_st['values']   
+        #load treasures+declaration
+        #load tiles+declaration
+        #board creation
+        #place pawns and give them names
+        #distribute treasures
     
     def move_pawn(self, pawn, newpos):
-        pass
+        startpos = self.board.get_pawn_position()
 
     def start(self):
         pass
