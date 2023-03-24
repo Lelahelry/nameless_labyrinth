@@ -96,9 +96,12 @@ class Game:
         '''initialize the game'''
         #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
-            data_list = json.load(treasures)
-            for my_treasure in data_list:
-                
+            data_treas = json.load(treasures)
+
+        #get 
+            
+
+
 
         #load treasures+declaration
         #load tiles+declaration
@@ -107,7 +110,7 @@ class Game:
         #distribute treasures
     
     def move_pawn(self, pawn, newpos):
-        pass
+        startpos = self.board.get_pawn_position()
 
     def start(self):
         pass
