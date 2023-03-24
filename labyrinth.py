@@ -91,9 +91,12 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
+        #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
-            data_st = json.load(jsonfile)
-    data_st = data_st['values']   
+            data_list = json.load(treasures)
+            for my_treasure in data_list:
+                
+
         #load treasures+declaration
         #load tiles+declaration
         #board creation
