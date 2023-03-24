@@ -25,6 +25,7 @@ class Tile:
     """Represents the tiles that compose the labyrinth."""
     filepath: str # Path to .json file with init data.
     sides: list[bool] # Represents the open/closed nature of the four sides.
+    orientation: int = 0
 
 @dataclass
 class FixedTile(Tile):
@@ -41,6 +42,8 @@ class MovingTile(Tile):
 
     def rotate_cw(self):
         """Rotates the tile clockwise."""
+        self.orientation = (self.orientation+1)%(4)
+        self.sides = self.sides.inster(0,self.sides.pop())
         pass
     
     def rotate_ccw(self):
