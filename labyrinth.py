@@ -26,20 +26,18 @@ class Tile:
     filepath: str # Path to .json file with init data.
     sides: list[bool] # Represents the open/closed nature of the four sides.
     orientation: int = 0
+    treasure: Treasure | None = None
+    pawn: Pawn | None = None
 
 @dataclass
 class FixedTile(Tile):
     """These tiles are the ones that are fixed to the board and cannot move."""
-    fixed_position: tuple[int, int]
-    treasure: Treasure | None = None
-    pawn: Pawn | None = None
+    fixed_position: tuple[int, int] | None = None
 
 @dataclass
 class MovingTile(Tile):
     """Tiles that can be moved by sliding and rotating."""
-    treasure: Treasure | None = None
-    pawn: Pawn | None = None
-
+    
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
@@ -80,7 +78,8 @@ class Board:
         pass
     
     def get_pawn_position(self, pawn) -> tuple[int, int]:
-        pass
+        for pos, tile in self.grid.items():
+            
 
 @dataclass
 class Game:
@@ -108,6 +107,7 @@ class Game:
     
     def move_pawn(self, pawn, newpos):
         startpos = self.board.get_pawn_position()
+        
 
     def start(self):
         pass
