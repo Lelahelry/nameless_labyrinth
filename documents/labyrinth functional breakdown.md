@@ -19,7 +19,7 @@
 ```py
 @dataclass(frozen=True)
 class Treasure:
-    """Represents the treasures and treasure objectives of the game."""
+    """Represents the treasures which the objectives of the players."""
     filepath: str # Path to .png texture file of the treasure.
     name: str
 ```
@@ -86,7 +86,7 @@ class MovingTile(Tile):
 @dataclass
 class Board:
     """Represents the game board containing all tiles."""
-    grid: dict[tuple[int, int], Tile]
+    grid: dict[tuple[int, int], Tile] #(line, column)
     slideout_position: tuple[int, int] | None
 
     def __init__(self, fixed_tiles, moving_tiles):
@@ -94,6 +94,9 @@ class Board:
         Initializes the grid, then places base tiles according to their fixed positions, then randomly fills the rest of the grid with the moving tiles.
         """
         pass
+        #create the empty grid
+        #place fixed tiles (seperate method)
+        #place random tiles (seperate method)
     
     def __getitem__(self, pos: tuple[int, int]):
         return self.grid[pos]
@@ -108,7 +111,9 @@ class Board:
     
     def slide_tile(self, insertpos: tuple[int, int], tile: Tile) -> Tile:
         """
-        Initializes the grid, then places base tiles according to their fixed positions, then randomly fills the rest of the grid with the moving tiles.
+        Updates the grid according to the line or column pushed by the player. 
+        inputs: tuple(position of new tile) and new tile 
+        returns: tile pushed out
         """
         pass
     
@@ -128,12 +133,24 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         pass
+        #load tiles+declaration
+        #load treasures+declaration
+        #board creation
+        #place pawns
     
     def move_pawn(self, pawn, newpos):
         pass
+        #get_pawn_position
+        #check destination is reached
+        #update pawn position or display error message
 
     def start(self):
         pass
+        #tile choice
+        #slide_tile
+        #move_pawn
+        #check a treasure was found
+        #change player
 ```
 
 ## GUI
@@ -142,3 +159,8 @@ class Game:
 - Game board display
 - Game state display
 - Game control interface
+
+## Test sets
+- rotation
+- slide tiles
+- get pawn position
