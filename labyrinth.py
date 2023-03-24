@@ -90,9 +90,12 @@ class Game:
         '''initialize the game'''
         #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
-            data_list = json.load(treasures)
-            for my_treasure in data_list:
-                
+            data_treas = json.load(treasures)
+
+        #get 
+            
+
+
 
         #load treasures+declaration
         #load tiles+declaration
