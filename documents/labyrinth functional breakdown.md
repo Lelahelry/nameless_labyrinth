@@ -133,24 +133,33 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         pass
-        #load tiles+declaration
         #load treasures+declaration
+        #load tiles+declaration
         #board creation
-        #place pawns
+        #place pawns and give them names
+        #distribute treasures
     
     def move_pawn(self, pawn, newpos):
+        '''return updated grid+boolean on managed motion'''
         pass
         #get_pawn_position
         #check destination is reached
-        #update pawn position or display error message
+        #update pawn position or display error message or else 
 
-    def start(self):
+    def turn(self, player):
         pass
+        '''return player and boolean'''
         #tile choice
         #slide_tile
         #move_pawn
         #check a treasure was found
-        #change player
+            #check the player has won 
+    def start(self):
+        #while player didn't win won
+            #change player
+            #turn
+            
+
 ```
 
 ## GUI
@@ -164,4 +173,3 @@ class Game:
 - rotation
 - slide tiles
 - get pawn position
-
