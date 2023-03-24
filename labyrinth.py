@@ -25,6 +25,7 @@ class Tile:
     """Represents the tiles that compose the labyrinth."""
     filepath: str # Path to .json file with init data.
     sides: list[bool] # Represents the open/closed nature of the four sides.
+    orientation: int = 0
 
 @dataclass
 class FixedTile(Tile):
@@ -41,6 +42,8 @@ class MovingTile(Tile):
 
     def rotate_cw(self):
         """Rotates the tile clockwise."""
+        self.orientation = (self.orientation+1)%(4)
+        self.sides = self.sides.inster(0,self.sides.pop())
         pass
     
     def rotate_ccw(self):
@@ -88,9 +91,12 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
+        #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
-            data_st = json.load(jsonfile)
-            data_st = data_st['values']   
+            data_list = json.load(treasures)
+            for my_treasure in data_list:
+                
+
         #load treasures+declaration
         #load tiles+declaration
         #board creation
