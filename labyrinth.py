@@ -43,11 +43,14 @@ class MovingTile(Tile):
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
-        self.sides = self.sides.inster(0,self.sides.pop())
+        self.sides = self.sides[2:] + self.sides[:2]
+
         pass
     
     def rotate_ccw(self):
         """Rotates the tile counterclockwise."""
+        self.orientation = (self.orientation-1)%(4)
+        self.sides = self.sides[-2:] + self.sides[:-2]
         pass
 
 @dataclass
