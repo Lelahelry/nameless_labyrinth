@@ -1,8 +1,7 @@
 the tiles
 I do one list of fixed tile, one of moving
 ``` json
-[
-    [{"filepath":'', 
+{ "fixed":    [{"filepath":'', 
     "sides":[False, True, True, False],
     "position":(0,0) ,
     "treasure":None,
@@ -98,8 +97,8 @@ I do one list of fixed tile, one of moving
     "position":(6,4) ,
     "treasure":None,
     "pawn":None },
-    ] 
-    ,
+    ] ,
+    "moving":
     [{"filepath":'', 
     "sides":[True, True, False, False],
     "treasure":None,
@@ -267,7 +266,7 @@ I do one list of fixed tile, one of moving
 
     ]
 
-]
+}
 ```
 
 the grid
