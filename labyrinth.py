@@ -94,8 +94,11 @@ class Game:
         #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
             data_treas = json.load(treasures)
-
-        #get 
+            
+        #get the tiles
+        with open("./tiles.json" , 'r', encoding ='itf-8') as tiles:
+            data_tiles = json.load(tiles)
+             
             
 
 
