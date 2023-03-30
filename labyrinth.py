@@ -91,14 +91,30 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
+        the_tiles=list()
         #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
             data_treas = json.load(treasures)
+            the_treasures = dict()
+            #à voir parce que je dois pouvoir les appeler et distribuer mais peut etre pas besoin d'avoir un objet direct
             
         #get the tiles
         with open("./tiles.json" , 'r', encoding ='itf-8') as tiles:
             data_tiles = json.load(tiles)
+
+        for section, the_dict in data_tiles.items():
+            if section == "fixed": 
+                for filep, sides, position, treasure, pawn in the_dict:
+                    new_tile = FixedTile(filep, sides, 0, position, data_treas[treasure], pawn)
+                    the_tiles.append(new_tile)
+
+            else:
+                for filep, sides, treasure, pawn in the_dict:
+                    treas = 
+                    new_tile = MovingTile(filepath, sides, 0, treas, pawn)
+                    the_tiles.append(new_tile)
              
+        
             
 
 
