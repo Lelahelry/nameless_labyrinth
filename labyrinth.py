@@ -132,9 +132,12 @@ class Game:
             pass
 
     def start(self):
+        while not win:
+            self.queue = self.queue.append(0,self.queue.pop())
+            win = Game.turn(self, self.queue[0])
+
         pass
 
-<<<<<<< HEAD
     def turn(self, player):
         pass
         '''return player and boolean'''
@@ -143,7 +146,3 @@ class Game:
         #move_pawn
         #check a treasure was found
             #check the player has won 
-=======
-
-
->>>>>>> c8bff8eefffec9cbdf0219c851af005e3b59f203
