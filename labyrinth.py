@@ -41,14 +41,11 @@ class MovingTile(Tile):
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
-        self.sides = self.sides[2:] + self.sides[:2]
-
-        pass
+        pass bn
     
     def rotate_ccw(self):
         """Rotates the tile counterclockwise."""
         self.orientation = (self.orientation-1)%(4)
-        self.sides = self.sides[-2:] + self.sides[:-2]
         pass
 
 @dataclass
@@ -93,11 +90,30 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
+        the_tiles=list()
         #get the treasures
         with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
             data_treas = json.load(treasures)
+            the_treasures = dict()
+            #à voir parce que je dois pouvoir les appeler et distribuer mais peut etre pas besoin d'avoir un objet direct
+            
+        #get the tiles
+        with open("./tiles.json" , 'r', encoding ='itf-8') as tiles:
+            data_tiles = json.load(tiles)
 
-        #get 
+        for section, the_dict in data_tiles.items():
+            if section == "fixed": 
+                for filep, sides, position, treasure, pawn in the_dict:
+                    new_tile = FixedTile(filep, sides, 0, position, data_treas[treasure], pawn)
+                    the_tiles.append(new_tile)
+
+            else:
+                for filep, sides, treasure, pawn in the_dict:
+                    treas = 
+                    new_tile = MovingTile(filepath, sides, 0, treas, pawn)
+                    the_tiles.append(new_tile)
+             
+        
             
 
 
@@ -110,10 +126,23 @@ class Game:
     
     def move_pawn(self, pawn, newpos):
         startpos = self.board.get_pawn_position()
-        
+        #check destination is reacheable
+        if destinationisreacheable == True:
+            Tile.pawn
+            pass
 
     def start(self):
+        while not win:
+            self.queue = self.queue.append(0,self.queue.pop())
+            win = Game.turn(self, self.queue[0])
+
         pass
 
-
-
+    def turn(self, player):
+        pass
+        '''return player and boolean'''
+        #tile choice
+        #slide_tile
+        #move_pawn
+        #check a treasure was found
+            #check the player has won 
