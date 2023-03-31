@@ -41,7 +41,7 @@ class MovingTile(Tile):
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
-        pass bn
+        pass
     
     def rotate_ccw(self):
         """Rotates the tile counterclockwise."""
@@ -73,7 +73,7 @@ class Board:
     
     def slide_tile(self, insertpos: tuple[int, int], tile: Tile) -> Tile:
         """
-        Initializes the grid, then places base tiles according to their fixed positions, then randomly fills the rest of the grid with the moving tiles.
+        Pushes the tiles in the direcrtion of the inserted tile
         """
         pass
     
@@ -82,11 +82,18 @@ class Board:
             pass
 
 @dataclass
+class Message:
+    """communicates with the graphics file"""
+    choosentile: tuple[int,int] | None
+    insertpos : tuple[int, int] | None
+
+@dataclass
 class Game:
     """Encapsulates all data related to an individual game's state and manages game flow."""
     queue: list[Pawn] # Rotating queue for playing order
     board: Board
     hand: MovingTile # Tile that last slid out of the board, returned by Board.slide_tile method
+    message : Message
 
     def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
@@ -113,6 +120,7 @@ class Game:
                     new_tile = MovingTile(filepath, sides, 0, treas, pawn)
                     the_tiles.append(new_tile)
              
+        pass
         
             
 
@@ -138,11 +146,17 @@ class Game:
 
         pass
 
-    def turn(self, player):
+    def turn(self, player, choosentile):
         pass
         '''return player and boolean'''
-        #tile choice
-        #slide_tile
+        choosentile = Message.choosentile
+        Board.slide_tile(Message.insertpos, Tile)
+        self.move_pawn(self.queue[0],)
+
+
+        
         #move_pawn
         #check a treasure was found
-            #check the player has won 
+            #check the player has won choosentile
+
+
