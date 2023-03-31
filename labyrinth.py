@@ -41,14 +41,11 @@ class MovingTile(Tile):
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
-        self.sides = self.sides[2:] + self.sides[:2]
-
-        pass
+        pass bn
     
     def rotate_ccw(self):
         """Rotates the tile counterclockwise."""
         self.orientation = (self.orientation-1)%(4)
-        self.sides = self.sides[-2:] + self.sides[:-2]
         pass
 
 @dataclass
@@ -110,7 +107,19 @@ class Game:
     
     def move_pawn(self, pawn, newpos):
         startpos = self.board.get_pawn_position()
-        
+        #check destination is reacheable
+        if destinationisreacheable == True:
+            Tile.pawn
+            pass
 
     def start(self):
         pass
+
+    def turn(self, player):
+        pass
+        '''return player and boolean'''
+        #tile choice
+        #slide_tile
+        #move_pawn
+        #check a treasure was found
+            #check the player has won 
