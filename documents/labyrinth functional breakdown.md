@@ -122,7 +122,6 @@ class Board:
 ```
 
 ### Game class
-
 ```py
 @dataclass
 class Game:
@@ -170,7 +169,6 @@ class Game:
 - Game control interface
 
 ## Test sets
-
 - rotation
 - slide tiles
 - get pawn position
