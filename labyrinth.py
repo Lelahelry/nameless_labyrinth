@@ -164,13 +164,16 @@ class Game:
         
 
     def start(self):
-        pass
+        while #player didnt winwon:
+            
 
-    def turn(self, player, choosentile):
+
+
+    def turn(self, player, insertpos):
         pass
         '''return boolean'''
-        choosentile = Message.choosentile
-        Board.slide_tile(Message.insertpos, choosentile)
+        insertpos = Message.insertpos
+        Board.slide_tile(insertpos, Tile)
         self.move_pawn(self.queue[0], Message.newpos)
         if Pawn.objectives == Tile.treasure:
             return True
