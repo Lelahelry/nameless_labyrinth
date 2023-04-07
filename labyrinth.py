@@ -86,7 +86,19 @@ class Board:
         """
         Deskription bg
         """
+        ALLOWED_ROWS_COLUMNS = (1, 2, 5)
+        FIRST_LAST = (0, 6)
+
+        rowpos, colpos = insertpos
+        row_insert = (rowpos in ALLOWED_ROWS_COLUMNS and colpos in FIRST_LAST)
+        col_insert = (colpos in ALLOWED_ROWS_COLUMNS and rowpos in FIRST_LAST)
         
+        assert row_insert ^ col_insert, "Invalid insert position."
+        assert insertpos != self.slideout_position, "Can't cancel previous move."
+
+        if row_insert:
+            pass
+
     
     def get_pawn_position(self, pawn) -> tuple[int, int]:
         for pos, tile in self.grid.items():
