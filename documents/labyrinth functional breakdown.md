@@ -122,6 +122,7 @@ class Board:
 ```
 
 ### Game class
+
 ```py
 @dataclass
 class Game:
@@ -142,7 +143,7 @@ class Game:
         '''return updated grid+boolean on managed motion'''
         pass
         #get_pawn_position
-        #check destination is reached
+        #check destination is reacheable
         #update pawn position or display error message or else 
 
     def turn(self, player):
@@ -169,6 +170,7 @@ class Game:
 - Game control interface
 
 ## Test sets
+
 - rotation
 - slide tiles
 - get pawn position

@@ -41,11 +41,6 @@ class MovingTile(Tile):
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
-<<<<<<< HEAD
-=======
-        self.sides = self.sides[2:] + self.sides[:2]
-
->>>>>>> 7fbd7efc53ae693e315a40e3cd35544cfc463a7d
         pass
     
     def rotate_ccw(self):
@@ -92,6 +87,8 @@ class Message:
     """communicates with the graphics file"""
     choosentile: tuple[int,int] | None
     insertpos : tuple[int, int] | None
+    newpos : tuple[int,int] | None
+    foundtreasure : 
 
 @dataclass
 class Game:
@@ -126,20 +123,12 @@ class Game:
                     the_ftiles.add(new_tile)
 
             else:
-<<<<<<< HEAD
                 for filep, sides, treasure, pawn in the_dict:
                     treas = 
                     new_tile = MovingTile(filepath, sides, 0, treas, pawn)
                     the_tiles.append(new_tile)
              
         pass
-=======
-                for filep, sides, treasure, pawns in the_dict:
-                    new_tile = MovingTile(filepath, sides, 0, the_treasures[treasure], pawns)
-                    the_mtiles.add(new_tile)
-
-        colors=["red", "blue", "green", "yellow"]
->>>>>>> 7fbd7efc53ae693e315a40e3cd35544cfc463a7d
         
         self.queue=list()
         #get players
@@ -168,20 +157,15 @@ class Game:
     def start(self):
         pass
 
-<<<<<<< HEAD
     def turn(self, player, choosentile):
         pass
         '''return player and boolean'''
         choosentile = Message.choosentile
         Board.slide_tile(Message.insertpos, Tile)
-        self.move_pawn(self.queue[0],)
+        self.move_pawn(self.queue[0], Message.newpos)
+        if Pawn.objectives == Tile.treasure
 
-
-        
-        #move_pawn
         #check a treasure was found
             #check the player has won choosentile
-=======
->>>>>>> 7fbd7efc53ae693e315a40e3cd35544cfc463a7d
 
 
