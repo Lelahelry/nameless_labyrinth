@@ -93,6 +93,14 @@ class Board:
             pass
 
 @dataclass
+class Message:
+    """communicates with the graphics file"""
+    choosentile: tuple[int,int] | None
+    insertpos : tuple[int, int] | None
+    newpos : tuple[int,int] | None
+    foundtreasure : 
+
+@dataclass
 class Game:
     """Encapsulates all data related to an individual game's state and manages game flow."""
     queue: list[Pawn] # Rotating queue for playing order
@@ -124,11 +132,12 @@ class Game:
                     the_ftiles.add(new_tile)
 
             else:
-                for filep, sides, treasure, pawns in the_dict:
-                    new_tile = MovingTile(tile["filepath"], tile["sides"], tile["orientation"], the_treasures[tile["treasure"]], tile["pawns"])
-                    the_mtiles.add(new_tile)
-
-        colors=["red", "blue", "green", "yellow"]
+                for filep, sides, treasure, pawn in the_dict:
+                    treas = 
+                    new_tile = MovingTile(filepath, sides, 0, treas, pawn)
+                    the_tiles.append(new_tile)
+             
+        pass
         
         self.queue=list()
         #get players
@@ -157,5 +166,18 @@ class Game:
     def start(self):
         pass
 
+    def turn(self, player, choosentile):
+        pass
+        '''return boolean'''
+        choosentile = Message.choosentile
+        Board.slide_tile(Message.insertpos, choosentile)
+        self.move_pawn(self.queue[0], Message.newpos)
+        if Pawn.objectives == Tile.treasure:
+            return True
+        else:
+            return False
+
+        #check a treasure was found
+            #check the player has won choosentile
 
 
