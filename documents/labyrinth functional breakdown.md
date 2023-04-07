@@ -19,7 +19,7 @@
 ```py
 @dataclass(frozen=True)
 class Treasure:
-    """Represents the treasures which the objectives of the players."""
+    """Represents the treasures which are the objectives of the players."""
     filepath: str # Path to .png texture file of the treasure.
     name: str
 ```
