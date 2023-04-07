@@ -160,27 +160,24 @@ class Game:
 
     
     def move_pawn(self, pawn, newpos):
+        """returne destination tile"""
         startpos = self.board.get_pawn_position()
         
 
     def start(self):
-        while #player didnt winwon:
-            
+        win = False
+        while not win:
+            if self.turn():
+                self.queue[0].treasures.pop(0)
+                if self.queue[0].treasures == []:
+                    win = True
+            self.queue = self.queue.happen(self.queue.pop(0))
 
 
 
-    def turn(self, player, insertpos):
+    def turn(self):
         pass
         '''return boolean'''
-        insertpos = Message.insertpos
-        Board.slide_tile(insertpos, Tile)
-        self.move_pawn(self.queue[0], Message.newpos)
-        if Pawn.objectives == Tile.treasure:
-            return True
-        else:
-            return False
-
-        #check a treasure was found
-            #check the player has won choosentile
-
-
+        Board.slide_tile(Message.insertpos, Tile)
+        destination = self.move_pawn(self.queue[0], Message.newpos)
+        return(self.queue[0].objectives[0] == destination.treasure)
