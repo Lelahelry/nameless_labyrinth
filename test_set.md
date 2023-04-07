@@ -272,3 +272,7 @@ I do one list of fixed tile, one of moving
 the grid
 ```py
 grid={(0,0):TileA, }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 90f4751 (ui)

@@ -105,6 +105,14 @@ class Board:
             pass
 
 @dataclass
+class Message:
+    """communicates with the graphics file"""
+    choosentile: tuple[int,int] | None
+    insertpos : tuple[int, int] | None
+    newpos : tuple[int,int] | None
+    foundtreasure : 
+
+@dataclass
 class Game:
     """Encapsulates all data related to an individual game's state and manages game flow."""
     queue: list[Pawn] # Rotating queue for playing order
@@ -116,7 +124,7 @@ class Game:
         the_ftiles=set()
         the_mtiles=set()
         #get the treasures
-        with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
+        with open("./treasures.json" , 'r', encoding ='utf-8') as treasures:
             data_treas = json.load(treasures)
             the_treasures = dict()
             for name, fpath in data_treas:
@@ -125,7 +133,7 @@ class Game:
             #à voir parce que je dois pouvoir les appeler et distribuer mais peut etre pas besoin d'avoir un objet direct
             
         #get the tiles
-        with open("./tiles.json" , 'r', encoding ='itf-8') as tiles:
+        with open("./tiles.json" , 'r', encoding ='utf-8') as tiles:
             data_tiles = json.load(tiles)
 
         for section, the_list in data_tiles.items():
@@ -136,11 +144,12 @@ class Game:
                     the_ftiles.add(new_tile)
 
             else:
-                for filep, sides, treasure, pawns in the_dict:
-                    new_tile = MovingTile(tile["filepath"], tile["sides"], tile["orientation"], the_treasures[tile["treasure"]], tile["pawns"])
-                    the_mtiles.add(new_tile)
-
-        colors=["red", "blue", "green", "yellow"]
+                for filep, sides, treasure, pawn in the_dict:
+                    treas = 
+                    new_tile = MovingTile(filepath, sides, 0, treas, pawn)
+                    the_tiles.append(new_tile)
+             
+        pass
         
         self.queue=list()
         #get players
@@ -163,11 +172,24 @@ class Game:
 
     
     def move_pawn(self, pawn, newpos):
+        """returne destination tile"""
         startpos = self.board.get_pawn_position()
         
 
     def start(self):
+        win = False
+        while not win:
+            if self.turn():
+                self.queue[0].treasures.pop(0)
+                if self.queue[0].treasures == []:
+                    win = True
+            self.queue = self.queue.happen(self.queue.pop(0))
+
+
+
+    def turn(self):
         pass
-
-
-
+        '''return boolean'''
+        Board.slide_tile(Message.insertpos, Tile)
+        destination = self.move_pawn(self.queue[0], Message.newpos)
+        return(self.queue[0].objectives[0] == destination.treasure)
