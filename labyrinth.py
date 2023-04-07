@@ -170,7 +170,7 @@ class Game:
         pass
         '''return boolean'''
         choosentile = Message.choosentile
-        Board.slide_tile(Message.insertpos, Tile)
+        Board.slide_tile(Message.insertpos, choosentile)
         self.move_pawn(self.queue[0], Message.newpos)
         if Pawn.objectives == Tile.treasure:
             return True
