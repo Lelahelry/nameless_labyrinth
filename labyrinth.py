@@ -168,11 +168,14 @@ class Game:
 
     def turn(self, player, choosentile):
         pass
-        '''return player and boolean'''
+        '''return boolean'''
         choosentile = Message.choosentile
         Board.slide_tile(Message.insertpos, Tile)
         self.move_pawn(self.queue[0], Message.newpos)
-        if Pawn.objectives == Tile.treasure
+        if Pawn.objectives == Tile.treasure:
+            return True
+        else:
+            return False
 
         #check a treasure was found
             #check the player has won choosentile
