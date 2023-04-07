@@ -104,7 +104,7 @@ class Game:
         the_ftiles=set()
         the_mtiles=set()
         #get the treasures
-        with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
+        with open("./treasures.json" , 'r', encoding ='utf-8') as treasures:
             data_treas = json.load(treasures)
             the_treasures = dict()
             for name, fpath in data_treas:
@@ -113,7 +113,7 @@ class Game:
             #à voir parce que je dois pouvoir les appeler et distribuer mais peut etre pas besoin d'avoir un objet direct
             
         #get the tiles
-        with open("./tiles.json" , 'r', encoding ='itf-8') as tiles:
+        with open("./tiles.json" , 'r', encoding ='utf-8') as tiles:
             data_tiles = json.load(tiles)
 
         for section, the_list in data_tiles.items():
