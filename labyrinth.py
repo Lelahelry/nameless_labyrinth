@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import random
 import json
 
 @dataclass(frozen=True)
@@ -27,12 +28,12 @@ class Tile:
     sides: list[bool] # Represents the open/closed nature of the four sides.
     orientation: int = 0
     treasure: Treasure | None = None
-    pawn: Pawn | None = None
+    pawns: list[Pawn] = []
 
 @dataclass
 class FixedTile(Tile):
     """These tiles are the ones that are fixed to the board and cannot move."""
-    fixed_position: tuple[int, int] | None = None
+    fixed_position: tuple[int, int] = (-1, -1)
 
 @dataclass
 class MovingTile(Tile):
@@ -41,15 +42,10 @@ class MovingTile(Tile):
     def rotate_cw(self):
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
-        self.sides = self.sides[2:] + self.sides[:2]
-
-        pass
     
     def rotate_ccw(self):
         """Rotates the tile counterclockwise."""
         self.orientation = (self.orientation-1)%(4)
-        self.sides = self.sides[-2:] + self.sides[:-2]
-        pass
 
 @dataclass
 class Board:
@@ -57,11 +53,23 @@ class Board:
     grid: dict[tuple[int, int], Tile]
     slideout_position: tuple[int, int] | None
 
-    def __init__(self, fixed_tiles, moving_tiles):
+    def __init__(self, fixed_tiles: set[FixedTile], moving_tiles: set[MovingTile]):
         """
         Initializes the grid, then places base tiles according to their fixed positions, then randomly fills the rest of the grid with the moving tiles.
         """
-        pass
+        for ftile in fixed_tiles:
+            self[ftile.fixed_position] = ftile
+        
+        for i in range(7):
+            for j in range(7):
+                if (i, j) in self.grid:
+                    continue
+                else:
+                    tile = moving_tiles.pop()
+                    for _ in range(random.randint(0, 3)):
+                        tile.rotate_cw()
+                    self[(i, j)] = tile
+        
     
     def __getitem__(self, pos: tuple[int, int]):
         return self.grid[pos]
@@ -76,13 +84,33 @@ class Board:
     
     def slide_tile(self, insertpos: tuple[int, int], tile: Tile) -> Tile:
         """
-        Initializes the grid, then places base tiles according to their fixed positions, then randomly fills the rest of the grid with the moving tiles.
+        Deskription bg
         """
-        pass
+        ALLOWED_ROWS_COLUMNS = (1, 2, 5)
+        FIRST_LAST = (0, 6)
+
+        rowpos, colpos = insertpos
+        row_insert = (rowpos in ALLOWED_ROWS_COLUMNS and colpos in FIRST_LAST)
+        col_insert = (colpos in ALLOWED_ROWS_COLUMNS and rowpos in FIRST_LAST)
+        
+        assert row_insert ^ col_insert, "Invalid insert position."
+        assert insertpos != self.slideout_position, "Can't cancel previous move."
+
+        if row_insert:
+            pass
+
     
     def get_pawn_position(self, pawn) -> tuple[int, int]:
         for pos, tile in self.grid.items():
             pass
+
+@dataclass
+class Message:
+    """communicates with the graphics file"""
+    choosentile: tuple[int,int] | None
+    insertpos : tuple[int, int] | None
+    newpos : tuple[int,int] | None
+    foundtreasure : 
 
 @dataclass
 class Game:
@@ -96,7 +124,7 @@ class Game:
         the_ftiles=set()
         the_mtiles=set()
         #get the treasures
-        with open("./treasures.json" , 'r', encoding ='itf-8') as treasures:
+        with open("./treasures.json" , 'r', encoding ='utf-8') as treasures:
             data_treas = json.load(treasures)
             the_treasures = dict()
             for name, fpath in data_treas:
@@ -105,7 +133,7 @@ class Game:
             #à voir parce que je dois pouvoir les appeler et distribuer mais peut etre pas besoin d'avoir un objet direct
             
         #get the tiles
-        with open("./tiles.json" , 'r', encoding ='itf-8') as tiles:
+        with open("./tiles.json" , 'r', encoding ='utf-8') as tiles:
             data_tiles = json.load(tiles)
 
         for section, the_list in data_tiles.items():
@@ -116,11 +144,12 @@ class Game:
                     the_ftiles.add(new_tile)
 
             else:
-                for filep, sides, treasure, pawns in the_dict:
-                    new_tile = MovingTile(tile["filepath"], tile["sides"], tile["orientation"], the_treasures[tile["treasure"]], tile["pawns"])
-                    the_mtiles.add(new_tile)
-
-        colors=["red", "blue", "green", "yellow"]
+                for filep, sides, treasure, pawn in the_dict:
+                    treas = 
+                    new_tile = MovingTile(filepath, sides, 0, treas, pawn)
+                    the_tiles.append(new_tile)
+             
+        pass
         
         self.queue=list()
         #get players
@@ -143,11 +172,24 @@ class Game:
 
     
     def move_pawn(self, pawn, newpos):
+        """returne destination tile"""
         startpos = self.board.get_pawn_position()
         
 
     def start(self):
+        win = False
+        while not win:
+            if self.turn():
+                self.queue[0].treasures.pop(0)
+                if self.queue[0].treasures == []:
+                    win = True
+            self.queue = self.queue.happen(self.queue.pop(0))
+
+
+
+    def turn(self):
         pass
-
-
-
+        '''return boolean'''
+        Board.slide_tile(Message.insertpos, Tile)
+        destination = self.move_pawn(self.queue[0], Message.newpos)
+        return(self.queue[0].objectives[0] == destination.treasure)
