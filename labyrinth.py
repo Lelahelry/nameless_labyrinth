@@ -192,6 +192,6 @@ class Game:
     def turn(self):
         pass
         '''return boolean'''
-        Board.slide_tile(Message.insertpos, Tile)
+        self.board.slide_tile(Message.insertpos, Tile)
         destination = self.move_pawn(self.queue[0], Message.newpos)
         return(self.queue[0].objectives[0] == destination.treasure)

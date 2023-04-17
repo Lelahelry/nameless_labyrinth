@@ -157,6 +157,7 @@ class Game:
 - Game control interface
 
 ## Test sets
+-instance of each game (fully specified or not)
 - rotation
 - slide tiles
 - get pawn position
