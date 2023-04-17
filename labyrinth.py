@@ -110,7 +110,9 @@ class Message:
     choosentile: tuple[int,int] | None
     insertpos : tuple[int, int] | None
     newpos : tuple[int,int] | None
-    foundtreasure : 
+    foundtreasure : Treasure | None
+    current_grid : dict
+    playernames : list[str]
 
 @dataclass
 class Game:
@@ -121,8 +123,10 @@ class Game:
 
     def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
-        the_ftiles=set()
-        the_mtiles=set()
+        the_ftiles = set()
+        the_mtiles = set()
+        self.queue = list()
+        colors = ['blue', 'red', 'green', 'yellow']
         #get the treasures
         with open("./treasures.json" , 'r', encoding ='utf-8') as treasures:
             data_treas = json.load(treasures)
@@ -130,7 +134,6 @@ class Game:
             for name, fpath in data_treas:
                 t = Treasure(fpath, name)
                 the_treasures[name]=t
-            #à voir parce que je dois pouvoir les appeler et distribuer mais peut etre pas besoin d'avoir un objet direct
             
         #get the tiles
         with open("./tiles.json" , 'r', encoding ='utf-8') as tiles:
@@ -144,35 +147,34 @@ class Game:
                     the_ftiles.add(new_tile)
 
             else:
-                for filep, sides, treasure, pawn in the_dict:
-                    treas = 
-                    new_tile = MovingTile(filepath, sides, 0, treas, pawn)
-                    the_tiles.append(new_tile)
-             
-        pass
+                for tile in the_list:
+                    for filep, sides, treasure, pawn in the_dict:
+                        t = the_treasures[treasure]
+                        new_tile = MovingTile(filepath, sides, 0, t, pawn)
+                        the_mtiles.append(new_tile)
         
-        self.queue=list()
         #get players
         for i in range in len(playernames):
             objectives=list()
             for p in range(6):
-                ind = randint(len(the_treasures)-1)
+                ind = random.randint(len(the_treasures)-1)
                 objectives.append(the_treasures.pop(ind))
             new_p = Pawn(colors[i], playernames[i], objectives)   
             self.queue.append(new_p)
+        
         #board creation
         self.board = Board(the_ftiles, the_mtiles)
         self.hand = the_mtiles.pop()
+        
         #place pawns
         positions=[(0,0), (6,6), (0,6), (6,0)]
         for i in range(len(self.queue)):
-            placement = position[i]
-            strat_tile=self.board.grid[placement]
-            start_tile.pawn = queue[i]
-
+            placement = positions[i]
+            start_tile = self.board.grid[placement]
+            start_tile.pawn = self.queue[i]
     
     def move_pawn(self, pawn, newpos):
-        """returne destination tile"""
+        """return destination tile"""
         startpos = self.board.get_pawn_position()
         
 
