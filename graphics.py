@@ -8,7 +8,7 @@ class Game_window():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
-        self.root.geometry("600x400")
+        self.root.geometry("300x350")
         #management of the communication with the game class
             
         ########################################
@@ -17,59 +17,80 @@ class Game_window():
         #graphical elements
         self.folder = "C:\\Users\\cleme\\Documents\\INSA\\cours\\2A\\algo\\nameless_labyrinth\\textures"#adresse 
         # canva size
-        self.f_graph_height = 650
-        self.f_graph_width = 650
+        self.f_graph_height =2000
+        self.f_graph_width = 2000
 
         # display window setting
         self.f_graph = None
         #test parameters
+        self.playernames_e = list()
         self.playernames = list()
         # widgets creation
         self.widgets_creation(self.root)
 
     def widgets_creation(self, root):
+        
         #player number
+        self.player_number = tk.IntVar()
+        self.scale = ctk.CTkSlider(root,  height= 30,progress_color="goldenrod", fg_color="DodgerBlue4",  button_corner_radius=5, button_color="goldenrod", button_hover_color="DodgerBlue4", from_=2, to=4, number_of_steps=2, orientation= "horizontal", variable=self.player_number )
         
-        self.scale = ctk.CTkSlider(root,  button_corner_radius=5, button_color="goldenrod", button_hover_color="DodgerBlue4", from_=2, to=4, number_of_steps=2, orientation= "horizontal" )
         self.scale.pack(fill='x')
-        self.player_number = self.scale.get()
-        #player names
-        
-        self.add_playernames(self.root)
+        self.scale.bind('<ButtonRelease-1>', self.add_playernames)
 
+        self.scale.set(2)
+        self.add_playernames(None)
+
+        #quit
+        
+        self.bouton_2 = ctk.CTkButton(root, text="Quit", corner_radius=8 ,height = 30, width = 15, fg_color="red4", hover_color="DodgerBlue4", command=self.root.destroy)
+        self.bouton_2.pack(fill='x', side = tk.BOTTOM)
         
         #launch game
-        self.button_launch = ctk.CTkButton(self.root, text = "Start game", corner_radius=8 ,height = 2, width = 15, fg_color="goldenrod", hover_color="DodgerBlue4",)
+        self.button_launch = ctk.CTkButton(self.root, text = "Start game", corner_radius=8 ,height = 40, width = 15, fg_color="goldenrod", hover_color="DodgerBlue4",)
         self.button_launch.bind('<Button-1>', self.game_launch)
         self.button_launch.pack(side = ctk.BOTTOM, fill='x')
-       
-        #quit
-    #launch callback
-    def add_playernames(self, root):
+      
+
+    def add_playernames(self, event):
         """add entry bars to get player names"""
-        length= int(self.player_number)
-        
-        for i in range(length):
-            self.playernames.append("")
-        for name in range(length):
-            self.playernames[i]="Player"+str(i+1)
-            entry =ctk.CTkEntry(self.root,placeholder_text=self.playernames[i], width=50, height=2)
-            self.scale.pack(fill='x', side = ctk.TOP)
-            self.playernames[i] = str(entry.get())
-
-
+        length = self.player_number.get()
+        print(length)
+        if length>len(self.playernames_e):
+            #add new player name entires
+            print("add")
+            for i in range(1, length-len(self.playernames_e)+1):
+                name="Player"+str(len(self.playernames_e)+1)
+                entry =ctk.CTkEntry(self.root,text_color="DodgerBlue4", placeholder_text=name,  height=50)
+                entry.pack(padx=10, pady = 2,  side = ctk.TOP)
+                self.playernames_e.append(entry)
+        elif length<len(self.playernames_e): 
+            print("redo")
+            diff = len(self.playernames_e)-length
+            # empty player names and change entries
+            for i in range(diff):
+                self.playernames_e.pop().pack_forget()
+           
 
     def game_launch(self, message):
         """creation of the window"""
+        #find the playernames
+        for i in range(len(self.playernames_e)):
+            name = str(self.playernames_e[i].get())
+            if name == "":
+                    name = "Player"+str(i+1)
+                    self.playernames.append(name)
         #init game through message
         #create the graphic window
         if (self.f_graph == None) :
-            self.f_graph = ctk.CTkToplevel(self.racine)
+            self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.width = self.f_graph_width
             self.f_graph.height = self.f_graph_height
-            self.f_graph.canvas = ctk.CTkCanvas(self.f_graph, height = self.f_graph.height+150, width = self.f_graph.width+150)
-            self.backgroundImage=self.root.PhotoImage(file = folder+"//board.png")
-            self.f_graph.canevas.pack()
+            self.f_graph.canvas = tk.Canvas(self.f_graph, height = self.f_graph.height+150, width = self.f_graph.width+150)
+            self.background = tk.PhotoImage(file=self.folder+'\\board.png')
+            self.item = self.f_graph.canvas.create_image(500, 300, image=self.background, anchor='c')
+            self.item.resize((1000,1000))
+            self.f_graph.canvas.lower(self.item)
+            self.f_graph.canvas.pack()
         #self.place_objects()
         
     """ def place_objects():
