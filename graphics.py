@@ -54,17 +54,17 @@ class Game_window():
     def add_playernames(self, event):
         """add entry bars to get player names"""
         length = self.player_number.get()
-        print(length)
+
         if length>len(self.playernames_e):
             #add new player name entires
-            print("add")
+  
             for i in range(1, length-len(self.playernames_e)+1):
                 name="Player"+str(len(self.playernames_e)+1)
                 entry =ctk.CTkEntry(self.root,text_color="DodgerBlue4", placeholder_text=name,  height=50)
                 entry.pack(padx=10, pady = 2,  side = ctk.TOP)
                 self.playernames_e.append(entry)
         elif length<len(self.playernames_e): 
-            print("redo")
+
             diff = len(self.playernames_e)-length
             # empty player names and change entries
             for i in range(diff):
