@@ -1,6 +1,6 @@
 from typing import Iterable
 
-def two_by_two(r: Iterable):
+def pairwise(r: Iterable):
     it = iter(r)
 
     a = next(it)

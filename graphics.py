@@ -15,9 +15,9 @@ class Game_window():
         # Graphic window settings
         ########################################
         #graphical elements
-        self.folder = "C:\\Users\\cleme\\Documents\\INSA\\cours\\2A\\algo\\nameless_labyrinth\\textures"#adresse 
+        self.folder = "./textures"#adresse 
         # canva size
-        self.f_graph_height =2000
+        self.f_graph_height = 2000
         self.f_graph_width = 2000
 
         # display window setting
