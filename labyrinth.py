@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from utils import two_by_two
 import random
 import json
 
@@ -58,7 +59,7 @@ class Board:
         Initializes the grid, then places base tiles according to their fixed positions, then randomly fills the rest of the grid with the moving tiles.
         """
         for ftile in fixed_tiles:
-            self[ftile.fixed_position] = ftile
+            self.grid[ftile.fixed_position] = ftile
         
         for i in range(7):
             for j in range(7):
@@ -68,7 +69,7 @@ class Board:
                     tile = moving_tiles.pop()
                     for _ in range(random.randint(0, 3)):
                         tile.rotate_cw()
-                    self[(i, j)] = tile
+                    self.grid[(i, j)] = tile
         
     
     def __getitem__(self, pos: tuple[int, int]):
@@ -84,25 +85,45 @@ class Board:
     
     def slide_tile(self, insertpos: tuple[int, int], tile: Tile) -> Tile:
         """
-        Deskription bg
+        Applies the desired slide (if valid), and returns the tile that slid out.
         """
-        ALLOWED_ROWS_COLUMNS = (1, 2, 5)
-        FIRST_LAST = (0, 6)
+        match insertpos:
 
-        rowpos, colpos = insertpos
-        row_insert = (rowpos in ALLOWED_ROWS_COLUMNS and colpos in FIRST_LAST)
-        col_insert = (colpos in ALLOWED_ROWS_COLUMNS and rowpos in FIRST_LAST)
+            case self.slideout_position:
+                raise ValueError("Can't cancel previous move.")
+
+            case ((0 | 6) as rowpos, (1 | 2 | 5) as colpos):
+                first, last = rowpos, 6 if rowpos == 0 else 0
+                r = range(last, first)
+
+                self.slideout_position = (last, colpos)
+                slideout_tile = self.grid.pop(self.slideout_position)
+                for i_current, i_next in two_by_two(r):
+                    self.grid[(i_current, colpos)] = self.grid.pop((i_next, colpos))
+                self.grid[(first, colpos)] = tile
+            
+            case ((1 | 2 | 5) as rowpos, (0 | 6) as colpos):
+                first, last = colpos, 6 if colpos == 0 else 0
+                r = range(last, first)
+
+                self.slideout_position = (rowpos, last)
+                slideout_tile = self.grid.pop(self.slideout_position)
+                for i_current, i_next in two_by_two(r):
+                    self.grid[(rowpos, i_current)] = self.grid.pop((rowpos, i_next))
+                self.grid[(rowpos, first)] = tile
+
+            case (_, _):
+                raise ValueError("Invalid insert position")
+            
+            case _:
+                raise ValueError("Invalid insertpos argument.")
         
-        assert row_insert ^ col_insert, "Invalid insert position."
-        assert insertpos != self.slideout_position, "Can't cancel previous move."
-
-        if row_insert:
-            pass
-
+        return slideout_tile
     
     def get_pawn_position(self, pawn) -> tuple[int, int]:
         for pos, tile in self.grid.items():
-            pass
+            if pawn in tile.pawns:
+                return pos
 
 @dataclass
 class Message:
