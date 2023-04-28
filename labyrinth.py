@@ -94,7 +94,7 @@ class Board:
             case self.slideout_position:
                 raise ValueError("Can't cancel previous move.")
 
-            case ((0 | 6) as row, (1 | 2 | 5) as col):
+            case ((0 | 6) as row, (1 | 3 | 5) as col):
                 first, last = row, 6 if row == 0 else 0
                 r = range(last, first)
 
@@ -107,7 +107,7 @@ class Board:
                 while len(slideout_tile.pawns):
                     tile.pawns.append(slideout_tile.pawns.pop())
             
-            case ((1 | 2 | 5) as row, (0 | 6) as col):
+            case ((1 | 3 | 5) as row, (0 | 6) as col):
                 first, last = col, 6 if col == 0 else 0
                 r = range(last, first)
 
