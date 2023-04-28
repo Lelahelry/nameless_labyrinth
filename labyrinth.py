@@ -241,7 +241,7 @@ class Game:
                 self.queue[0].treasures.pop(0)
                 if self.queue[0].treasures == []:
                     game_won = True
-            self.queue = self.queue.happen(self.queue.pop(0))
+            self.queue = self.queue.append(self.queue.pop(0))
 
     def turn(self):
         pass
