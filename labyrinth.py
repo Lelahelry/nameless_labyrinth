@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from utils import pairwise
+from utils import pairwise, bfs_walk
 import random
 import json
 
@@ -73,7 +73,6 @@ class Board:
                     for _ in range(random.randint(0, 3)):
                         tile.rotate_cw()
                     self.grid[(i, j)] = tile
-        
     
     def __getitem__(self, pos: tuple[int, int]):
         return self.grid[pos]
@@ -95,25 +94,25 @@ class Board:
             case self.slideout_position:
                 raise ValueError("Can't cancel previous move.")
 
-            case ((0 | 6) as rowpos, (1 | 2 | 5) as colpos):
-                first, last = rowpos, 6 if rowpos == 0 else 0
+            case ((0 | 6) as row, (1 | 2 | 5) as col):
+                first, last = row, 6 if row == 0 else 0
                 r = range(last, first)
 
-                self.slideout_position = (last, colpos)
+                self.slideout_position = (last, col)
                 slideout_tile = self.grid.pop(self.slideout_position)
                 for i_current, i_next in pairwise(r):
-                    self.grid[(i_current, colpos)] = self.grid.pop((i_next, colpos))
-                self.grid[(first, colpos)] = tile
+                    self.grid[(i_current, col)] = self.grid.pop((i_next, col))
+                self.grid[(first, col)] = tile
             
-            case ((1 | 2 | 5) as rowpos, (0 | 6) as colpos):
-                first, last = colpos, 6 if colpos == 0 else 0
+            case ((1 | 2 | 5) as row, (0 | 6) as col):
+                first, last = col, 6 if col == 0 else 0
                 r = range(last, first)
 
-                self.slideout_position = (rowpos, last)
+                self.slideout_position = (row, last)
                 slideout_tile = self.grid.pop(self.slideout_position)
-                for i_current, i_next in pairwise(r):
-                    self.grid[(rowpos, i_current)] = self.grid.pop((rowpos, i_next))
-                self.grid[(rowpos, first)] = tile
+                for j_current, j_next in pairwise(r):
+                    self.grid[(row, j_current)] = self.grid.pop((row, j_next))
+                self.grid[(row, first)] = tile
 
             case (_, _):
                 raise ValueError("Invalid insert position")
@@ -123,12 +122,35 @@ class Board:
         
         return slideout_tile
     
-    def get_pawn_position(self, pawn) -> tuple[int, int]:
+    def get_pawn_position(self, pawn: Pawn) -> tuple[int, int]:
         for pos, tile in self.grid.items():
             if pawn in tile.pawns:
                 return pos
         
         raise ValueError(f"{pawn} doesn't exist on the board.")
+    
+    def connected_tiles(self, origin_pos: tuple[int, int]):
+        i, j = origin_pos
+        origin = self.grid[origin_pos]
+        neighbors_pos = [(i-1, j), (i, j+1), (i+1, j), (i, j-1)]
+
+        for side in enumerate(origin.sides):
+            match side:
+
+                case (idx, True):
+                    neighb_pos = neighbors_pos[idx]
+                    neighb = self.grid.get(neighb_pos)
+                    if neighb is None:
+                        continue
+
+                    opp = (idx+2)%4
+                    if not neighb.sides[opp]:
+                        continue
+                    
+                    yield neighb_pos
+                
+                case (_, False):
+                    continue
 
 @dataclass
 class Message:
@@ -201,10 +223,18 @@ class Game:
         for pawn, pos in zip(self.queue, STARTING_POSITIONS):
             start_tile = self.board[pos].pawns.append(pawn)
     
+    
     def move_pawn(self, pawn, newpos):
         """return destination tile"""
-        startpos = self.board.get_pawn_position()
+        startpos = self.board.get_pawn_position(pawn)
+        for pos in bfs_walk(startpos, self.board.connected_tiles):
+            if pos == newpos:
+                self.board[startpos].pawns.remove(pawn)
+                self.board[newpos].pawns.append(pawn)
+
+                return newpos
         
+        raise ValueError("Pawn doesn't have an open path to given tile.")
 
     def start(self):
         game_won = False
