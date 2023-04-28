@@ -1,6 +1,8 @@
-from typing import Iterable, Callable
+from typing import Iterable, Callable, Iterator, TypeVar
 
-def pairwise(r: Iterable):
+T = TypeVar('T')
+
+def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
     it = iter(r)
 
     a = next(it)
@@ -8,15 +10,15 @@ def pairwise(r: Iterable):
         yield (a, b)
         a = b
 
-def bfs_walk(origin: tuple[int, int], adjacency_fn: Callable):
+def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterator[T]]) -> Iterator[T]:
     queue = [origin]
     done = {origin}
 
     while len(queue):
-        pos = queue.pop(0)
-        yield pos
+        node = queue.pop(0)
+        yield node
 
-        for neighb in adjacency_fn(pos):
+        for neighb in adjacency_fn(node):
             if neighb not in done:
                 done.add(neighb)
                 queue.append(neighb)

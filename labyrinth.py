@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Iterator
 from utils import pairwise, bfs_walk
 import random
 import json
@@ -16,13 +17,13 @@ class Pawn:
     name: str
     objectives: list[Treasure]
 
-    def current_objective(self):
+    def current_objective(self) -> Treasure:
         return self.objectives[0]
 
-    def collect(self):
-        self.objectives.pop(0)
+    def collect(self) -> Treasure:
+        return self.objectives.pop(0)
     
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.color.upper()}/{self.name!r}"
 
 @dataclass
@@ -43,11 +44,11 @@ class FixedTile(Tile):
 class MovingTile(Tile):
     """Tiles that can be moved by sliding and rotating."""
     
-    def rotate_cw(self):
+    def rotate_cw(self) -> None:
         """Rotates the tile clockwise."""
         self.orientation = (self.orientation+1)%(4)
     
-    def rotate_ccw(self):
+    def rotate_ccw(self) -> None:
         """Rotates the tile counterclockwise."""
         self.orientation = (self.orientation-1)%(4)
 
@@ -66,22 +67,21 @@ class Board:
         
         for i in range(7):
             for j in range(7):
-                if (i, j) in self.grid:
-                    continue
+                if (i, j) in self.grid: continue
                 else:
                     tile = moving_tiles.pop()
                     for _ in range(random.randint(0, 3)):
                         tile.rotate_cw()
                     self.grid[(i, j)] = tile
     
-    def __getitem__(self, pos: tuple[int, int]):
+    def __getitem__(self, pos: tuple[int, int]) -> Tile:
         return self.grid[pos]
     
-    def __setitem__(self, pos: tuple[int, int], tile: Tile):
+    def __setitem__(self, pos: tuple[int, int], tile: Tile) -> None:
         if isinstance(self.grid[pos], FixedTile):
-            raise KeyError("You can't move fixed tiles!")
+            raise ValueError("You can't move fixed tiles!")
         elif pos == self.slideout_position:
-            raise KeyError("You can't insert your tile at the same place it came from!")
+            raise ValueError("You can't insert your tile at the same place it came from!")
         else:
             self.grid[pos] = tile
     
@@ -114,11 +114,11 @@ class Board:
                     self.grid[(row, j_current)] = self.grid.pop((row, j_next))
                 self.grid[(row, first)] = tile
 
-            case (_, _):
+            case (a, b) if (a is int) and (b is int):
                 raise ValueError("Invalid insert position")
             
             case _:
-                raise ValueError("Invalid insertpos argument.")
+                raise ValueError("Invalid insertpos type passed.")
         
         return slideout_tile
     
@@ -129,7 +129,7 @@ class Board:
         
         raise ValueError(f"{pawn} doesn't exist on the board.")
     
-    def connected_tiles(self, origin_pos: tuple[int, int]):
+    def connected_tiles(self, origin_pos: tuple[int, int]) -> Iterator[tuple[int, int]]:
         i, j = origin_pos
         origin = self.grid[origin_pos]
         neighbors_pos = [(i-1, j), (i, j+1), (i+1, j), (i, j-1)]
@@ -140,16 +140,14 @@ class Board:
                 case (idx, True):
                     neighb_pos = neighbors_pos[idx]
                     neighb = self.grid.get(neighb_pos)
-                    if neighb is None:
-                        continue
+                    if neighb is None: continue
 
                     opp = (idx+2)%4
-                    if not neighb.sides[opp]:
-                        continue
+                    if not neighb.sides[opp]: continue
                     
                     yield neighb_pos
                 
-                case (_, False):
+                case _:
                     continue
 
 @dataclass
@@ -224,7 +222,7 @@ class Game:
             start_tile = self.board[pos].pawns.append(pawn)
     
     
-    def move_pawn(self, pawn, newpos):
+    def move_pawn(self, pawn: Pawn, newpos: tuple[int, int]) -> tuple[int, int]:
         """return destination tile"""
         startpos = self.board.get_pawn_position(pawn)
         for pos in bfs_walk(startpos, self.board.connected_tiles):
@@ -250,4 +248,4 @@ class Game:
         '''return boolean'''
         self.board.slide_tile(Message.insertpos, Tile)
         destination = self.move_pawn(self.queue[0], Message.newpos)
-        return(self.queue[0].objectives[0] == destination.treasure)
+        return self.queue[0].objectives[0] == destination.treasure
