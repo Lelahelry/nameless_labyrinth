@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Iterator
 from utils import pairwise, bfs_walk
 import random
@@ -33,7 +33,7 @@ class Tile:
     sides: list[bool] # Represents the open/closed nature of the four sides.
     orientation: int = 0
     treasure: Treasure | None = None
-    pawns: list[Pawn] = []
+    pawns: list[Pawn] = field(default_factory=list)
 
 @dataclass
 class FixedTile(Tile):
@@ -204,8 +204,7 @@ class Game:
                 tile = FixedTile(tile_dict["filepath"], 
                                  tile_dict["sides"], 
                                  tile_dict["orientation"], 
-                                 treasures[tile_dict["treasure"]], 
-                                 tile_dict["pawns"], 
+                                 treasures[tile_dict["treasure"]],
                                  tuple(tile_dict["position"]))
                 ftiles.add(tile)
 
@@ -214,9 +213,7 @@ class Game:
             for tile_dict in tiles:
                 tile = MovingTile(tile_dict["filepath"], 
                                   tile_dict["sides"], 
-                                  tile_dict["orientation"], 
-                                  treasures[tile_dict["treasure"]], 
-                                  tile_dict["pawns"])
+                                  treasures[tile_dict["treasure"]])
                 mtiles.add(tile)
         
         #board creation
