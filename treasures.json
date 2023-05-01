@@ -1,4 +1,4 @@
-{"bat":"./tr_bat.png", 
+[{"bat":"./tr_bat.png", 
 "candelabrum":"./tr_candelabrum.png", 
 "chest":"./tr_chest.png", 
 "crown":"./tr_crown.png", 
@@ -21,4 +21,4 @@
 "skull":"./tr_skull.png", 
 "sorceress":"./tr_sorceress.png", 
 "spider":"./tr_spider.png", 
-"sword":"./tr_sword.png"}
+"sword":"./tr_sword.png"}]
