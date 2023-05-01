@@ -88,18 +88,22 @@ class Game_window():
         # creation of the graphic window
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
+            self.f_graph.title('Labyrinth - Current game')
             self.f_graph.width = self.f_graph_width
             self.f_graph.height = self.f_graph_height
             # canvas for the board
-            self.f_graph.canvas_board = tk.Canvas(self.f_graph, height = self.f_graph.height, width = self.f_graph.width - 800)
+            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 700)
             self.background = tk.PhotoImage(file = self.folder + '\\board.png')
-            self.item = self.f_graph.canvas_board.create_image(500, 300, image = self.background, anchor = 'c')
+            self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
             """self.item.resize((1000,1000))"""
             self.f_graph.canvas_board.lower(self.item)
-            self.f_graph.canvas_board.pack(side = tk.LEFT)
+            self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
             # canvas for the card of the current objective
-            self.f_graph.canvas_card = tk.Canvas(self.f_graph, height = self.f_graph.height/2, width = 800, bg = "magenta")
-            self.f_graph.canvas_card.pack(side = tk.RIGHT)
+            self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta")
+            self.f_graph.canvas_card.pack(side = tk.TOP, expand = True, fill = 'both')
+            # canvas for the tile in hand
+            self.f_graph.canvas_tile = tk.Canvas(self.f_graph, bg = "lime")
+            self.f_graph.canvas_tile.pack(side = tk.TOP, expand = True, fill = 'both')
         # self.place_objects()
         
     """ def place_objects():
