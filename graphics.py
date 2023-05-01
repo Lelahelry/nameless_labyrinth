@@ -95,9 +95,8 @@ class Game_window():
             # canvas for the board
             self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 700)
             self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
-            self.background = self.background_original.zoom(3,3)
-            self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
-            """self.item.resize((1000,1000))"""
+            self.background = self.background_original.zoom(2,2)
+            self.item = self.f_graph.canvas_board.create_image(500, 500, image = self.background, anchor = 'c')
             self.f_graph.canvas_board.lower(self.item)
             self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
             # canvas for the card of the current objective
