@@ -94,7 +94,7 @@ class Board:
             case self.slideout_position:
                 raise ValueError("Can't cancel previous move.")
 
-            case ((0 | 6) as row, (1 | 2 | 5) as col):
+            case ((0 | 6) as row, (1 | 3 | 5) as col):
                 first, last = row, 6 if row == 0 else 0
                 r = range(last, first)
 
@@ -103,8 +103,11 @@ class Board:
                 for i_current, i_next in pairwise(r):
                     self.grid[(i_current, col)] = self.grid.pop((i_next, col))
                 self.grid[(first, col)] = tile
+                #remove the pawns from the removed tile
+                while len(slideout_tile.pawns):
+                    tile.pawns.append(slideout_tile.pawns.pop())
             
-            case ((1 | 2 | 5) as row, (0 | 6) as col):
+            case ((1 | 3 | 5) as row, (0 | 6) as col):
                 first, last = col, 6 if col == 0 else 0
                 r = range(last, first)
 
@@ -113,6 +116,9 @@ class Board:
                 for j_current, j_next in pairwise(r):
                     self.grid[(row, j_current)] = self.grid.pop((row, j_next))
                 self.grid[(row, first)] = tile
+                #remove the pawns from the removed tile
+                while len(slideout_tile.pawns):
+                    tile.pawns.append(slideout_tile.pawns.pop())
 
             case (a, b) if (a is int) and (b is int):
                 raise ValueError("Invalid insert position")
@@ -223,6 +229,7 @@ class Game:
     
     def move_pawn(self, pawn: Pawn, newpos: tuple[int, int]) -> tuple[int, int]:
         """return destination tile"""
+#try interroger controlleur et prévenir controlleur
         startpos = self.board.get_pawn_position(pawn)
         for pos in bfs_walk(startpos, self.board.connected_tiles):
             if pos == newpos:
@@ -237,14 +244,18 @@ class Game:
         game_won = False
         while not game_won:
             if self.turn():
+                self.controller.collect()
                 self.queue[0].treasures.pop(0)
                 if self.queue[0].treasures == []:
+                    self.controller.win(self.queue[0])
                     game_won = True
             self.queue = self.queue.happen(self.queue.pop(0))
+            self.controller.next_turn()
 
     def turn(self):
         pass
         '''return boolean'''
+
         self.board.slide_tile(Message.insertpos, Tile)
-        destination = self.move_pawn(self.queue[0], Message.newpos)
+        self.move_pawn()
         return self.queue[0].objectives[0] == destination.treasure
