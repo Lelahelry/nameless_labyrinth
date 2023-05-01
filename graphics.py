@@ -8,7 +8,7 @@ class Game_window():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
-        self.root.geometry("300x350")
+        self.root.geometry("1000x600")
         # management of the communication with the game class
             
         ########################################
@@ -16,9 +16,6 @@ class Game_window():
         ########################################
         # graphical elements
         self.folder = "./textures" # adresse 
-        # canva size
-        self.f_graph_height = 2000
-        self.f_graph_width = 2000
 
         # display window setting
         self.f_graph = None
@@ -30,7 +27,7 @@ class Game_window():
 
     def widgets_creation(self, root):
         # text
-        self.welcome = ctk.CTkLabel(root, height = 160, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
+        self.welcome = ctk.CTkLabel(root, height = 110, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
         self.welcome.pack(side = tk.TOP)
 
         self.label = ctk.CTkLabel(root, height = 40, text = "Choose the number of players and enter their names :", font = ('Calibri', 20))
@@ -105,16 +102,12 @@ class Game_window():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
-            self.f_graph.width = self.f_graph_width
-            self.f_graph.height = self.f_graph_height
-            #bouton "mon tour est fini" en bas
-
+            self.f_graph.geometry("1000x600")
             # canvas for the board
-            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 700)
-            #load the image
+            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 800)
             self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
             self.background = self.background_original.zoom(2,2)
-            self.item = self.f_graph.canvas_board.create_image(500, 500, image = self.background, anchor = 'c')
+            self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
             self.f_graph.canvas_board.lower(self.item)
             self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
             #sliding option buttons
