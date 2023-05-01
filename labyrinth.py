@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Iterator
-from utils import pairwise, bfs_walk
+from utils import *
 import random
 import json
 
@@ -130,19 +130,18 @@ class Board:
         raise ValueError(f"{pawn} doesn't exist on the board.")
     
     def connected_tiles(self, origin_pos: tuple[int, int]) -> Iterator[tuple[int, int]]:
-        i, j = origin_pos
         origin = self.grid[origin_pos]
-        neighbors_pos = [(i-1, j), (i, j+1), (i+1, j), (i, j-1)]
 
         for side in enumerate(origin.sides):
             match side:
 
                 case (idx, True):
-                    neighb_pos = neighbors_pos[idx]
+                    idx = (origin.orientation - idx)%4
+                    neighb_pos = adjacent_coords_cw(origin_pos, idx)
                     neighb = self.grid.get(neighb_pos)
                     if neighb is None: continue
 
-                    opp = (idx+2)%4
+                    opp = (neighb.orientation + idx + 2)%4
                     if not neighb.sides[opp]: continue
                     
                     yield neighb_pos
