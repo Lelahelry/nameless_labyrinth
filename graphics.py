@@ -103,56 +103,132 @@ class Game_window():
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
             self.f_graph.geometry("1000x600")
-            # canvas for the board
-            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 800)
-            self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
-            self.background = self.background_original.zoom(2,2)
-            self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
-            self.f_graph.canvas_board.lower(self.item)
-            self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
-            #sliding option buttons
-            #bind them to slide tile with a parameter(to be chosen)
-            #validate button 
-            #bind it to controller somehow
+            #bouton "mon tour est fini"?
 
-            # canvas for the card of the current objective
-            self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta")
-            self.f_graph.canvas_card.pack(side = tk.TOP, expand = True, fill = 'both')
-
-            #text area for commmunication through controller
-            #bind it to messagerie method
+            self.canvas_for_board()
+           
+            self.slide_tiles_buttons()
             
-            # canvas for the tile in hand
-            self.f_graph.canvas_tile = tk.Canvas(self.f_graph, bg = "lime")
-            self.f_graph.canvas_tile.pack(side = tk.TOP, expand = True, fill = 'both')
-            #turning buttons
-            #validate button 
-            #bind it to controller somehow
+            self.canvas_for_objective() 
             
-            #load the 3 tile images and resize them
-            #load the 24 treas images and resize them for display
+            self.text_area()
+            
+            self.canvas_for_hand()
 
-            #display the hand using the controller
+            self.turn_tile_buttons()
+            
+            self.validate()
+
+            self.images()
+            
+
+    def canvas_for_board(self):
+        """creates the canva for the board with the background
+        no input
+        no output"""
+        self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 800)
+        self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
+        self.background = self.background_original.zoom(2,2)
+        self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
+        self.f_graph.canvas_board.lower(self.item)
+        self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
+
+    def slide_tiles_buttons(self):
+        """creates the buttons around the board allowing to choose where to insert the tile
+        no input
+        no output"""
+        #sliding option buttons
+        #bind them to slide tile with a parameter(to be chosen)
+        #validate button 
+        #bind it to controller somehow
+
+    def canvas_for_objective(self):
+        """creates canvas to display the objective of the player"""
+        self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta")
+        self.f_graph.canvas_card.pack(side = tk.TOP, expand = True, fill = 'both')
+
+    def text_area(self):
+        """creates text area where the controller sends event messages
+        no input
+        no output"""
+        #text area for commmunication through controller
+        #bind it to messagerie method
+
+    def canvas_for_hand(self):
+        """creates canvas area for the hand
+        no input
+        no output"""
+        self.f_graph.canvas_tile = tk.Canvas(self.f_graph, bg = "lime")
+        self.f_graph.canvas_tile.pack(side = tk.TOP, expand = True, fill = 'both')
+
+    def turn_tile_buttons(self):
+        """creates the buttons next to the hand allowing to turn the orientation of the hand tile
+        no input
+        no output"""
+        #turning buttons
+        
+    def validate(self):
+        """creates the button under the hand to validate the chosen orientation and insertion
+        no input
+        no output"""    
+        #validate button 
+        #bind it to controller somehow
+
+    def images(self):
+        """creates the board objects and binds them all
+        no input
+        no output"""
+        self.image_library()
+        
+        self.hand_image()
+           
+        self.grid_images()    
+
+        self.place_pawns()
+
+        
+    def image_library(self):
+        """loads and sizes all PNG files (not arrows)
+        no input
+        no output"""
+        #load the 3 tile images and resize them
+        #load the 24 treas images and resize them for display
+
+    def hand_image(self):
+        """displays the hand in its canvas and binds it to the rotation
+        no input
+        no output"""
+         #display the hand using the controller
                 #choose the tile
                 #place the treasure on it
                 #place the image on its spot
             #bind method de rotation 
             #stock the tile in a dict
-            
 
-            #use the grid to create all the other tiles
-                #choose the tile
-                #place the treasure on it
-                #place the image on its spot
-            #bind method de rotation 
-            #stock the tile in a dict
+    def grid_images(self):
+        """displays the tiles on the board in its canvas and binds it to the sliding
+        beforehand associates tiles and treasures+stock them 
+        
+        no input
+        no output"""
+        #use the grid to create all the other tiles
+            #choose the tile
+            #place the treasure on it
+            #place the image on its spot
+        #bind method de rotation 
+        #stock the tile in a dict
 
-            #place pawns and bind them to moving animation
-
-        # self.place_objects()
-
-
-        #inspi
+    def anim_silde_tile(self):
+        """pour slider les tiles à l'écran"""
+        #effacer bout
+        # animer translation des 6 d'avant
+        # ajouter la première
+        
+    def place_pawns(self):
+        #place pawns and bind them to moving animation
+        
+        
+#inspi
 def place_objects():
         grid = #board read through message
         for position, tile in grid.items():
