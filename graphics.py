@@ -94,7 +94,8 @@ class Game_window():
             self.f_graph.height = self.f_graph_height
             # canvas for the board
             self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 700)
-            self.background = tk.PhotoImage(file = self.folder + '\\board.png')
+            self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
+            self.background = self.background_original.zoom(3,3)
             self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
             """self.item.resize((1000,1000))"""
             self.f_graph.canvas_board.lower(self.item)
