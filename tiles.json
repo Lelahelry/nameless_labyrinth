@@ -1,6 +1,6 @@
 { "fixed":    [{"filepath":"./tile_corner.png", 
     "sides":[true, true, false, false],
-    "orentation": 1,
+    "orientation": 1,
     "position": [0, 0] ,
     "treasure": null },
 
@@ -57,7 +57,6 @@
     "sides":[false, true, true, true],
     "position":[2,2] ,
     "treasure":"emerald"},
-
 
     {"filepath":"./tile_t.png", 
     "orientation":1, 
@@ -159,23 +158,7 @@
 
     {"filepath":"./tile_corner.png", 
     "sides":[true, true, false, false],
-    "treasure":null },
-
-    {"filepath":"./tile_corner.png", 
-    "sides":[true, true, false, false],
-    "treasure":null },
-
-    {"filepath":"./tile_straight.png", 
-    "sides":[false, true, false, true],
-    "treasure":null },
-    
-    {"filepath":"./tile_straight.png", 
-    "sides":[false, true, false, true],
-    "treasure":null },
-    
-    {"filepath":"./tile_straight.png", 
-    "sides":[false, true, false, true],
-    "treasure":null },
+    "treasure":null},
 
     {"filepath":"./tile_straight.png", 
     "sides":[false, true, false, true],
@@ -243,9 +226,8 @@
 
     {"filepath":"./tile_t.png", 
     "sides":[ false, true, true, true],
-    "treasure":"ghost" }
+    "treasure":"ghost" },
 
     {"filepath":"./tile_t.png", 
     "sides":[ false, true, true, true],
-    "treasure":"sorceress" }
-    ]
+    "treasure":"sorceress"}]}
