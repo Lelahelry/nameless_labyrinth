@@ -22,3 +22,13 @@ def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterator[T]]) -> Iterator[T]
             if neighb not in done:
                 done.add(neighb)
                 queue.append(neighb)
+
+def adjacent_coords_cw(pos: tuple[int, int], side) -> tuple[int, int]:
+    i, j = pos
+
+    match side:
+        case 0: return (i-1, j)
+        case 1: return (i, j+1)
+        case 2: return (i+1, j)
+        case 3: return (i, j-1)
+        case _: raise ValueError("Invalid orientation given.")

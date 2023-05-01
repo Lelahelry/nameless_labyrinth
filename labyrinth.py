@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Iterator
-from utils import pairwise, bfs_walk
+from utils import *
 import random
 import json
 
@@ -94,7 +94,7 @@ class Board:
             case self.slideout_position:
                 raise ValueError("Can't cancel previous move.")
 
-            case ((0 | 6) as row, (1 | 2 | 5) as col):
+            case ((0 | 6) as row, (1 | 3 | 5) as col):
                 first, last = row, 6 if row == 0 else 0
                 r = range(last, first)
 
@@ -107,7 +107,7 @@ class Board:
                 while len(slideout_tile.pawns):
                     tile.pawns.append(slideout_tile.pawns.pop())
             
-            case ((1 | 2 | 5) as row, (0 | 6) as col):
+            case ((1 | 3 | 5) as row, (0 | 6) as col):
                 first, last = col, 6 if col == 0 else 0
                 r = range(last, first)
 
@@ -136,19 +136,18 @@ class Board:
         raise ValueError(f"{pawn} doesn't exist on the board.")
     
     def connected_tiles(self, origin_pos: tuple[int, int]) -> Iterator[tuple[int, int]]:
-        i, j = origin_pos
         origin = self.grid[origin_pos]
-        neighbors_pos = [(i-1, j), (i, j+1), (i+1, j), (i, j-1)]
 
         for side in enumerate(origin.sides):
             match side:
 
                 case (idx, True):
-                    neighb_pos = neighbors_pos[idx]
+                    idx = (origin.orientation - idx)%4
+                    neighb_pos = adjacent_coords_cw(origin_pos, idx)
                     neighb = self.grid.get(neighb_pos)
                     if neighb is None: continue
 
-                    opp = (idx+2)%4
+                    opp = (neighb.orientation + idx + 2)%4
                     if not neighb.sides[opp]: continue
                     
                     yield neighb_pos
