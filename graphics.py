@@ -51,8 +51,7 @@ class Game_window():
         self.button_launch = ctk.CTkButton(self.root, text = "Start game", corner_radius = 8, height = 60, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
         self.button_launch.bind('<Button-1>', self.game_launch)
         self.button_launch.pack(side = ctk.BOTTOM, fill = 'x')
-      
-
+ 
     def add_playernames(self, event):
         """adds entry bars to get player names"""
         length = self.player_number.get()
@@ -72,7 +71,6 @@ class Game_window():
             for i in range(diff):
                 self.playernames_e.pop().pack_forget()
            
-
     def game_launch(self, message):
         """creation of the window"""
         # find the player name
@@ -104,11 +102,15 @@ class Game_window():
             self.f_graph.title('Labyrinth - Current game')
             self.f_graph.geometry("1000x600")
             
+            
             #bouton "mon tour est fini"?
             self.button_done = ctk.CTkButton(self.f_graph, text = "My turn is over.", corner_radius = 8, height = 30, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
             #self.button_done.bind('<Button-1>', self.turn_over())
             self.button_done.pack(side = ctk.BOTTOM, fill = 'x')
             
+            
+            self.image_dict = {}#stock all 50 tiles as (bg, fg, pawn) in grid size
+
             self.canvas_for_board()
            
             self.slide_tiles_buttons()
@@ -119,27 +121,26 @@ class Game_window():
             
             self.canvas_for_hand()
 
-            #self.images()
-
             self.turn_tile_buttons()
             
-            self.validate_buttons()
-
-            
-            
+            self.validate_buttons()    
 
     def canvas_for_board(self):
         """creates the canva for the board with the background
         no input
         no output"""
         
-        self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = 1100, height = 1100)
+        self.canvas_board = tk.Canvas(self.f_graph, width = 1100, height = 1100)
         
         self.background = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
-        self.item = self.f_graph.canvas_board.create_image(550, 550, image = self.background)
-        self.f_graph.canvas_board.lower(self.item)
+        self.item = self.canvas_board.create_image(550, 550, image = self.background)
+        self.canvas_board.lower(self.item)
         
-        self.f_graph.canvas_board.pack(side = tk.LEFT, padx=40, pady=40)
+        self.grid_images() 
+
+        self.place_pawns()
+
+        self.canvas_board.pack(side = tk.LEFT, padx=40, pady=40)
 
     def slide_tiles_buttons(self):
         """creates the buttons around the board allowing to choose where to insert the tile
@@ -167,12 +168,9 @@ class Game_window():
         """creates canvas area for the hand
         no input
         no output"""
-        self.f_graph.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 500, height = 500)
-
-        
-       
-        self.hand_image(self.f_graph.canvas_tile)
-        self.f_graph.canvas_tile.pack(side = tk.BOTTOM, anchor = 'w', padx=50, expand = True)
+        self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 400, height = 400)
+        self.hand_image()
+        self.canvas_tile.pack(side = tk.BOTTOM, anchor = 'w', padx=50, expand = True)
 
     def turn_tile_buttons(self):
         """creates the buttons next to the hand allowing to turn the orientation of the hand tile
@@ -187,60 +185,39 @@ class Game_window():
         #validate button 
         #bind it to controller somehow
 
-    def images(self):
-        """creates the board objects and binds them all
-        no input
-        no output"""
-        self.image_library()
-
-        self.objective_image()
-        
-        self.hand_image()
-           
-        #self.grid_images()    
-
-        #self.place_pawns()
-
     def objective_image(self):
         self.f_graph.canvas_card.pack(side = tk.TOP, anchor='e', expand = True)
-
-        
+     
     def image_library(self, filepath):
         """loads and sizes all PNG files (not arrows)
         no input
         no output"""
-        pass
+        self.image_dict = {}
         #load the 3 tile images and resize them
         self.tile_c = tk.PhotoImage(file = self.folder + '\\tile_corner.png')
         self.tile_t = tk.PhotoImage(file = self.folder + '\\tile_t.png')
         self.tile_s = tk.PhotoImage(file = self.folder + '\\tile_straight.png')
         
-        #load the 24 treas images and resize them for display
-        #wel not opti i think
-        
-
-    def hand_image(self, canvas):
+    def hand_image(self):
         """displays the hand in its canvas and binds it to the rotation
         no input
         no output"""
         
-        #filepath_t = self.controller.hand.filepath à la place de filepath_t = ...
+        #filepath_t, filepath_tr = self.controller.hand: #hand should be reduced to (filepathTile, filepathTreas|None)
         filepath_ti="\\tile_corner.png"
-        #filepath_tr = self.Controller.hand.treasure.filepath
         filepath_tr = "\\tr_bat.png"
         self.tile_h = tk.PhotoImage(file = self.folder + filepath_ti)
-        self.tile_h_resized = self.tile_h.zoom(3,3)
-        self.bg = canvas.create_image(250, 250, image = self.tile_h_resized)
-        canvas.lower(self.bg)
-
-        self.tile_t = tk.PhotoImage(file = self.folder + filepath_tr)
-        self.tile_t_resized = self.tile_t.zoom(3,3)
-        self.fg = canvas.create_image(250, 250, image = self.tile_t_resized)
-        canvas.lift(self.fg)
-        
-        #self.f_graph.canvas_tile.pack(side = tk.BOTTOM, anchor = 'w', padx=50, expand = True) 
-        
-        
+        self.tile_h_resized = self.tile_h.zoom(2,2)
+        self.bg_h = self.canvas_tile.create_image(250, 250, image = self.tile_h_resized)
+        self.canvas_tile.lower(self.bg_h)
+        if filepath_tr != None:
+            self.treas_h = tk.PhotoImage(file = self.folder + filepath_tr)
+            self.treas_h_resized = self.treas_h.zoom(2,2)
+            self.fg_h = self.canvas_tile.create_image(250, 250, image = self.treas_h_resized)
+            self.canvas_tile.lift(self.fg_h)
+            self.image_dict[(self.tile_h, self.treas_h, None)]=(7,7)  
+        else:
+            self.image_dict[(self.tile_h, None, None)]=(7,7)  
         
         #display the hand using the controller
                 #choose the tile
@@ -255,14 +232,46 @@ class Game_window():
         
         no input
         no output"""
-        pass
+        #get grid
+        for position, tile in self.controller.grid: #grid should be reduced to (positionTuple)={filepathTile, filepathTreas|None, list of colors or empty list]
+                #init
+                pawn = [] 
+                if tile["filepath_ti"] == '\\tile_corner.png':
+                    self.new_tile =self.tile_c
+                elif tile["filepath_ti"] == '\\tile_t.png':
+                    self.new_tile = self.tile_t
+                else:
+                    self.new_tile = self.tile_s
+                #position
+                x = 100 + position(0)*146
+                y = 100 + position(1)*146
+
+                #tile display
+                self.new_bg = self.canvas_board.create_image(x, y, image = self.self.new_tile)
+                self.canvas_board.lift(self.new_bg)
+
+                #treasure display
+                if tile["filepath_tr"]!=None:
+                    #create and position treasure
+                    self.new_treas = tk.PhotoImage(file = self.folder + tile["filepath_tr"])
+                    self.new_fg = self.canvas_board.create_image(x, y, image = self.new_treas)
+                    self.canvas_board.lift(self.new_fg)
+                    treas = self.new_fg
+                else:
+                    treas = None
+
+                self.image_dict[(self.new_bg, treas, pawn)]
+
+                
+                
+                
         #use the grid to create all the other tiles
             #choose the tile
             #place the treasure on it
             #place the image on its spot
         #bind method de rotation 
         #stock the tile in a dict
-
+        
 
 
         
@@ -280,6 +289,7 @@ class Game_window():
         self.item4 = self.f_graph.canvas_board.create_image(100, 246, image = self.tile_c)
         self.f_graph.canvas_board.lift(self.item4)
 
+
     def anim_silde_tile(self):
         """pour slider les tiles à l'écran"""
         pass
@@ -291,6 +301,16 @@ class Game_window():
         """place circles for the pawn"""
         pass
         #place pawns and bind them to moving animation
+        x = 100 + position(0)*146
+        y = 100 + position(1)*146
+        #pawn display
+        for position, tile in self.controller.grid:
+            if tile["pawns"]!=None:
+                #create circles on the tile
+                for color in tile["pawns"]:
+                    if color == "blue": 
+                        self.canvas_board.create_oval(x-20, y+10, x, y+10, "fill"=color  )
+                    el
     """
     def turn_over(self, event):
         validates that the player is done with his turn and communicates the changes of player back and forth with the controller
