@@ -130,10 +130,10 @@ class Game_window():
         """creates the canva for the board with the background
         no input
         no output"""
-        self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 800)
-        self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
-        self.background = self.background_original.zoom(2,2)
-        self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
+        self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = 700)
+        self.background_original = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
+        """self.background = self.background_original.zoom(2,2)"""
+        self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background_original, anchor = 'c')
         self.f_graph.canvas_board.lower(self.item)
         self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
 
