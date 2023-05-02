@@ -1,6 +1,5 @@
 import tkinter as tk
 import customtkinter as ctk
-from PIL import Image, ImageTk
 
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
@@ -77,63 +76,189 @@ class Game_window():
     def game_launch(self, message):
         """creation of the window"""
         # find the player name
+        self.get_playernames()
+        
+        # init the game through controller
+        #self.controller.init_control()
+
+        # creation of the graphic window
+        self.graphic_window() 
+        
+    #callback
+    def get_playernames(self):
+        """recovers the player's name
+        no input
+        no output"""
         for i in range(len(self.playernames_e)):
             name = str(self.playernames_e[i].get())
             if name == "":
-                    name = "Player" + str(i+1)
-                    self.playernames.append(name)
-        # init the game through message
-        # creation of the graphic window
+                name = "Player" + str(i+1)
+            self.playernames.append(name)
+    
+    def graphic_window(self):
+        """creates graphic window for current game display
+        no input
+        no output"""
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
-            self.f_graph.geometry("1200x700")
-            # canvas for the board
-            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = 900)
-            self.background_original = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
-            self.background = self.background_original
-            """self.background = self.background_original.zoom(2, 2)"""
-            self.item = self.f_graph.canvas_board.create_image(400, 400, image = self.background, anchor = 'c')
-            self.f_graph.canvas_board.lower(self.item)
-            self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
-            # canvas for the card of the current objective
-            self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta")
-            self.f_graph.canvas_card.pack(side = tk.TOP, expand = True, fill = 'both')
-            # canvas for the tile in hand
-            self.f_graph.canvas_tile = tk.Canvas(self.f_graph, bg = "lime")
-            self.f_graph.canvas_tile.pack(side = tk.TOP, expand = True, fill = 'both')
-        # self.place_objects()
+            self.f_graph.geometry("1000x600")
+            #bouton "mon tour est fini"?
+
+            self.canvas_for_board()
+           
+            self.slide_tiles_buttons()
+            
+            self.canvas_for_objective() 
+            
+            self.text_area()
+            
+            self.canvas_for_hand()
+
+            self.turn_tile_buttons()
+            
+            self.validate()
+
+            self.images()
+            
+
+    def canvas_for_board(self):
+        """creates the canva for the board with the background
+        no input
+        no output"""
+        self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 800)
+        self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
+        self.background = self.background_original.zoom(2,2)
+        self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
+        self.f_graph.canvas_board.lower(self.item)
+        self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
+
+    def slide_tiles_buttons(self):
+        """creates the buttons around the board allowing to choose where to insert the tile
+        no input
+        no output"""
+        #sliding option buttons
+        #bind them to slide tile with a parameter(to be chosen)
+        #validate button 
+        #bind it to controller somehow
+
+    def canvas_for_objective(self):
+        """creates canvas to display the objective of the player"""
+        self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta")
+        self.f_graph.canvas_card.pack(side = tk.TOP, expand = True, fill = 'both')
+
+    def text_area(self):
+        """creates text area where the controller sends event messages
+        no input
+        no output"""
+        #text area for commmunication through controller
+        #bind it to messagerie method
+
+    def canvas_for_hand(self):
+        """creates canvas area for the hand
+        no input
+        no output"""
+        self.f_graph.canvas_tile = tk.Canvas(self.f_graph, bg = "lime")
+        self.f_graph.canvas_tile.pack(side = tk.TOP, expand = True, fill = 'both')
+
+    def turn_tile_buttons(self):
+        """creates the buttons next to the hand allowing to turn the orientation of the hand tile
+        no input
+        no output"""
+        #turning buttons
         
-    """ def place_objects():
-        grid = #board read through message
-        for position, tile in grid.items():
-            #get the type of tile and orientation
-            self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
-            self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
-            self.f_graph.canvas.lower(self.item)
-            #ajouter la taille au dico avec son ident
-        #read the current player, display his name and his objective
-        #ajouter boutons pour tourner la tuile et placer  
-    #graphic window
-        #initialize
-        #set background
-        #read grid to fill the graphic grid + read the treasure and pawn to draw them...
-        #read the hand and display it
-        #read the current player, display his name and his objective
+    def validate(self):
+        """creates the button under the hand to validate the chosen orientation and insertion
+        no input
+        no output"""    
+        #validate button 
+        #bind it to controller somehow
+
+    def images(self):
+        """creates the board objects and binds them all
+        no input
+        no output"""
+        self.image_library()
+        
+        self.hand_image()
+           
+        self.grid_images()    
+
+        self.place_pawns()
+
+        
+    def image_library(self):
+        """loads and sizes all PNG files (not arrows)
+        no input
+        no output"""
+        #load the 3 tile images and resize them
+        #load the 24 treas images and resize them for display
+
+    def hand_image(self):
+        """displays the hand in its canvas and binds it to the rotation
+        no input
+        no output"""
+         #display the hand using the controller
+                #choose the tile
+                #place the treasure on it
+                #place the image on its spot
+            #bind method de rotation 
+            #stock the tile in a dict
+
+    def grid_images(self):
+        """displays the tiles on the board in its canvas and binds it to the sliding
+        beforehand associates tiles and treasures+stock them 
+        
+        no input
+        no output"""
+        #use the grid to create all the other tiles
+            #choose the tile
+            #place the treasure on it
+            #place the image on its spot
+        #bind method de rotation 
+        #stock the tile in a dict
+
+    def anim_silde_tile(self):
+        """pour slider les tiles à l'écran"""
+        #effacer bout
+        # animer translation des 6 d'avant
+        # ajouter la première
+        
+    def place_pawns(self):
+        #place pawns and bind them to moving animation
+        
+        """       
+    #inspi
+    def place_objects():
+            grid = #board read through message
+            for position, tile in grid.items():
+                #get the type of tile and orientation
+                self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
+                self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
+                self.f_graph.canvas.lower(self.item)
+                #ajouter la taille au dico avec son ident
+            #read the current player, display his name and his objective
+            #ajouter boutons pour tourner la tuile et placer  
+        #graphic window
+            #initialize
+            #set background
+            #read grid to fill the graphic grid + read the treasure and pawn to draw them...
+            #read the hand and display it
+            #read the current player, display his name and his objective
 
 
 
 
 
 
-récupération des positions de clic
-def affiche_info_ville(self,event):
-        self.text_area.delete("1.0", "end")
-        mouseX = event.x
-        mouseY = event.y
-        ident = self.f_graph.canevas.find_withtag("current")[0]
-        item_clicked = self.dicoSommetsGraphiques[ident]
-        self.text_area.insert(tk.INSERT,item_clicked)"""
+    récupération des positions de clic
+    def affiche_info_ville(self,event):
+            self.text_area.delete("1.0", "end")
+            mouseX = event.x
+            mouseY = event.y
+            ident = self.f_graph.canevas.find_withtag("current")[0]
+            item_clicked = self.dicoSommetsGraphiques[ident]
+            self.text_area.insert(tk.INSERT,item_clicked)"""
     
 
 
