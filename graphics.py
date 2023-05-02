@@ -229,8 +229,8 @@ class Game_window():
         # ajouter la première
         
     def place_pawns(self):
+        """place circles for the pawn"""
         #place pawns and bind them to moving animation
-
 
     def turn_over(self, event):
         """validates that the player is done with his turn and communicates the changes of player back and forth with the controller
