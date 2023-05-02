@@ -103,8 +103,12 @@ class Game_window():
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
             self.f_graph.geometry("1000x600")
+            
             #bouton "mon tour est fini"?
-
+            self.button_done = ctk.CTkButton(self.root, text = "My turn is over.", corner_radius = 8, height = 30, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
+            self.button_done.bind('<Button-1>', self.turn_over())
+            self.button_done.pack(side = ctk.BOTTOM, fill = 'x')
+            
             self.canvas_for_board()
            
             self.slide_tiles_buttons()
@@ -117,7 +121,7 @@ class Game_window():
 
             self.turn_tile_buttons()
             
-            self.validate()
+            self.validate_buttons()
 
             self.images()
             
@@ -167,7 +171,7 @@ class Game_window():
         no output"""
         #turning buttons
         
-    def validate(self):
+    def validate_buttons(self):
         """creates the button under the hand to validate the chosen orientation and insertion
         no input
         no output"""    
@@ -226,6 +230,13 @@ class Game_window():
         
     def place_pawns(self):
         #place pawns and bind them to moving animation
+
+
+    def turn_over(self, event):
+        """validates that the player is done with his turn and communicates the changes of player back and forth with the controller
+        no input
+        output???"""
+
         
         """       
     #inspi
