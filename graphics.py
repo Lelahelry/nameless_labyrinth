@@ -87,12 +87,13 @@ class Game_window():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
-            self.f_graph.geometry("1000x600")
+            self.f_graph.geometry("1200x700")
             # canvas for the board
-            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = self.f_graph.width - 800)
-            self.background_original = tk.PhotoImage(file = self.folder + '\\board.png')
-            self.background = self.background_original.zoom(2,2)
-            self.item = self.f_graph.canvas_board.create_image(300, 300, image = self.background, anchor = 'c')
+            self.f_graph.canvas_board = tk.Canvas(self.f_graph, width = 900)
+            self.background_original = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
+            self.background = self.background_original
+            """self.background = self.background_original.zoom(2, 2)"""
+            self.item = self.f_graph.canvas_board.create_image(400, 400, image = self.background, anchor = 'c')
             self.f_graph.canvas_board.lower(self.item)
             self.f_graph.canvas_board.pack(side = tk.LEFT, fill = 'y')
             # canvas for the card of the current objective
