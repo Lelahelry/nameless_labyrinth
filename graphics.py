@@ -79,7 +79,7 @@ class Game_window():
         self.get_playernames()
         
         # init the game through controller
-        self.controller.init_control()
+        #self.controller.init_control()
 
         # creation of the graphic window
         self.graphic_window() 
@@ -227,38 +227,38 @@ class Game_window():
     def place_pawns(self):
         #place pawns and bind them to moving animation
         
-        
-#inspi
-def place_objects():
-        grid = #board read through message
-        for position, tile in grid.items():
-            #get the type of tile and orientation
-            self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
-            self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
-            self.f_graph.canvas.lower(self.item)
-            #ajouter la taille au dico avec son ident
-        #read the current player, display his name and his objective
-        #ajouter boutons pour tourner la tuile et placer  
-    #graphic window
-        #initialize
-        #set background
-        #read grid to fill the graphic grid + read the treasure and pawn to draw them...
-        #read the hand and display it
-        #read the current player, display his name and his objective
+        """       
+    #inspi
+    def place_objects():
+            grid = #board read through message
+            for position, tile in grid.items():
+                #get the type of tile and orientation
+                self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
+                self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
+                self.f_graph.canvas.lower(self.item)
+                #ajouter la taille au dico avec son ident
+            #read the current player, display his name and his objective
+            #ajouter boutons pour tourner la tuile et placer  
+        #graphic window
+            #initialize
+            #set background
+            #read grid to fill the graphic grid + read the treasure and pawn to draw them...
+            #read the hand and display it
+            #read the current player, display his name and his objective
 
 
 
 
 
 
-récupération des positions de clic
-def affiche_info_ville(self,event):
-        self.text_area.delete("1.0", "end")
-        mouseX = event.x
-        mouseY = event.y
-        ident = self.f_graph.canevas.find_withtag("current")[0]
-        item_clicked = self.dicoSommetsGraphiques[ident]
-        self.text_area.insert(tk.INSERT,item_clicked)
+    récupération des positions de clic
+    def affiche_info_ville(self,event):
+            self.text_area.delete("1.0", "end")
+            mouseX = event.x
+            mouseY = event.y
+            ident = self.f_graph.canevas.find_withtag("current")[0]
+            item_clicked = self.dicoSommetsGraphiques[ident]
+            self.text_area.insert(tk.INSERT,item_clicked)"""
     
 
 
