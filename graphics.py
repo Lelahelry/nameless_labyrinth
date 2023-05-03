@@ -348,7 +348,7 @@ def affiche_info_ville(self,event):
         mouseY = event.y
         ident = self.f_graph.canevas.find_withtag("current")[0]
         item_clicked = self.dicoSommetsGraphiques[ident]
-        self.text_area.insert(tk.INSERT,item_clicked)"""
+        self.text_area.insert(tk.INSERT,item_clicked)
     récupération des positions de clic
     def affiche_info_ville(self,event):
             self.text_area.delete("1.0", "end")
