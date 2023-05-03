@@ -224,7 +224,7 @@ class Game:
         
         #place pawns
         for pawn, pos in zip(self.queue, STARTING_POSITIONS):
-            start_tile = self.board[pos].pawns.append(pawn)
+            self.board[pos].pawns.append(pawn)
     
     
     def move_pawn(self, pawn: Pawn, newpos: tuple[int, int]) -> tuple[int, int]:
