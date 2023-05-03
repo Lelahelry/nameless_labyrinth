@@ -238,16 +238,22 @@ class Game:
         
         raise ValueError("Pawn doesn't have an open path to given tile.")
 
+    def get_active_player(self):
+        return self.queue[0]
+    
+    def rotate_players(self):
+        self.queue.append(self.queue.pop(0))
+
     def start(self):
         game_won = False
         while not game_won:
             if self.turn():
                 self.controller.collect()
-                self.queue[0].treasures.pop(0)
-                if self.queue[0].treasures == []:
+                self.get_active_player().objectives.pop(0)
+                if self.get_active_player().objectives == []:
                     self.controller.win(self.queue[0])
                     game_won = True
-            self.queue = self.queue.happen(self.queue.pop(0))
+            self.rotate_players()
             self.controller.next_turn()
 
     def turn(self):
