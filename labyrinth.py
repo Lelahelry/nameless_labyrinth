@@ -224,12 +224,7 @@ class Game:
         for pawn, pos in zip(self.queue, STARTING_POSITIONS):
             self.board[pos].pawns.append(pawn)
     
-    def get_active_player(self):
-        return self.queue[0]
-
-    def rotate_players(self):
-        self.queue.append(self.queue.pop(0))
-
+    
     def move_pawn(self, pawn: Pawn, newpos: tuple[int, int]) -> tuple[int, int]:
         """return destination tile"""
 #try interroger controlleur et prévenir controlleur
@@ -252,7 +247,7 @@ class Game:
                 if self.queue[0].treasures == []:
                     self.controller.win(self.queue[0])
                     game_won = True
-            self.rotate_players()
+            self.queue = self.queue.happen(self.queue.pop(0))
             self.controller.next_turn()
 
     def turn(self):
