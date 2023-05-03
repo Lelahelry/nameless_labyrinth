@@ -144,3 +144,8 @@ print("")
 print("")
 print(graphics_dict)
 
+t1 = FixedTile(filepath="",sides=[True])
+t2 = MovingTile(filepath="", sides=[False])
+b=Board([t1],[t2])
+print(b)
+

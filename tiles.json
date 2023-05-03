@@ -83,7 +83,7 @@
     "treasure":"keys" },
 
     {"filepath":"./tile_t.png", 
-    "orientation":1, 
+    "orientation":2, 
     "sides":[false, true, true, true],
     "position":[6,2] ,
     "treasure":"purse" },
