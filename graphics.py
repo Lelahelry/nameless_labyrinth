@@ -10,7 +10,7 @@ class Game_window():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
-        self.root.geometry("1000x600")
+        self.root.geometry("1200x700")
         # management of the communication with the game class
             
         ########################################
@@ -29,17 +29,17 @@ class Game_window():
 
     def widgets_creation(self, root):
         # text
-        self.welcome = ctk.CTkLabel(root, height = 110, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
+        self.welcome = ctk.CTkLabel(root, height = 120, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
         self.welcome.pack(side = tk.TOP)
 
-        self.label = ctk.CTkLabel(root, height = 40, text = "Choose the number of players and enter their names :", font = ('Calibri', 20))
+        self.label = ctk.CTkLabel(root, height = 50, text = "Choose the number of players and enter their names :", font = ('Calibri', 20))
         self.label.pack(side = tk.TOP)
 
         # player number
         self.player_number = tk.IntVar()
         self.scale = ctk.CTkSlider(root, height = 30, width = 455, progress_color = "goldenrod", fg_color = "DodgerBlue4",  button_corner_radius = 5, button_color = "goldenrod", button_hover_color = "DodgerBlue4", from_ = 2, to = 4, number_of_steps = 2, orientation = "horizontal", variable = self.player_number)
 
-        self.scale.pack(pady = 20, anchor = ctk.CENTER)
+        self.scale.pack(pady = 30, anchor = ctk.CENTER)
         self.scale.bind('<ButtonRelease-1>', self.add_playernames)
 
         self.scale.set(2)
@@ -64,7 +64,7 @@ class Game_window():
             for i in range(1, length - len(self.playernames_e) + 1):
                 name = "Player" + str(len(self.playernames_e) +1)
                 entry = ctk.CTkEntry(self.root,text_color = "DodgerBlue4", placeholder_text = name,  height = 50, width = 200, font = ('Calibri', 16))
-                entry.pack(padx = 10, pady = 6, anchor = ctk.CENTER)
+                entry.pack(padx = 10, pady = 10, anchor = ctk.CENTER)
                 self.playernames_e.append(entry)
         elif length<len(self.playernames_e): 
 
@@ -102,7 +102,7 @@ class Game_window():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
-            self.f_graph.geometry("1000x600")
+            self.f_graph.geometry("1200x700")
             
             
             #bouton "mon tour est fini"?
@@ -132,7 +132,7 @@ class Game_window():
         no input
         no output"""
         
-        self.canvas_board = tk.Canvas(self.f_graph, width = 1100, height = 1100)
+        self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752)
         
         self.background = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
         self.item = self.canvas_board.create_image(550, 550, image = self.background)
@@ -142,7 +142,7 @@ class Game_window():
 
         self.place_pawns()
 
-        self.canvas_board.pack(side = tk.LEFT, padx=40, pady=40)
+        self.canvas_board.pack(side = tk.LEFT, anchor = 'nw', padx = 40, pady = 40)
 
     def slide_tiles_buttons(self):
         """creates the buttons around the board allowing to choose where to insert the tile
@@ -155,9 +155,9 @@ class Game_window():
 
     def canvas_for_objective(self):
         """creates canvas to display the objective of the player"""
-        self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta", width = 550, height = 800)
+        self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta", width = 660, height = 420)
         self.objective_image()
-        #self.f_graph.canvas_card.pack(side = tk.TOP, anchor='e', expand = True)
+        self.f_graph.canvas_card.pack(side = tk.TOP, anchor = 'ne')
 
     def text_area(self):
         """creates text area where the controller sends event messages
@@ -170,9 +170,9 @@ class Game_window():
         """creates canvas area for the hand
         no input
         no output"""
-        self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 400, height = 400)
+        self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 660, height = 420)
         self.hand_image()
-        self.canvas_tile.pack(side = tk.BOTTOM, anchor = 'w', padx=50, expand = True)
+        self.canvas_tile.pack(side = tk.TOP, anchor = 'ne') # padx=50, expand = True)
 
     def turn_tile_buttons(self):
         """creates the buttons next to the hand allowing to turn the orientation of the hand tile
