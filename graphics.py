@@ -134,13 +134,15 @@ class Game_window():
         
         self.canvas_board = tk.Canvas(self.f_graph, width = 1100, height = 1100)
         
-        self.background = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
-        self.item = self.canvas_board.create_image(550, 550, image = self.background)
-        self.canvas_board.lower(self.item)
+        
         
         self.grid_images() 
 
         self.place_pawns()
+
+        self.background = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
+        self.item = self.canvas_board.create_image(550, 550, image = self.background)
+        self.canvas_board.lower(self.item)
 
         self.canvas_board.pack(side = tk.LEFT, padx=40, pady=40)
 
@@ -245,48 +247,57 @@ class Game_window():
         
         no input
         no output"""
-        graphics_dict = {(0, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': ['blue']}, (0, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': ['red']}, (6, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (6, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': ['green']}, (0, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_helmet.png', 'orientation': 0, 'pawns': []}, (0, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_candelabrum.png', 'orientation': 0, 'pawns': []}, (2, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_chest.png', 'orientation': 0, 'pawns': []}, (2, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sword.png', 'orientation': 3, 'pawns': []}, (4, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_skull.png', 'orientation': 3, 'pawns': []}, (2, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_emerald.png', 'orientation': 3, 'pawns': []}, (2, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_ring.png', 'orientation': 1, 'pawns': []}, (4, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_map.png', 'orientation': 1, 'pawns': []}, (4, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_crown.png', 'orientation': 1, 'pawns': []}, (4, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_keys.png', 'orientation': 2, 'pawns': []}, (6, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_purse.png', 'orientation': 1, 'pawns': []}, (6, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_grimoire.png', 'orientation': 2, 'pawns': []}, (0, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (0, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (0, 5): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_ghost.png', 'orientation': 0, 'pawns': []}, (1, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sorceress.png', 'orientation': 3, 'pawns': []}, (1, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_moth.png', 'orientation': 3, 'pawns': []}, (1, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_gnome.png', 'orientation': 0, 'pawns': []}, (1, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_scarab.png', 'orientation': 3, 'pawns': []}, (1, 4): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (1, 5): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_genie.png', 'orientation': 1, 'pawns': []}, (1, 6): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (2, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (2, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (2, 5): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (3, 0): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (3, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (3, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 4): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (3, 6): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (4, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_salamander.png', 'orientation': 0, 'pawns': []}, (4, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (4, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_owl.png', 'orientation': 0, 'pawns': []}, (5, 0): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (5, 1): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_bat.png', 'orientation': 3, 'pawns': []}, (5, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_rat.png', 'orientation': 3, 'pawns': []}, (5, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (5, 4): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (5, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (5, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (6, 1): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_dragon.png', 'orientation': 0, 'pawns': []}, (6, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_spider.png', 'orientation': 3, 'pawns': []}, (6, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}}
-        self.image_library()
+        graphics_dict = {(0, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': ['blue']}, (0, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': ['red']}, (6, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (6, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': ['green']}, (0, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_helmet.png', 'orientation': 0, 'pawns': []}, (0, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_candelabrum.png', 'orientation': 0, 'pawns': []}, (2, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_chest.png', 'orientation': 0, 'pawns': []}, (2, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sword.png', 'orientation': 3, 'pawns': []}, (4, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_skull.png', 'orientation': 3, 'pawns': []}, (2, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_emerald.png', 'orientation': 3, 'pawns': []}, (2, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_ring.png', 'orientation': 1, 'pawns': []}, (4, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_map.png', 'orientation': 1, 'pawns': []}, (4, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_crown.png', 'orientation': 1, 'pawns': []}, (4, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_keys.png', 'orientation': 2, 'pawns': []}, (6, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_purse.png', 'orientation': 1, 'pawns': []}, (6, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_grimoire.png', 'orientation': 2, 'pawns': []}, (0, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (0, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (0, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_rat.png', 'orientation': 2, 'pawns': []}, (1, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_ghost.png', 'orientation': 3, 'pawns': []}, (1, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (1, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_owl.png', 'orientation': 0, 'pawns': []}, (1, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (1, 4): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (1, 5): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (1, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (2, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_scarab.png', 'orientation': 0, 'pawns': []}, (2, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (2, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (3, 0): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 1): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_gnome.png', 'orientation': 2, 'pawns': []}, (3, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_salamander.png', 'orientation': 1, 'pawns': []}, (3, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (3, 4): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_moth.png', 'orientation': 2, 'pawns': []}, (3, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_dragon.png', 'orientation': 3, 'pawns': []}, (4, 1): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_genie.png', 'orientation': 2, 'pawns': []}, (4, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (4, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (5, 0): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (5, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (5, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (5, 3): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_bat.png', 'orientation': 3, 'pawns': []}, (5, 4): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (5, 5): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (5, 6): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (6, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (6, 3): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sorceress.png', 'orientation': 0, 'pawns': []}, (6, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}}
+        self.image_library_i()
         #get grid
         #for position, tile in self.controller.grid: #grid should be reduced to (positionTuple)={filepathTile, filepathTreas|None, list of colors or empty list]
+        i = 0
+        self.treasures ={}
+        self.tiles = {}
         for position, tile in graphics_dict.items():
-                #init
-                if tile["filepathTile"] == './tile_corner.png':
-                    self.new_tile =self.tile_c
-                elif tile["filepathTile"] == './tile_t.png':
-                    self.new_tile = self.tile_t
-                else:
-                    self.new_tile = self.tile_s
-                
-
-                #position
-                x0 = position[0]
-                y0 = position[1]
-                x = 110 + x0*146
-                y = 110 + y0*146
-
+            i += 1
+            #position
+            x0 = position[0]
+            y0 = position[1]
+            x = 110 + x0*146
+            y = 110 + y0*146
+            #treasure display
+            if tile["filepathTreas"]!=None:
+                #create and position treasure
+                self.treasures[i] = tk.PhotoImage(file = self.folder + tile["filepathTreas"])
+                #print('1')
+                new_fg = self.canvas_board.create_image(y, x, image = self.treasures[i])
+                #print('2')
+                self.canvas_board.lift(new_fg)
                 #orientate
-                #for i in range(tile["orientation"]):
-                    #rotate_image(self.new_tile, "right")
-                #self.new_tile_r = rotate_image(new_tile, 1)
+                #self.new_treas = Image.open(self.folder + tile['filepathTreas'])
+                #self.treasures[i] = rotate_image(self.new_tile, tile["orientation"])
                 
-                #tile display
-                new_bg = self.canvas_board.create_image(x, y, image = self.new_tile)
-                self.canvas_board.lift(new_bg)
+                #display
+                #new_fg = self.canvas_board.create_image(y, x, image = self.treasures[i])
+                #self.canvas_board.lift(new_fg)
+            else:
+                treas = None
                 
-                
+            #init
+            if tile["filepathTile"] == './tile_corner.png':
+                self.new_tile = self.tile_c
+            elif tile["filepathTile"] == './tile_t.png':
+                self.new_tile = self.tile_t
+            else:
+                self.new_tile = self.tile_s
 
-                #treasure display
-                if tile["filepathTreas"]!=None:
-                    #create and position treasure
-                    new_treas = tk.PhotoImage(file = self.folder + tile["filepathTreas"])
-                    new_fg = self.canvas_board.create_image(x, y, image = new_treas)
-                    self.canvas_board.lift(new_fg)
-                    treas = new_fg
-                else:
-                    treas = None
+            #orientate
+            self.tiles[i] = rotate_image(self.new_tile, tile["orientation"])
+            
+            #display
+            new_bg = self.canvas_board.create_image(y, x, image = self.tiles[i])
+            self.canvas_board.lower(new_bg)
+            
 
-                self.image_dict[new_bg] = (x,y)
+            
+
+            self.image_dict[new_bg] = (x,y)
 
                 
                 
@@ -378,8 +389,7 @@ class Game_window():
             item_clicked = self.dicoSommetsGraphiques[ident]
             self.text_area.insert(tk.INSERT,item_clicked)"""
 def rotate_image(img, orientation):
-    for i in range(orientation):
-        img = img.rotate(-90)
+    img = img.rotate(orientation* -90)
     return (ImageTk.PhotoImage(img))
     
 
