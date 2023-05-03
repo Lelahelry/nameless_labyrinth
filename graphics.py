@@ -1,6 +1,8 @@
 import tkinter as tk
 import customtkinter as ctk
 
+from PIL import Image, ImageTk
+
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
@@ -188,7 +190,7 @@ class Game_window():
     def objective_image(self):
         self.f_graph.canvas_card.pack(side = tk.TOP, anchor='e', expand = True)
      
-    def image_library(self, filepath):
+    def image_library(self):
         """loads and sizes all PNG files (not arrows)
         no input
         no output"""
@@ -197,6 +199,16 @@ class Game_window():
         self.tile_c = tk.PhotoImage(file = self.folder + '\\tile_corner.png')
         self.tile_t = tk.PhotoImage(file = self.folder + '\\tile_t.png')
         self.tile_s = tk.PhotoImage(file = self.folder + '\\tile_straight.png')
+
+    def image_library_i(self):
+        """loads and sizes all PNG files (not arrows)
+        no input
+        no output"""
+        self.image_dict = {}
+        #load the 3 tile images and resize them
+        self.tile_c = Image.open(self.folder + '\\tile_corner.png')
+        self.tile_t = Image.open(self.folder + '\\tile_t.png')
+        self.tile_s = Image.open(self.folder + '\\tile_straight.png')
         
     def hand_image(self):
         """displays the hand in its canvas and binds it to the rotation
@@ -226,41 +238,55 @@ class Game_window():
             #bind method de rotation 
             #stock the tile in a dict
 
+
     def grid_images(self):
         """displays the tiles on the board in its canvas and binds it to the sliding
         beforehand associates tiles and treasures+stock them 
         
         no input
         no output"""
+        graphics_dict = {(0, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': ['blue']}, (0, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': ['red']}, (6, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (6, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': ['green']}, (0, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_helmet.png', 'orientation': 0, 'pawns': []}, (0, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_candelabrum.png', 'orientation': 0, 'pawns': []}, (2, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_chest.png', 'orientation': 0, 'pawns': []}, (2, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sword.png', 'orientation': 3, 'pawns': []}, (4, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_skull.png', 'orientation': 3, 'pawns': []}, (2, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_emerald.png', 'orientation': 3, 'pawns': []}, (2, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_ring.png', 'orientation': 1, 'pawns': []}, (4, 6): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_map.png', 'orientation': 1, 'pawns': []}, (4, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_crown.png', 'orientation': 1, 'pawns': []}, (4, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_keys.png', 'orientation': 2, 'pawns': []}, (6, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_purse.png', 'orientation': 1, 'pawns': []}, (6, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_grimoire.png', 'orientation': 2, 'pawns': []}, (0, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (0, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (0, 5): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_ghost.png', 'orientation': 0, 'pawns': []}, (1, 0): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sorceress.png', 'orientation': 3, 'pawns': []}, (1, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_moth.png', 'orientation': 3, 'pawns': []}, (1, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_gnome.png', 'orientation': 0, 'pawns': []}, (1, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_scarab.png', 'orientation': 3, 'pawns': []}, (1, 4): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (1, 5): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_genie.png', 'orientation': 1, 'pawns': []}, (1, 6): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (2, 1): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (2, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (2, 5): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (3, 0): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (3, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (3, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 4): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (3, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (3, 6): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, (4, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_salamander.png', 'orientation': 0, 'pawns': []}, (4, 3): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (4, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_owl.png', 'orientation': 0, 'pawns': []}, (5, 0): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (5, 1): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_bat.png', 'orientation': 3, 'pawns': []}, (5, 2): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_rat.png', 'orientation': 3, 'pawns': []}, (5, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (5, 4): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}, (5, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}, (5, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': []}, (6, 1): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_dragon.png', 'orientation': 0, 'pawns': []}, (6, 3): {'filepathTile': './tile_corner.png', 'filepathTreas': './tr_spider.png', 'orientation': 3, 'pawns': []}, (6, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []}}
+        self.image_library()
         #get grid
-        for position, tile in self.controller.grid: #grid should be reduced to (positionTuple)={filepathTile, filepathTreas|None, list of colors or empty list]
+        #for position, tile in self.controller.grid: #grid should be reduced to (positionTuple)={filepathTile, filepathTreas|None, list of colors or empty list]
+        for position, tile in graphics_dict.items():
                 #init
-                pawn = [] 
-                if tile["filepath_ti"] == '\\tile_corner.png':
+                if tile["filepathTile"] == './tile_corner.png':
                     self.new_tile =self.tile_c
-                elif tile["filepath_ti"] == '\\tile_t.png':
+                elif tile["filepathTile"] == './tile_t.png':
                     self.new_tile = self.tile_t
                 else:
                     self.new_tile = self.tile_s
-                #position
-                x = 100 + position(0)*146
-                y = 100 + position(1)*146
+                
 
+                #position
+                x0 = position[0]
+                y0 = position[1]
+                x = 110 + x0*146
+                y = 110 + y0*146
+
+                #orientate
+                #for i in range(tile["orientation"]):
+                    #rotate_image(self.new_tile, "right")
+                #self.new_tile_r = rotate_image(new_tile, 1)
+                
                 #tile display
-                self.new_bg = self.canvas_board.create_image(x, y, image = self.self.new_tile)
-                self.canvas_board.lift(self.new_bg)
+                new_bg = self.canvas_board.create_image(x, y, image = self.new_tile)
+                self.canvas_board.lift(new_bg)
+                
+                
 
                 #treasure display
-                if tile["filepath_tr"]!=None:
+                if tile["filepathTreas"]!=None:
                     #create and position treasure
-                    self.new_treas = tk.PhotoImage(file = self.folder + tile["filepath_tr"])
-                    self.new_fg = self.canvas_board.create_image(x, y, image = self.new_treas)
-                    self.canvas_board.lift(self.new_fg)
-                    treas = self.new_fg
+                    new_treas = tk.PhotoImage(file = self.folder + tile["filepathTreas"])
+                    new_fg = self.canvas_board.create_image(x, y, image = new_treas)
+                    self.canvas_board.lift(new_fg)
+                    treas = new_fg
                 else:
                     treas = None
 
-                self.image_dict[(self.new_bg, treas, pawn)]
+                self.image_dict[new_bg] = (x,y)
 
                 
                 
@@ -275,19 +301,19 @@ class Game_window():
 
 
         
-        self.tile_c = tk.PhotoImage(file = self.folder + '\\tile_corner.png')
-        self.item2 = self.f_graph.canvas_board.create_image(100, 100, image = self.tile_c)
-        self.treas1 =  tk.PhotoImage(file = self.folder + '\\tr_bat.png')
-        self.item21 = self.f_graph.canvas_board.create_image(100, 100, image = self.treas1)
+        #self.tile_c = tk.PhotoImage(file = self.folder + '\\tile_corner.png')
+        #self.item2 = self.f_graph.canvas_board.create_image(100, 100, image = self.tile_c)
+        #self.treas1 =  tk.PhotoImage(file = self.folder + '\\tr_bat.png')
+        #self.item21 = self.f_graph.canvas_board.create_image(100, 100, image = self.treas1)
 
 
         
-        self.f_graph.canvas_board.lift(self.item2)
-        self.f_graph.canvas_board.lift(self.item21)
-        self.item3 = self.f_graph.canvas_board.create_image(246, 100, image = self.tile_c)
-        self.f_graph.canvas_board.lift(self.item3)
-        self.item4 = self.f_graph.canvas_board.create_image(100, 246, image = self.tile_c)
-        self.f_graph.canvas_board.lift(self.item4)
+        #self.f_graph.canvas_board.lift(self.item2)
+        #self.f_graph.canvas_board.lift(self.item21)
+        #self.item3 = self.f_graph.canvas_board.create_image(246, 100, image = self.tile_c)
+        #self.f_graph.canvas_board.lift(self.item3)
+        #self.item4 = self.f_graph.canvas_board.create_image(100, 246, image = self.tile_c)
+        #self.f_graph.canvas_board.lift(self.item4)
 
 
     def anim_silde_tile(self):
@@ -300,6 +326,7 @@ class Game_window():
     def place_pawns(self):
         """place circles for the pawn"""
         pass
+    """
         #place pawns and bind them to moving animation
         x = 100 + position(0)*146
         y = 100 + position(1)*146
@@ -311,11 +338,11 @@ class Game_window():
                     if color == "blue": 
                         self.canvas_board.create_oval(x-20, y+10, x, y+10, "fill"=color  )
                     el
-    """
+    
     def turn_over(self, event):
-        validates that the player is done with his turn and communicates the changes of player back and forth with the controller
-        no input
-        output
+        #validates that the player is done with his turn and communicates the changes of player back and forth with the controller
+        #no input
+        #output
 
         
                
@@ -350,6 +377,10 @@ class Game_window():
             ident = self.f_graph.canevas.find_withtag("current")[0]
             item_clicked = self.dicoSommetsGraphiques[ident]
             self.text_area.insert(tk.INSERT,item_clicked)"""
+def rotate_image(img, orientation):
+    for i in range(orientation):
+        img = img.rotate(-90)
+    return (ImageTk.PhotoImage(img))
     
 
 

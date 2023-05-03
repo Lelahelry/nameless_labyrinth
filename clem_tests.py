@@ -129,3 +129,18 @@ print(ti_1.orientation)
 gamer = Game("jkscnj", ["léa","clem","marine"])
 
 
+graphics_dict ={}
+##grid should be reduced to (positionTuple)={filepathTile, filepathTreas|None, list of colors or empty list]
+for position , tile in gamer.board.grid.items():
+    if tile.treasure != None:
+        pawns=[p.color for p in tile.pawns]
+        graphics_dict[position]= {"filepathTile" : tile.filepath,"filepathTreas" : tile.treasure.filepath,"orientation":tile.orientation, "pawns" : pawns}
+    else:
+        pawns=[p.color for p in tile.pawns]
+        graphics_dict[position]= {"filepathTile" : tile.filepath, "filepathTreas" : None, "orientation":tile.orientation, "pawns" : pawns}
+
+
+print("")
+print("")
+print(graphics_dict)
+
