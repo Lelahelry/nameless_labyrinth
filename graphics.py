@@ -156,19 +156,57 @@ class GameWindow():
         """creates the buttons around the board allowing to choose where to insert the tile
         no input
         no output"""
-        #sliding option buttons
-        #bind them to slide tile with a parameter(to be chosen)
-        #validate button 
-        #bind it to controller somehow
-        self.bouton01 = ctk.CTkButton(self.f_graph, text = "", width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton01 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton01.bind('<Button-1>', self.select_insertion_button(self, (0,1)))
-        self.bouton01.place(x = 120, y = 0)
+        self.bouton01.place(x = 110, y = 0)
 
-        #self.bouton03 = 
+        self.bouton03 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton03.bind('<Button-1>', self.select_insertion_button(self, (0,3)))
+        self.bouton03.place(x = 310, y = 0)
+
+        self.bouton05 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton05.bind('<Button-1>', self.select_insertion_button(self, (0,5)))
+        self.bouton05.place(x = 510, y = 0)
+
+        self.bouton10 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton10.bind('<Button-1>', self.select_insertion_button(self, (1,0)))
+        self.bouton10.place(x = 0, y = 110)
+
+        self.bouton30 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton30.bind('<Button-1>', self.select_insertion_button(self, (3,0)))
+        self.bouton30.place(x = 0, y = 310)
+
+        self.bouton50 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton50.bind('<Button-1>', self.select_insertion_button(self, (5,0)))
+        self.bouton50.place(x = 0, y = 510)
+
+        self.bouton71 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton71.bind('<Button-1>', self.select_insertion_button(self, (7,1)))
+        self.bouton71.place(x = 110, y = 636)
+
+        self.bouton73 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton73.bind('<Button-1>', self.select_insertion_button(self, (7,3)))
+        self.bouton73.place(x = 310, y = 636)
+
+        self.bouton75 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton75.bind('<Button-1>', self.select_insertion_button(self, (7,5)))
+        self.bouton75.place(x = 510, y = 636)
+
+        self.bouton17 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton17.bind('<Button-1>', self.select_insertion_button(self, (1,7)))
+        self.bouton17.place(x = 636, y = 110)
+
+        self.bouton37 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton37.bind('<Button-1>', self.select_insertion_button(self, (3,7)))
+        self.bouton37.place(x = 636, y = 310)
+
+        self.bouton57 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton57.bind('<Button-1>', self.select_insertion_button(self, (5,7)))
+        self.bouton57.place(x = 636, y = 510)
     
     def select_insertion_button(self, event, pos):
         """changes the color of the selected button and gets its position"""
-        # change color
+        # change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
         # get button position and call anim_slide_tile
 
     def canvas_for_objective(self):
