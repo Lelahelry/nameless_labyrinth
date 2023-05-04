@@ -236,7 +236,7 @@ class GameWindow():
     def validate_button(self):
         """creates the button under the hand to validate the chosen orientation and insertion
     def validate_button(self):
-        """creates the button next to the hand to validate the chosen orientation and insertion
+        creates the button next to the hand to validate the chosen orientation and insertion
         no input
         no output"""    
         self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'),width = 50, height = 50, fg_color = 'green', hover_color = "DodgerBlue4")
