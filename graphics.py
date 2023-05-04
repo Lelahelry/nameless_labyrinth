@@ -134,8 +134,6 @@ class Game_window():
         
         self.canvas_board = tk.Canvas(self.f_graph, width = 1100, height = 1100)
         
-        
-        
         self.grid_images() 
 
         self.place_pawns()
@@ -182,7 +180,7 @@ class Game_window():
         no output"""
         #turning buttons
         
-    def validate_buttons(self):
+    def validate_button(self):
         """creates the button under the hand to validate the chosen orientation and insertion
         no input
         no output"""    
@@ -327,8 +325,9 @@ class Game_window():
         #self.f_graph.canvas_board.lift(self.item4)
 
 
-    def anim_silde_tile(self):
-        """pour slider les tiles à l'écran"""
+    def anim_silde_tile(self, event, pos):
+        """pour slider les tiles à l'écran
+        input : tuple"""
         pass
         #effacer bout
         # animer translation des 6 d'avant
