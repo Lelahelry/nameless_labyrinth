@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Iterator
+from typing import Callable, Iterator
 from utils import pairwise, adjacent_coords_cw
 import random
 import json
@@ -215,13 +215,13 @@ class GameData:
         
         raise ValueError(f"{pawn} doesn't exist on the board.")
     
-    def get_adjacency_fn(self) -> Iterator[tuple[int, int]]:
+    def get_adjacency_fn(self) -> Callable[[tuple[int, int]], Iterator[tuple[int, int]]]:
         return self.board.connected_tiles
 
     def get_slideout_position(self) -> tuple[int, int] | None:
         return self.board.slideout_position
 
-    def get_active_player(self):
+    def get_active_player(self) -> Pawn:
         return self.queue[0]
     
     def advance_queue(self):
