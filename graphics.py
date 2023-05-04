@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
-class Game_window():
+class GameWindow():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
@@ -403,5 +403,5 @@ def rotate_image(img, orientation):
 
         
 if __name__ == "__main__":
-    app = Game_window()
+    app = GameWindow()
     app.root.mainloop()

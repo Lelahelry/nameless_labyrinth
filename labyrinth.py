@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import Iterator
-from utils import *
+from utils import pairwise, adjacent_coords_cw
 import random
 import json
 
@@ -129,12 +129,6 @@ class Board:
         
         return slideout_tile
     
-    def get_pawn_position(self, pawn: Pawn) -> tuple[int, int]:
-        for pos, tile in self.grid.items():
-            if pawn in tile.pawns:
-                return pos
-        
-        raise ValueError(f"{pawn} doesn't exist on the board.")
     
     def connected_tiles(self, origin_pos: tuple[int, int]) -> Iterator[tuple[int, int]]:
         origin = self.grid[origin_pos]
@@ -157,23 +151,13 @@ class Board:
                     continue
 
 @dataclass
-class Message:
-    """communicates with the graphics file"""
-    choosentile: tuple[int,int] | None
-    insertpos : tuple[int, int] | None
-    newpos : tuple[int,int] | None
-    foundtreasure : Treasure | None
-    current_grid : dict
-    playernames : list[str]
-
-@dataclass
-class Game:
+class GameData:
     """Encapsulates all data related to an individual game's state and manages game flow."""
     queue: list[Pawn] # Rotating queue for playing order
     board: Board
     hand: MovingTile # Tile that last slid out of the board, returned by Board.slide_tile method
 
-    def __init__(self, datapath: str, playernames: list[str]):
+    def __init__(self, datapath: str, playernames: list[str], controller: Controller):
         '''initialize the game'''
         COLORS = ['blue', 'red', 'green', 'yellow']
         STARTING_POSITIONS = [(0, 0), (0, 6), (6, 0), (6, 6)]
@@ -223,43 +207,22 @@ class Game:
                 #place pawns
         for pawn, pos in zip(self.queue, STARTING_POSITIONS):
             self.board[pos].pawns.append(pawn)
-    
-    
-    def move_pawn(self, pawn: Pawn, newpos: tuple[int, int]) -> tuple[int, int]:
-        """return destination tile"""
-#try interroger controlleur et prévenir controlleur
-        startpos = self.board.get_pawn_position(pawn)
-        for pos in bfs_walk(startpos, self.board.connected_tiles):
-            if pos == newpos:
-                self.board[startpos].pawns.remove(pawn)
-                self.board[newpos].pawns.append(pawn)
 
-                return newpos
+    def get_pawn_container(self, pawn: Pawn) -> tuple[tuple[int, int], Tile]:
+        for pos, tile in self.board.grid.items():
+            if pawn in tile.pawns:
+                return (pos, tile)
         
-        raise ValueError("Pawn doesn't have an open path to given tile.")
+        raise ValueError(f"{pawn} doesn't exist on the board.")
+    
+    def get_adjacency_fn(self) -> Iterator[tuple[int, int]]:
+        return self.board.connected_tiles
+
+    def get_slideout_position(self) -> tuple[int, int] | None:
+        return self.board.slideout_position
 
     def get_active_player(self):
         return self.queue[0]
     
-    def rotate_players(self):
+    def advance_queue(self):
         self.queue.append(self.queue.pop(0))
-
-    def start(self):
-        game_won = False
-        while not game_won:
-            if self.turn():
-                self.controller.collect()
-                self.get_active_player().objectives.pop(0)
-                if self.get_active_player().objectives == []:
-                    self.controller.win(self.queue[0])
-                    game_won = True
-            self.rotate_players()
-            self.controller.next_turn()
-
-    def turn(self):
-        pass
-        '''return boolean
-
-        self.board.slide_tile(Message.insertpos, Tile)
-        self.move_pawn()
-        return self.queue[0].objectives[0] == destination.treasure'''
