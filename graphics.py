@@ -6,11 +6,11 @@ from PIL import Image, ImageTk
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
-class Game_window():
+class GameWindow():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
-        self.root.geometry("1000x600")
+        self.root.geometry("1200x700")
         # management of the communication with the game class
             
         ########################################
@@ -29,17 +29,17 @@ class Game_window():
 
     def widgets_creation(self, root):
         # text
-        self.welcome = ctk.CTkLabel(root, height = 110, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
+        self.welcome = ctk.CTkLabel(root, height = 120, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
         self.welcome.pack(side = tk.TOP)
 
-        self.label = ctk.CTkLabel(root, height = 40, text = "Choose the number of players and enter their names :", font = ('Calibri', 20))
+        self.label = ctk.CTkLabel(root, height = 50, text = "Choose the number of players and enter their names :", font = ('Calibri', 20))
         self.label.pack(side = tk.TOP)
 
         # player number
         self.player_number = tk.IntVar()
         self.scale = ctk.CTkSlider(root, height = 30, width = 455, progress_color = "goldenrod", fg_color = "DodgerBlue4",  button_corner_radius = 5, button_color = "goldenrod", button_hover_color = "DodgerBlue4", from_ = 2, to = 4, number_of_steps = 2, orientation = "horizontal", variable = self.player_number)
 
-        self.scale.pack(pady = 20, anchor = ctk.CENTER)
+        self.scale.pack(pady = 30, anchor = ctk.CENTER)
         self.scale.bind('<ButtonRelease-1>', self.add_playernames)
 
         self.scale.set(2)
@@ -64,7 +64,7 @@ class Game_window():
             for i in range(1, length - len(self.playernames_e) + 1):
                 name = "Player" + str(len(self.playernames_e) +1)
                 entry = ctk.CTkEntry(self.root,text_color = "DodgerBlue4", placeholder_text = name,  height = 50, width = 200, font = ('Calibri', 16))
-                entry.pack(padx = 10, pady = 6, anchor = ctk.CENTER)
+                entry.pack(padx = 10, pady = 10, anchor = ctk.CENTER)
                 self.playernames_e.append(entry)
         elif length<len(self.playernames_e): 
 
@@ -102,7 +102,7 @@ class Game_window():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
-            self.f_graph.geometry("1000x600")
+            self.f_graph.geometry("1200x700")
             
             
             #bouton "mon tour est fini"?
@@ -125,7 +125,7 @@ class Game_window():
 
             self.turn_tile_buttons()
             
-            self.validate_buttons()    
+            self.validate_button()    
 
     def canvas_for_board(self):
         """creates the canva for the board with the background
@@ -138,6 +138,8 @@ class Game_window():
 
         self.place_pawns()
 
+        self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752)
+        
         self.background = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
         self.item = self.canvas_board.create_image(550, 550, image = self.background)
         self.canvas_board.lower(self.item)
@@ -148,16 +150,67 @@ class Game_window():
         """creates the buttons around the board allowing to choose where to insert the tile
         no input
         no output"""
-        #sliding option buttons
-        #bind them to slide tile with a parameter(to be chosen)
-        #validate button 
-        #bind it to controller somehow
+
+        # Bind it to controller somehow so as to disable the button where it's not allowed to insert the tile
+
+        self.bouton01 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton01.bind('<Button-1>', self.select_insertion_button(self, (0,1)))
+        self.bouton01.place(x = 110, y = 0)
+
+        self.bouton03 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton03.bind('<Button-1>', self.select_insertion_button(self, (0,3)))
+        self.bouton03.place(x = 310, y = 0)
+
+        self.bouton05 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton05.bind('<Button-1>', self.select_insertion_button(self, (0,5)))
+        self.bouton05.place(x = 510, y = 0)
+
+        self.bouton10 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton10.bind('<Button-1>', self.select_insertion_button(self, (1,0)))
+        self.bouton10.place(x = 0, y = 110)
+
+        self.bouton30 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton30.bind('<Button-1>', self.select_insertion_button(self, (3,0)))
+        self.bouton30.place(x = 0, y = 310)
+
+        self.bouton50 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton50.bind('<Button-1>', self.select_insertion_button(self, (5,0)))
+        self.bouton50.place(x = 0, y = 510)
+
+        self.bouton71 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton71.bind('<Button-1>', self.select_insertion_button(self, (7,1)))
+        self.bouton71.place(x = 110, y = 636)
+
+        self.bouton73 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton73.bind('<Button-1>', self.select_insertion_button(self, (7,3)))
+        self.bouton73.place(x = 310, y = 636)
+
+        self.bouton75 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton75.bind('<Button-1>', self.select_insertion_button(self, (7,5)))
+        self.bouton75.place(x = 510, y = 636)
+
+        self.bouton17 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton17.bind('<Button-1>', self.select_insertion_button(self, (1,7)))
+        self.bouton17.place(x = 636, y = 110)
+
+        self.bouton37 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton37.bind('<Button-1>', self.select_insertion_button(self, (3,7)))
+        self.bouton37.place(x = 636, y = 310)
+
+        self.bouton57 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton57.bind('<Button-1>', self.select_insertion_button(self, (5,7)))
+        self.bouton57.place(x = 636, y = 510)
+    
+    def select_insertion_button(self, event, pos):
+        """changes the color of the selected button and gets its position"""
+        # change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
+        # get button position and call anim_slide_tile
 
     def canvas_for_objective(self):
         """creates canvas to display the objective of the player"""
-        self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta", width = 550, height = 800)
+        self.f_graph.canvas_card = tk.Canvas(self.f_graph, bg = "magenta", width = 660, height = 420)
         self.objective_image()
-        #self.f_graph.canvas_card.pack(side = tk.TOP, anchor='e', expand = True)
+        self.f_graph.canvas_card.pack(side = tk.TOP, anchor = 'ne')
 
     def text_area(self):
         """creates text area where the controller sends event messages
@@ -170,9 +223,9 @@ class Game_window():
         """creates canvas area for the hand
         no input
         no output"""
-        self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 400, height = 400)
+        self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 660, height = 420)
         self.hand_image()
-        self.canvas_tile.pack(side = tk.BOTTOM, anchor = 'w', padx=50, expand = True)
+        self.canvas_tile.pack(side = tk.TOP, anchor = 'ne')
 
     def turn_tile_buttons(self):
         """creates the buttons next to the hand allowing to turn the orientation of the hand tile
@@ -182,10 +235,14 @@ class Game_window():
         
     def validate_button(self):
         """creates the button under the hand to validate the chosen orientation and insertion
+    def validate_button(self):
+        """creates the button next to the hand to validate the chosen orientation and insertion
         no input
         no output"""    
-        #validate button 
-        #bind it to controller somehow
+        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'),width = 50, height = 50, fg_color = 'green', hover_color = "DodgerBlue4")
+        self.button_valid.bind('<Button-1>', self.anim_slide_tiles)
+        self.button_valid.place(x = 1100, y = 600)
+        # bind it to controller somehow
 
     def objective_image(self):
         self.f_graph.canvas_card.pack(side = tk.TOP, anchor='e', expand = True)
@@ -328,6 +385,8 @@ class Game_window():
     def anim_silde_tile(self, event, pos):
         """pour slider les tiles à l'écran
         input : tuple"""
+    def anim_slide_tiles(self):
+        """pour slider les tiles à l'écran"""
         pass
         #effacer bout
         # animer translation des 6 d'avant
@@ -387,6 +446,7 @@ class Game_window():
             ident = self.f_graph.canevas.find_withtag("current")[0]
             item_clicked = self.dicoSommetsGraphiques[ident]
             self.text_area.insert(tk.INSERT,item_clicked)"""
+    
 def rotate_image(img, orientation):
     img = img.rotate(orientation* -90)
     return (ImageTk.PhotoImage(img))
@@ -396,5 +456,5 @@ def rotate_image(img, orientation):
 
         
 if __name__ == "__main__":
-    app = Game_window()
+    app = GameWindow()
     app.root.mainloop()

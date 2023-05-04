@@ -1,10 +1,3 @@
-import tkinter as tk
-
-#classes
-
-#functions
-
-#game
-
-#GUI 
-
+import labyrinth
+import controller
+import graphics
