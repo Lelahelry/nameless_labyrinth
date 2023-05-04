@@ -224,5 +224,8 @@ class GameData:
     def get_active_player(self) -> Pawn:
         return self.queue[0]
     
+    def get_pawns_at_pos(self, pos: tuple[int, int]):
+        return self.board[pos].pawns
+
     def advance_queue(self):
         self.queue.append(self.queue.pop(0))
