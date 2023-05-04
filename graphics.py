@@ -125,7 +125,7 @@ class GameWindow():
 
             self.turn_tile_buttons()
             
-            self.validate_buttons()    
+            self.validate_button()    
 
     def canvas_for_board(self):
         """creates the canva for the board with the background
@@ -156,6 +156,9 @@ class GameWindow():
         """creates the buttons around the board allowing to choose where to insert the tile
         no input
         no output"""
+
+        # Bind it to controller somehow so as to disable the button where it's not allowed to insert the tile
+
         self.bouton01 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton01.bind('<Button-1>', self.select_insertion_button(self, (0,1)))
         self.bouton01.place(x = 110, y = 0)
@@ -228,7 +231,7 @@ class GameWindow():
         no output"""
         self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 660, height = 420)
         self.hand_image()
-        self.canvas_tile.pack(side = tk.TOP, anchor = 'ne') # padx=50, expand = True)
+        self.canvas_tile.pack(side = tk.TOP, anchor = 'ne')
 
     def turn_tile_buttons(self):
         """creates the buttons next to the hand allowing to turn the orientation of the hand tile
@@ -236,12 +239,14 @@ class GameWindow():
         no output"""
         #turning buttons
         
-    def validate_buttons(self):
-        """creates the button under the hand to validate the chosen orientation and insertion
+    def validate_button(self):
+        """creates the button next to the hand to validate the chosen orientation and insertion
         no input
         no output"""    
-        #validate button 
-        #bind it to controller somehow
+        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'),width = 50, height = 50, fg_color = 'green', hover_color = "DodgerBlue4")
+        self.button_valid.bind('<Button-1>', self.anim_slide_tiles)
+        self.button_valid.place(x = 1100, y = 600)
+        # bind it to controller somehow
 
     def objective_image(self):
         self.f_graph.canvas_card.pack(side = tk.TOP, anchor='e', expand = True)
@@ -381,7 +386,7 @@ class GameWindow():
         #self.f_graph.canvas_board.lift(self.item4)
 
 
-    def anim_slide_tile(self):
+    def anim_slide_tiles(self):
         """pour slider les tiles à l'écran"""
         pass
         #effacer bout
@@ -442,6 +447,7 @@ class GameWindow():
             ident = self.f_graph.canevas.find_withtag("current")[0]
             item_clicked = self.dicoSommetsGraphiques[ident]
             self.text_area.insert(tk.INSERT,item_clicked)"""
+    
 def rotate_image(img, orientation):
     img = img.rotate(orientation* -90)
     return (ImageTk.PhotoImage(img))
