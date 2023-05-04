@@ -160,6 +160,16 @@ class GameWindow():
         #bind them to slide tile with a parameter(to be chosen)
         #validate button 
         #bind it to controller somehow
+        self.bouton01 = ctk.CTkButton(self.f_graph, text = "", width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton01.bind('<Button-1>', self.select_insertion_button(self, (0,1)))
+        self.bouton01.place(x = 120, y = 0)
+
+        #self.bouton03 = 
+    
+    def select_insertion_button(self, event, pos):
+        """changes the color of the selected button and gets its position"""
+        # change color
+        # get button position and call anim_slide_tile
 
     def canvas_for_objective(self):
         """creates canvas to display the objective of the player"""
@@ -333,7 +343,7 @@ class GameWindow():
         #self.f_graph.canvas_board.lift(self.item4)
 
 
-    def anim_silde_tile(self):
+    def anim_slide_tile(self):
         """pour slider les tiles à l'écran"""
         pass
         #effacer bout
