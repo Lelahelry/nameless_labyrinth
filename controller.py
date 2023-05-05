@@ -5,7 +5,7 @@ from utils import bfs_walk
 
 
 @dataclass
-class Controller:
+class GameController:
     model: GameData
     view: GameWindow
 
@@ -13,7 +13,7 @@ class Controller:
         self.view.set_controller(self)
         self.game_active = False
     
-    def move_pawn(self)]:
+    def move_pawn(self):
         pawn_moved = False
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
