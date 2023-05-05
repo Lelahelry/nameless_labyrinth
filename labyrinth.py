@@ -56,7 +56,7 @@ class MovingTile(Tile):
 class Board:
     """Represents the game board containing all tiles."""
     grid: dict[tuple[int, int], Tile] 
-    slideout_position: tuple[int, int] | None
+    slideout_position: tuple[int, int] | None = None
 
     def __init__(self, fixed_tiles: list[FixedTile], moving_tiles: list[MovingTile]):
         """
@@ -86,7 +86,7 @@ class Board:
         else:
             self.grid[pos] = tile
     
-    def slide_tile(self, insertpos: tuple[int, int], tile: Tile) -> Tile:
+    def slide_tile(self, insertpos: tuple[int, int], tile: MovingTile) -> MovingTile:
         """
         Applies the desired slide (if valid), and returns the tile that slid out.
         """
@@ -96,8 +96,9 @@ class Board:
                 raise ValueError("Can't cancel previous move.")
 
             case ((0 | 6) as row, (1 | 3 | 5) as col):
-                first, last = row, 6 if row == 0 else 0
-                r = range(last, first)
+                first = row
+                last, step = (6, -1) if row == 0 else (0, 1)
+                r = range(last, first+step, step)
 
                 self.slideout_position = (last, col)
                 slideout_tile = self.grid.pop(self.slideout_position)
@@ -109,8 +110,9 @@ class Board:
                     tile.pawns.append(slideout_tile.pawns.pop())
             
             case ((1 | 3 | 5) as row, (0 | 6) as col):
-                first, last = col, 6 if col == 0 else 0
-                r = range(last, first)
+                first = col
+                last, step = (6, -1) if col == 0 else (0, 1)
+                r = range(last, first+step, step)
 
                 self.slideout_position = (row, last)
                 slideout_tile = self.grid.pop(self.slideout_position)
@@ -152,12 +154,12 @@ class Board:
 
 @dataclass
 class GameData:
-    """Encapsulates all data related to an individual game's state and manages game flow."""
+    """Encapsulates all data related to an individual game's state and can provide insight into it to external callers."""
     queue: list[Pawn] # Rotating queue for playing order
     board: Board
     hand: MovingTile # Tile that last slid out of the board, returned by Board.slide_tile method
 
-    def __init__(self, datapath: str, playernames: list[str], controller: Controller):
+    def __init__(self, datapath: str, playernames: list[str]):
         '''initialize the game'''
         COLORS = ['blue', 'red', 'green', 'yellow']
         STARTING_POSITIONS = [(0, 0), (0, 6), (6, 0), (6, 6)]

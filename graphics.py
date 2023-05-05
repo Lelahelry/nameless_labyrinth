@@ -10,8 +10,13 @@ class GameWindow():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
+<<<<<<< HEAD
         self.root.configure(bg='#103A86')
 
+=======
+        self.root.iconbitmap('tr_chest.ico')
+        self.root.geometry("1200x700")
+>>>>>>> 7df2e7415b1133686c9e3f79a0eb9cc1e23fa71a
         # management of the communication with the game class
             
         ########################################
@@ -104,9 +109,14 @@ class GameWindow():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
+<<<<<<< HEAD
             self.f_graph.geometry("1200x700")
 
             
+=======
+            #self.f_graph.iconbitmap('tr_chest.ico')      celiu-ci n'a pas l'air de fonctionner...
+            self.f_graph.geometry("1200x700")      
+>>>>>>> 7df2e7415b1133686c9e3f79a0eb9cc1e23fa71a
             
             #bouton "mon tour est fini"?
             self.button_done = ctk.CTkButton(self.f_graph, text = "My turn is over.", corner_radius = 8, height = 30, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
@@ -126,7 +136,7 @@ class GameWindow():
 
             self.turn_tile_buttons()
             
-            self.validate_button()    
+            self.validate_button()
 
     def canvas_for_board(self):
         """creates the canva for the board with the background
@@ -216,10 +226,11 @@ class GameWindow():
 
     def canvas_for_objective(self):
         """creates canvas to display the objective of the player"""
-        self.canvas_card = tk.Canvas(self.f_graph, bg = "DodgerBlue4", width = 310, height = 420)
+        self.canvas_card = tk.Canvas(self.f_graph, width = 360, height = 420)
+        self.objective_background()
         self.objective_image()
         self.canvas_card.pack(side = tk.TOP, anchor = 'ne')
-        
+
 
 
     def text_area(self):
@@ -266,8 +277,6 @@ class GameWindow():
 
     def validate_button(self):
         """creates the button under the hand to validate the chosen orientation and insertion
-    def validate_button(self):
-        creates the button next to the hand to validate the chosen orientation and insertion
         no input
         no output"""    
         self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#103A86', fg_color = '#009900', hover_color = "green4")
@@ -275,10 +284,25 @@ class GameWindow():
         self.button_valid.place(x = 1015, y = 605)
         # bind it to controller somehow
 
-    def objective_image(self):
-        self.canvas_card.background = tk.PhotoImage(file = self.folder + '\\card.png')
-        self.canvas_card.item = self.canvas_card.create_image(150, 210, image = self.canvas_card.background)
+    def objective_background(self):
+        self.canvas_card.original_background = tk.PhotoImage(file = self.folder + '\\card.png')
+        self.canvas_card.background = self.canvas_card.original_background.zoom(6, 6)
+        self.canvas_card.item = self.canvas_card.create_image(160, 212, image = self.canvas_card.background)
         self.canvas_card.lower(self.item)
+
+    def objective_image(self):
+        """displays the right treasure in the objective card
+        no input
+        no output"""
+        # filepath_tr = self.controller.hand
+        filepath_tr = "\\tr_spider.png"
+        self.treas_c = tk.PhotoImage(file = self.folder + filepath_tr)
+        self.treas_c_resized = self.treas_c.zoom(3,3)
+        self.fg_c = self.canvas_card.create_image(160, 212, image = self.treas_c_resized)
+        self.canvas_card.lift(self.fg_c)
+        
+        #display the treasure using the controller
+                # select treasure index 0 in the list of the player's objectives
      
     def image_library(self):
         """loads and sizes all PNG files (not arrows)
@@ -314,8 +338,8 @@ class GameWindow():
         self.canvas_tile.lower(self.bg_h)
         if filepath_tr != None:
             self.treas_h = tk.PhotoImage(file = self.folder + filepath_tr)
-            self.treas_h_resized = self.treas_h.zoom(2,2)
-            self.fg_h = self.canvas_tile.create_image(250, 250, image = self.treas_h_resized)
+            self.treas_h_resized = self.treas_h.zoom(3,3)
+            self.fg_h = self.canvas_tile.create_image(205, 195, image = self.treas_h_resized)
             self.canvas_tile.lift(self.fg_h)
             self.image_dict[(self.tile_h, self.treas_h, None)]=(7,7)  
         else:
