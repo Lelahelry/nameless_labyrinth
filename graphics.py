@@ -10,13 +10,9 @@ class GameWindow():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game") # Title of the window
-<<<<<<< HEAD
         self.root.configure(bg='#103A86')
-
-=======
         self.root.iconbitmap('tr_chest.ico') # Icon of the window
         self.root.geometry("1200x700") # Initial dimensions of the window
->>>>>>> 7df2e7415b1133686c9e3f79a0eb9cc1e23fa71a
         # management of the communication with the game class
             
         ########################################
@@ -184,6 +180,7 @@ class GameWindow():
         self.bouton50.bind('<Button-1>', lambda event: self.select_insertion_button((5,0), self.bouton50))
         self.bouton50.place(x = 0, y = 468)
 
+        # Bottom side buttons
         self.bouton61 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton61.bind('<Button-1>',  lambda event: self.select_insertion_button((6,1), self.bouton61))
         self.bouton61.place(x = 155, y = 630)
@@ -196,6 +193,7 @@ class GameWindow():
         self.bouton65.bind('<Button-1>', lambda event: self.select_insertion_button((6,5), self.bouton65))
         self.bouton65.place(x = 468, y = 630)
 
+        # Left side buttons
         self.bouton16 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton16.bind('<Button-1>', lambda event: self.select_insertion_button((1,6), self.bouton16))
         self.bouton16.place(x = 630, y = 155)
@@ -228,59 +226,6 @@ class GameWindow():
         self.objective_image()
 
         self.canvas_card.pack(side = tk.TOP, anchor = 'ne')
-
-
-
-    def text_area(self):
-        """creates text area where the controller sends event messages
-        no input
-        no output"""
-        #text area for commmunication through controller
-        #bind it to messagerie method
-
-    def canvas_for_hand(self):
-        """creates canvas area for the hand
-        no input
-        no output"""
-        self.canvas_tile = tk.Canvas(self.f_graph, bg = "#103A86", width = 400, height = 400)
-        self.hand_image()
-        self.canvas_tile.pack(side = tk.TOP, anchor = 'e')
-
-    def turn_tile_buttons(self):
-        """creates the buttons next to the hand allowing to turn the orientation of the hand tile
-        no input
-        no output"""
-        self.button_counterclockwise = ctk.CTkButton(self.f_graph, text = "⤹", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color="#103A86", fg_color = "goldenrod", hover_color = "red4")
-        self.button_clockwise = ctk.CTkButton(self.f_graph, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color="#103A86", fg_color = "goldenrod", hover_color = "red4")
-        self.button_counterclockwise.place(x=980, y=610)
-        self.button_clockwise.place(x=1068, y=610)
-        self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_counterclockwise())
-        #turning buttons
-        
-    def turn_counterclockwise(self):
-        tile = "\\tile_corner.png" #controller
-        self.image_library_i()
-        if tile == './tile_corner.png':
-            self.new_tile = self.tile_c
-        elif tile== './tile_t.png':
-            self.new_tile = self.tile_t
-        else:
-            self.new_tile = self.tile_s
-        self.rotatedcc_tile=rotate_image(self.new_tile, -1)
-        #self.rotatedcc_tile = tk.PhotoImage(self.rotatedcc_tile)
-        self.tile_cc_resized = (tk.PhotoImage(self.rotatedcc_tile)).zoom(3,3)
-        self.canvas_tile.delete(self.bg_h)
-        self.bg_cc = self.canvas_tile.create_image(200, 175, image = self.tile_cc_resized)
-        self.canvas_tile.lift(self.bg_cc)
-
-    def validate_button(self):
-        """creates the button under the hand to validate the chosen orientation and insertion
-        no input
-        no output"""    
-        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#103A86', fg_color = '#009900', hover_color = "green4")
-        self.button_valid.bind('<Button-1>', self.anim_slide_tiles())
-        self.button_valid.place(x = 1015, y = 605)
-        # bind it to controller somehow
 
     def objective_background(self):
         """Sets the image of the empty treasure card, which is the current objective of the player
@@ -320,7 +265,7 @@ class GameWindow():
         """Creates the canvas for the tile in hand
         No input
         No output"""
-        self.canvas_tile = tk.Canvas(self.f_graph, bg = "grey", width = 400, height = 400)
+        self.canvas_tile = tk.Canvas(self.f_graph, bg = "#103A86", width = 400, height = 400)
         self.hand_image()
         self.canvas_tile.pack(side = tk.TOP, anchor = 'e')
 
@@ -359,15 +304,36 @@ class GameWindow():
         """Creates the buttons next to the hand allowing to change the orientation of the tile in hand
         No input
         No output"""
-        #turning buttons
+        # Turning buttons
+        self.button_counterclockwise = ctk.CTkButton(self.f_graph, text = "⤹", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color="#103A86", fg_color = "goldenrod", hover_color = "red4")
+        self.button_clockwise = ctk.CTkButton(self.f_graph, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color="#103A86", fg_color = "goldenrod", hover_color = "red4")
+        self.button_counterclockwise.place(x = 980, y = 610)
+        self.button_clockwise.place(x = 1068, y = 610)
+        self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_counterclockwise())
+        
+    def turn_counterclockwise(self):
+        tile = "\\tile_corner.png" # Controller
+        self.image_library_i()
+        if tile == './tile_corner.png':
+            self.new_tile = self.tile_c
+        elif tile == './tile_t.png':
+            self.new_tile = self.tile_t
+        else:
+            self.new_tile = self.tile_s
+        self.rotatedcc_tile = rotate_image(self.new_tile, -1)
+        #self.rotatedcc_tile = tk.PhotoImage(self.rotatedcc_tile)
+        self.tile_cc_resized = (tk.PhotoImage(self.rotatedcc_tile)).zoom(3, 3)
+        self.canvas_tile.delete(self.bg_h)
+        self.bg_cc = self.canvas_tile.create_image(200, 175, image = self.tile_cc_resized)
+        self.canvas_tile.lift(self.bg_cc)
         
     def validate_button(self):
         """Creates the button under the hand to validate the chosen orientation and insertion
         No input
         No output"""    
-        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, fg_color = 'green3', hover_color = "green4")
+        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#103A86', fg_color = '#009900', hover_color = "green4")
         self.button_valid.bind('<Button-1>', self.check_insertion)
-        self.button_valid.place(x = 1100, y = 600)
+        self.button_valid.place(x = 1015, y = 605)
         # bind it to controller somehow
     
     def check_insertion(self, event, selected_button):
