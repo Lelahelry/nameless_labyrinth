@@ -108,7 +108,8 @@ class GameWindow():
             self.f_graph = tk.Toplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
             self.f_graph.iconbitmap('tr_chest.ico')      
-            self.f_graph.geometry("1500x875")      
+            self.f_graph.geometry("1500x875") 
+            self.f_graph.config(background = '#EFEFE1')
             
             # Button for players to indicate they finished their turn
             self.button_done = ctk.CTkButton(self.f_graph, text = "My turn is over.", corner_radius = 8, height = 30, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
@@ -133,17 +134,17 @@ class GameWindow():
         """Creates the canvas for the board with the background
         No input
         No output"""        
-        self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752)
+        self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752, bg = "#EFEFE1")
 
         self.grid_images() 
         self.place_pawns()
 
         # Set the background image of the canvas
-        self.background = tk.PhotoImage(file = self.folder + '\\zoomed_board.png')
-        self.item = self.canvas_board.create_image(370, 370, image = self.background)
+        self.background = tk.PhotoImage(file = self.folder + '\\board.png')
+        self.item = self.canvas_board.create_image(378, 378, image = self.background)
         self.canvas_board.lower(self.item)
 
-        self.canvas_board.pack(side = tk.LEFT, padx = 40, pady = 40)
+        self.canvas_board.pack(side = tk.LEFT, padx = 40, pady = 32)
 
     def slide_tiles_buttons(self):
         """Creates the buttons around the board allowing to choose where to insert the tile in hand
@@ -157,54 +158,54 @@ class GameWindow():
         # Top side buttons
         self.bouton01 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton01.bind('<Button-1>', lambda event: self.select_insertion_button((0,1), self.bouton01))
-        self.bouton01.place(x = 155, y = 0)
+        self.bouton01.place(x = 161, y = 1)
 
         self.bouton03 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton03.bind('<Button-1>', lambda event:  self.select_insertion_button( (0,3), self.bouton03))
-        self.bouton03.place(x = 312, y = 0)
+        self.bouton03.place(x = 318, y = 1)
 
         self.bouton05 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton05.bind('<Button-1>', lambda event: self.select_insertion_button( (0,5), self.bouton05))
-        self.bouton05.place(x = 468, y = 0)
+        self.bouton05.place(x = 475, y = 1)
 
-        # Right side buttons
+        # Left side buttons
         self.bouton10 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton10.bind('<Button-1>', lambda event: self.select_insertion_button( (1,0), self.bouton10))
-        self.bouton10.place(x = 0, y = 155)
+        self.bouton10.place(x = 1, y = 161)
 
         self.bouton30 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton30.bind('<Button-1>',  lambda event: self.select_insertion_button((3,0), self.bouton30))
-        self.bouton30.place(x = 0, y = 312)
+        self.bouton30.place(x = 1, y = 318)
 
         self.bouton50 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton50.bind('<Button-1>', lambda event: self.select_insertion_button((5,0), self.bouton50))
-        self.bouton50.place(x = 0, y = 468)
+        self.bouton50.place(x = 1, y = 475)
 
         # Bottom side buttons
         self.bouton61 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton61.bind('<Button-1>',  lambda event: self.select_insertion_button((6,1), self.bouton61))
-        self.bouton61.place(x = 155, y = 630)
+        self.bouton61.place(x = 161, y = 635)
 
         self.bouton63 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton63.bind('<Button-1>', lambda event: self.select_insertion_button((6,3), self.bouton63))
-        self.bouton63.place(x = 312, y = 630)
+        self.bouton63.place(x = 318, y = 635)
 
         self.bouton65 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton65.bind('<Button-1>', lambda event: self.select_insertion_button((6,5), self.bouton65))
-        self.bouton65.place(x = 468, y = 630)
+        self.bouton65.place(x = 475, y = 635)
 
-        # Left side buttons
+        # Right side buttons
         self.bouton16 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton16.bind('<Button-1>', lambda event: self.select_insertion_button((1,6), self.bouton16))
-        self.bouton16.place(x = 630, y = 155)
+        self.bouton16.place(x = 635, y = 161)
 
         self.bouton36 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton36.bind('<Button-1>', lambda event: self.select_insertion_button((3,6), self.bouton36))
-        self.bouton36.place(x = 630, y = 312)
+        self.bouton36.place(x = 635, y = 318)
         
         self.bouton56 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton56.bind('<Button-1>', lambda event: self.select_insertion_button((5,6), self.bouton56))
-        self.bouton56.place(x = 630, y = 468)
+        self.bouton56.place(x = 635, y = 475)
     
     def select_insertion_button(self, pos, button):
         """Changes the color of the selected button and gets its position"""
@@ -220,7 +221,7 @@ class GameWindow():
 
     def canvas_for_objective(self):
         """Creates the canvas to display the current objective of the player"""
-        self.canvas_card = tk.Canvas(self.f_graph, width = 360, height = 420)
+        self.canvas_card = tk.Canvas(self.f_graph, width = 360, height = 420, bg = '#EFEFE1')
 
         self.objective_background()
         self.objective_image()
@@ -265,7 +266,7 @@ class GameWindow():
         """Creates the canvas for the tile in hand
         No input
         No output"""
-        self.canvas_tile = tk.Canvas(self.f_graph, bg = "#103A86", width = 400, height = 400)
+        self.canvas_tile = tk.Canvas(self.f_graph, bg = "#EFEFE1", width = 400, height = 400)
         self.hand_image()
         self.canvas_tile.pack(side = tk.TOP, anchor = 'e')
 
@@ -286,7 +287,7 @@ class GameWindow():
         if filepath_tr != None:
             self.treas_h = tk.PhotoImage(file = self.folder + filepath_tr)
             self.treas_h_resized = self.treas_h.zoom(3, 3)
-            self.fg_h = self.canvas_tile.create_image(205, 195, image = self.treas_h_resized)
+            self.fg_h = self.canvas_tile.create_image(205, 175, image = self.treas_h_resized)
             self.canvas_tile.lift(self.fg_h)
             self.image_dict[(self.tile_h, self.treas_h, None)] = (7, 7)  
         # In case there is no treasure on the current tile in hand
@@ -305,8 +306,8 @@ class GameWindow():
         No input
         No output"""
         # Turning buttons
-        self.button_counterclockwise = ctk.CTkButton(self.f_graph, text = "⤹", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color="#103A86", fg_color = "goldenrod", hover_color = "red4")
-        self.button_clockwise = ctk.CTkButton(self.f_graph, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color="#103A86", fg_color = "goldenrod", hover_color = "red4")
+        self.button_counterclockwise = ctk.CTkButton(self.f_graph, text = "⤹", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
+        self.button_clockwise = ctk.CTkButton(self.f_graph, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
         self.button_counterclockwise.place(x = 980, y = 610)
         self.button_clockwise.place(x = 1068, y = 610)
         self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_counterclockwise())
@@ -331,7 +332,7 @@ class GameWindow():
         """Creates the button under the hand to validate the chosen orientation and insertion
         No input
         No output"""    
-        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#103A86', fg_color = '#009900', hover_color = "green4")
+        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#E8E4CC', fg_color = '#009900', hover_color = "green4")
         self.button_valid.bind('<Button-1>', self.check_insertion)
         self.button_valid.place(x = 1015, y = 605)
         # bind it to controller somehow
@@ -436,8 +437,8 @@ class GameWindow():
             # Position
             x0 = position[0]
             y0 = position[1]
-            x = 70 + x0*100
-            y = 70 + y0*100
+            x = 78 + x0*100
+            y = 78 + y0*100
             # Treasure display
             if tile["filepathTreas"] != None:
                 # Create and position treasure
