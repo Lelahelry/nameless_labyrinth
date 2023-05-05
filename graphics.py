@@ -10,6 +10,7 @@ class GameWindow():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
+        self.root.iconbitmap('tr_chest.ico')
         self.root.geometry("1200x700")
         # management of the communication with the game class
             
@@ -102,6 +103,7 @@ class GameWindow():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
+            #self.f_graph.iconbitmap('tr_chest.ico')      celiu-ci n'a pas l'air de fonctionner...
             self.f_graph.geometry("1200x700")      
             
             #bouton "mon tour est fini"?
