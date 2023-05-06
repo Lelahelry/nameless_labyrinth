@@ -311,14 +311,14 @@ class GameWindow():
         self.button_counterclockwise.place(x = 980, y = 610)
         self.button_clockwise.place(x = 1068, y = 610)
         self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_counterclockwise())
+        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_clockwise())
         
     def turn_counterclockwise(self):
-        tile = "\\tile_t.png" #controller
+        tilecc = "\\tile_t.png" #controller
         self.image_library_i()
-        if tile == './tile_corner.png':
+        if tilecc == './tile_corner.png':
             self.new_tile = self.tile_c
-        elif tile == './tile_t.png':
-        elif tile == './tile_t.png':
+        elif tilecc == './tile_t.png':
             self.new_tile = self.tile_t
         else:
             self.new_tile = self.tile_s
@@ -327,8 +327,26 @@ class GameWindow():
         self.tile_cc_resized = (self.rotatedcc_tile).zoom(3,3)
         self.tile_cc_resized = tk.PhotoImage(self.tile_cc_resized)
         self.canvas_tile.delete(self.bg_h)
-        self.bg_cc = self.canvas_tile.create_image(200, 175, image = tk.PhotoImage(self.))
-        self.canvas_tile.lift(self.bg_cc)
+        self.bg_cc = self.canvas_tile.create_image(200, 175, image = self.tile_cc_resized)
+        #self.canvas_tile.lift(self.bg_cc)
+
+    def turn_clockwise(self):
+        tilec = "\\tile_t.png" #controller
+        self.image_library_i()
+        if tilec == './tile_corner.png':
+            self.c_tile = self.tile_c
+        elif tilec == './tile_t.png':
+            self.c_tile = self.tile_t
+        else:
+            self.c_tile = self.tile_s
+        self.canvas_tile.delete(self.bg_h)
+        self.rotatedc_tile=rotate_image(self.c_tile, 1)
+        self.rotatedc_tile = tk.PhotoImage(self.rotatedc_tile)
+        self.tile_c_resized = (self.rotatedc_tile).zoom(3,3)
+        self.tile_c_resized = tk.PhotoImage(self.tile_c_resized)
+        
+        self.bg_c = self.canvas_tile.create_image(200, 175, image = tk.PhotoImage(tilec))
+        self.canvas_tile.lift(self.bg_c)
         
     def validate_button(self):
         """Creates the button under the hand to validate the chosen orientation and insertion
