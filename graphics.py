@@ -10,13 +10,8 @@ class GameWindow():
     def __init__(self):
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game")
-<<<<<<< HEAD
-        self.root.configure(bg='#103A86')
-
-=======
         self.root.iconbitmap('tr_chest.ico')
         self.root.geometry("1200x700")
->>>>>>> 7df2e7415b1133686c9e3f79a0eb9cc1e23fa71a
         # management of the communication with the game class
             
         ########################################
@@ -109,14 +104,8 @@ class GameWindow():
         if (self.f_graph == None) :
             self.f_graph = ctk.CTkToplevel(self.root)
             self.f_graph.title('Labyrinth - Current game')
-<<<<<<< HEAD
-            self.f_graph.geometry("1200x700")
-
-            
-=======
             #self.f_graph.iconbitmap('tr_chest.ico')      celiu-ci n'a pas l'air de fonctionner...
             self.f_graph.geometry("1200x700")      
->>>>>>> 7df2e7415b1133686c9e3f79a0eb9cc1e23fa71a
             
             #bouton "mon tour est fini"?
             self.button_done = ctk.CTkButton(self.f_graph, text = "My turn is over.", corner_radius = 8, height = 30, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
@@ -260,19 +249,20 @@ class GameWindow():
         #turning buttons
         
     def turn_counterclockwise(self):
-        tile = "\\tile_corner.png" #controller
+        tile = "\\tile_t.png" #controller
         self.image_library_i()
         if tile == './tile_corner.png':
             self.new_tile = self.tile_c
-        elif tile== './tile_t.png':
+        elif tile == './tile_t.png':
             self.new_tile = self.tile_t
         else:
             self.new_tile = self.tile_s
         self.rotatedcc_tile=rotate_image(self.new_tile, -1)
-        #self.rotatedcc_tile = tk.PhotoImage(self.rotatedcc_tile)
-        self.tile_cc_resized = (tk.PhotoImage(self.rotatedcc_tile)).zoom(3,3)
+        self.rotatedcc_tile = tk.PhotoImage(self.rotatedcc_tile)
+        self.tile_cc_resized = (self.rotatedcc_tile).zoom(3,3)
+        self.tile_cc_resized = tk.PhotoImage(self.tile_cc_resized)
         self.canvas_tile.delete(self.bg_h)
-        self.bg_cc = self.canvas_tile.create_image(200, 175, image = self.tile_cc_resized)
+        self.bg_cc = self.canvas_tile.create_image(200, 175, image = tk.PhotoImage(self.))
         self.canvas_tile.lift(self.bg_cc)
 
     def validate_button(self):
