@@ -435,7 +435,7 @@ class GameWindow():
                          (5, 6): {'filepathTile': './tile_straight.png', 'filepathTreas': None, 'orientation': 1, 'pawns': []},       
                          (6, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': ['green']}, 
                          (6, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, 
-                         (6, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_purse.png', 'orientation': 1, 'pawns': []}, 
+                         (6, 2): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_purse.png', 'orientation': 2, 'pawns': []}, 
                          (6, 3): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sorceress.png', 'orientation': 0, 'pawns': []}, 
                          (6, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_grimoire.png', 'orientation': 2, 'pawns': []},                          
                          (6, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []},
@@ -449,8 +449,8 @@ class GameWindow():
         for position, tile in graphics_dict.items():
             i += 1
             #position
-            co0 = position[0]
-            li0 = position[1]
+            co0 = position[1]
+            li0 = position[0]
             co = 70 + co0*100
             li = 70 + li0*100
             #treasure display
