@@ -294,6 +294,10 @@ class GameWindow():
         else:
             self.image_dict[(self.tile_h, None, None)]=(7,7)  
         
+
+        #useful for the rotatio display
+        self.orientation_h = 1 
+        self.dict_r ={}
         #display the hand using the controller
                 #choose the tile
                 #place the treasure on it
@@ -310,28 +314,18 @@ class GameWindow():
         self.button_clockwise = ctk.CTkButton(self.f_graph, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
         self.button_counterclockwise.place(x = 980, y = 610)
         self.button_clockwise.place(x = 1068, y = 610)
-        self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_counterclockwise())
-        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_clockwise())
+        self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(-1))
+        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))
         
-    def turn_counterclockwise(self):
-        tilecc = "\\tile_t.png" #controller
-        self.image_library_i()
-        if tilecc == './tile_corner.png':
-            self.new_tile = self.tile_c
-        elif tilecc == './tile_t.png':
-            self.new_tile = self.tile_t
-        else:
-            self.new_tile = self.tile_s
-        self.rotatedcc_tile=rotate_image(self.new_tile, -1)
-        self.rotatedcc_tile = tk.PhotoImage(self.rotatedcc_tile)
-        self.tile_cc_resized = (self.rotatedcc_tile).zoom(3,3)
-        self.tile_cc_resized = tk.PhotoImage(self.tile_cc_resized)
-        self.canvas_tile.delete(self.bg_h)
-        self.bg_cc = self.canvas_tile.create_image(200, 175, image = self.tile_cc_resized)
-        #self.canvas_tile.lift(self.bg_cc)
 
-    def turn_clockwise(self):
+    def turn_hand_tile(self, sens):
+        """Rotates the tile in hand
+        input = sens, the direction of the rotation
+        no output"""
         tilec = "\\tile_t.png" #controller
+        #set new orientation
+        self.orientation_h += sens
+        #prepare the image tile
         self.image_library_i()
         if tilec == './tile_corner.png':
             self.c_tile = self.tile_c
@@ -339,14 +333,14 @@ class GameWindow():
             self.c_tile = self.tile_t
         else:
             self.c_tile = self.tile_s
-        self.canvas_tile.delete(self.bg_h)
-        self.rotatedc_tile=rotate_image(self.c_tile, 1)
-        self.rotatedc_tile = tk.PhotoImage(self.rotatedc_tile)
-        self.tile_c_resized = (self.rotatedc_tile).zoom(3,3)
-        self.tile_c_resized = tk.PhotoImage(self.tile_c_resized)
         
-        self.bg_c = self.canvas_tile.create_image(200, 175, image = tk.PhotoImage(tilec))
-        self.canvas_tile.lift(self.bg_c)
+        self.rotatedc_tile=rotate_image_h(self.c_tile, self.orientation_h)
+        self.dict_r[1]=self.rotatedc_tile  
+        #replace self.bg_h with the rotated image
+        self.canvas_tile.delete(self.bg_h) #delete the old image
+        self.bg_h = self.canvas_tile.create_image(200, 175, image = self.dict_r[1]) #create the new image
+        self.canvas_tile.lower(self.bg_h)
+
         
     def validate_button(self):
         """Creates the button under the hand to validate the chosen orientation and insertion
@@ -464,7 +458,7 @@ class GameWindow():
                 #create and position treasure
                 self.treasures[i] = tk.PhotoImage(file = self.folder + tile["filepathTreas"])
                 
-                new_fg = self.canvas_board.create_image(li, co, image = self.treasures[i])
+                new_fg = self.canvas_board.create_image(co, li, image = self.treasures[i])
                 
                 self.canvas_board.lift(new_fg)
                 
@@ -483,7 +477,7 @@ class GameWindow():
             self.tiles[i] = rotate_image(self.new_tile, tile["orientation"])
             
             #display
-            new_bg = self.canvas_board.create_image(li, co, image = self.tiles[i])
+            new_bg = self.canvas_board.create_image(co, li, image = self.tiles[i])
             self.canvas_board.lower(new_bg)
             
 
@@ -503,17 +497,62 @@ class GameWindow():
                
 
 
-        """
-
+        
+    """
 
     def anim_silde_tile(self, event, pos):
         pour slider les tiles à l'écran
-        input : tuple
+        input : tuple                 #get which row/column moves
+            #if it is a line
+        if self.chosen_pos[1]==0 :
+            init_pos = (self.chosen_pos[0], -1)
+        elif self.chosen_pos[1]==6:
+            init_pos = (self.chosen_pos[0], 7)
+            #if it s a column
+        elif self.chosen_pos[0]==0:
+            init_pos = (-1, self.chosen_pos[1])
+        elif self.chosen_pos[0]==6:
+            init_pos = (7, self.chosen_pos[1])
+            
+        #add the new tile at the beginning of the row/column 
 
-    def lancer(self, event):
+        # Initialisation
+        if self.controller.hand.tile.treasure != None:
+                #create and position treasure
+                self.treasures[init_pos] = tk.PhotoImage(file = self.folder + self.controller.hand.tile.treasure.filepath)
+                
+                new_fg = self.canvas_board.create_image(init_pos[1], init_pos[0], image = self.treasures[init_pos])
+                
+                self.canvas_board.lift(new_fg)
+
+        if self.controller.hand.filepath == './tile_corner.png':
+            self.new_tile = self.tile_c
+        elif self.controller.hand.filepath == './tile_t.png':
+            self.new_tile = self.tile_t
+        else:
+            self.new_tile = self.tile_s
+
+        # Orientate
+        self.tiles[init_pos] = rotate_image(self.new_tile, self.controller.hand.orientation)
+        
+        #display
+        new_bg = self.canvas_board.create_image(init_pos[1], init_pos[0], image = self.tiles[init_pos])
+        self.canvas_board.lower(new_bg)
+
+        
+
+        #move the tiles along the row/column for 2seconds
+            #animation of tiles+treasures+pawns
+        self.lancer()
+
+        #delete the tiles+treasures pushed out of the board
+        #move the pawns pushed out of the board
+
+
+    def lancer(self):
         
         Lancement de la boucle du timer si elle n'est pas déjà active
-
+        
         
         if not(self.running) :
             self.timer_loop()
@@ -523,47 +562,40 @@ class GameWindow():
     def stop(self, event):
         
         Arrêt de la boucle du timer si elle est active
-
-        
+                
         if self.running :
-            self.racine.after_cancel(self.timer_id) 
+            self.f_graph.after_cancel(self.timer_id) 
         self.running = False
 
 
     def timer_loop(self):
         
         Boucle gérée par le timer : déplacement et affichage de l'image
+        
+        #for index in line/column:
+        ##dico des tile[coords].cget coords
+        ##dico des tile[coords].configure coords+dx/dy
+        ##same for treasures if exists
+        ##redraw pawn if found in the grid through controller
 
         
-        self.move()
-        self.canevas.delete(self.id_regis)
-        self.canevas.delete(self.id_boom)
-        self.id_regis = self.canevas.create_image((self.x,self.y), anchor = "nw", image = self.regis)
-        self.canevas.tag_bind(self.id_regis, '<Button-1>', self.process_click)
         self.timer_id = self.racine.after(self.dt, self.timer_loop)
 
 
-    def move(self):
     
-    Calcul du déplacement
 
-    
-    self.x += int(self.vitesse*self.dx)
-    self.y += int(self.vitesse*self.dy)                
-    if self.x < 0:
-        self.x = 0
-        self.dx = -self.dx
-    elif self.x+self.w_regis > self.w_wall :
-        self.x = self.w_wall-self.w_regis
-        self.dx = -self.dx
-            
-    if self.y < 0:
-        self.y = 0
-        self.dy = -self.dy
-    elif self.y+self.h_regis > self.h_wall :
-        self.y = self.h_wall-self.h_regis
-        self.dy = -self.dy  
-        """
+    def process_click(self, event):
+        
+        Gestion du clic éventuel sur l'image en mouvement'
+
+        
+        if self.running :
+            self.stop(None)
+            self. id_boom = self.canevas.create_image((self.x,self.y), anchor = "nw", image = self.boom)
+            self.count += 1
+            messagebox.showinfo("Gagné !", f"Nombre de points : {self.count}")
+            self.lancer(None)"""
+        
     def place_pawns(self):
         """place circles for the pawn"""
         # Place pawns and bind them to moving animation
@@ -680,7 +712,15 @@ class GameWindow():
     
 def rotate_image(img, orientation):
     img = img.rotate(orientation* -90)
+    print("turn")
     return (ImageTk.PhotoImage(img))
+def rotate_image_h(img, orientation):
+    w,h = img.size
+    img = img.resize((3*w,3*h))
+    img_f = rotate_image(img, orientation)
+    print("turn+")
+    return (img_f)
+    
 
 
         
