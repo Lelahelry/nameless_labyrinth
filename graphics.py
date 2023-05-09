@@ -33,7 +33,10 @@ class GameWindow():
         self.widgets_creation(self.root)
 
     def widgets_creation(self, root):
-        """Creates all necessary widgets for the welcome window"""
+        """Creates all necessary widgets for the welcome window
+        ----------
+        Input : the window in which we want to create widgets
+        No output"""
         # Text : game title
         self.welcome = ctk.CTkLabel(root, height = 120, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
         self.welcome.pack(side = tk.TOP)
@@ -60,7 +63,10 @@ class GameWindow():
         self.button_launch.pack(side = ctk.BOTTOM, fill = 'x')
  
     def add_playernames(self, event):
-        """Adds entry bars for players to enter custom names (optional)"""
+        """Adds entry bars for players to enter custom names (optional).
+        ----------
+        Input : Right click on button_launch
+        No output"""
         length = self.player_number.get()
 
         if length > len(self.playernames_e):
@@ -78,7 +84,10 @@ class GameWindow():
                 self.playernames_e.pop().pack_forget()
            
     def game_launch(self, message):
-        """Creation of the actual game window"""
+        """Creation of the actual game window.
+        ----------
+        Input : 
+        No output"""
         # Find the names of the players
         self.get_playernames()
         
@@ -90,8 +99,8 @@ class GameWindow():
         
     # Callback functions
     def get_playernames(self):
-        """Recovers each player's name
-        Default names are provided in case players don't add names
+        """Recovers each player's name. Default names are provided in case players don't add names.
+        ----------
         No input
         No output"""
         for i in range(len(self.playernames_e)):
@@ -101,7 +110,8 @@ class GameWindow():
             self.playernames.append(name)
     
     def graphic_window(self):
-        """Creates the graphic window for current game display
+        """Creates the graphic window for current game display.
+        ----------
         No input
         No output"""
         if (self.f_graph == None) :
@@ -131,7 +141,8 @@ class GameWindow():
         self.f_graph = None 
 
     def canvas_for_board(self):
-        """Creates the canvas for the board with the background
+        """Creates the canvas for the board with the background.
+        ----------
         No input
         No output"""        
         self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752, bg = "#EFEFE1")
@@ -147,8 +158,9 @@ class GameWindow():
         self.canvas_board.pack(side = tk.LEFT, padx = 40, pady = 32)
 
     def slide_tiles_buttons(self):
-        """Creates the buttons around the board allowing to choose where to insert the tile in hand
-        Each button is named according to the grid position it points to (row number, column number)
+        """Creates the buttons around the board allowing to choose where to insert the tile in hand.
+        Each button is named according to the grid position it points to (row number, column number).
+        ----------
         No input
         No output"""
 
@@ -208,7 +220,10 @@ class GameWindow():
         self.bouton56.place(x = 635, y = 475)
     
     def select_insertion_button(self, pos, button):
-        """Changes the color of the selected button and gets its position"""
+        """Changes the color of the selected button and gets its position.
+        ---------- 
+        Input : Insertion position (tuple), button that was clicked
+        No output"""
         # Change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
         # Find button selected by the player
         button.configure(fg_color = "red4")
@@ -220,7 +235,10 @@ class GameWindow():
         print(self.chosen_pos)
 
     def canvas_for_objective(self):
-        """Creates the canvas to display the current objective of the player"""
+        """Creates the canvas to display the current objective of the player.
+        ----------
+        No input
+        No output"""
         self.canvas_card = tk.Canvas(self.f_graph, width = 360, height = 420, bg = '#EFEFE1')
 
         self.objective_background()
@@ -229,7 +247,8 @@ class GameWindow():
         self.canvas_card.pack(side = tk.TOP, anchor = 'ne')
 
     def objective_background(self):
-        """Sets the image of the empty treasure card, which is the current objective of the player
+        """Sets the image of the empty treasure card, where the current objective of the player will be displayed.
+        ----------
         No input
         No output"""
         # Background image settings
@@ -240,7 +259,8 @@ class GameWindow():
         self.canvas_card.lower(self.item)
 
     def objective_image(self):
-        """Displays the right treasure in the objective card
+        """Displays the right treasure in the objective card.
+        ----------
         No input
         No output"""
         #filepath_tr = self.controller.hand
@@ -263,7 +283,8 @@ class GameWindow():
         #bind it to messagerie method
 
     def canvas_for_hand(self):
-        """Creates the canvas for the tile in hand
+        """Creates the canvas for the tile in hand.
+        ----------
         No input
         No output"""
         self.canvas_tile = tk.Canvas(self.f_graph, bg = "#EFEFE1", width = 400, height = 400)
@@ -271,7 +292,8 @@ class GameWindow():
         self.canvas_tile.pack(side = tk.TOP, anchor = 'e')
 
     def hand_image(self):
-        """Displays the tile in hand in its canvas and binds it to the rotation function
+        """Displays the tile in hand in its canvas and binds it to the rotation function.
+        ----------
         No input
         No output"""
         #filepath_t, filepath_tr = self.controller.hand: #hand should be reduced to (filepathTile, filepathTreas|None)
@@ -294,11 +316,10 @@ class GameWindow():
         else:
             self.image_dict[(self.tile_h, None, None)]=(7,7)  
         
-
-        #useful for the rotatio display
+        # Useful for the rotatio display
         self.orientation_h = 1 
         self.dict_r ={}
-        #display the hand using the controller
+        # Display the hand using the controller
                 #choose the tile
                 #place the treasure on it
                 #place the image on its spot
@@ -306,7 +327,8 @@ class GameWindow():
             #stock the tile in a dict
 
     def turn_tile_buttons(self):
-        """Creates the buttons next to the hand allowing to change the orientation of the tile in hand
+        """Creates the buttons next to the hand allowing to change the orientation of the tile in hand.
+        ----------
         No input
         No output"""
         # Turning buttons
@@ -315,17 +337,17 @@ class GameWindow():
         self.button_counterclockwise.place(x = 980, y = 610)
         self.button_clockwise.place(x = 1068, y = 610)
         self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(-1))
-        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))
-        
+        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))   
 
     def turn_hand_tile(self, sens):
-        """Rotates the tile in hand
-        input = sens, the direction of the rotation
-        no output"""
-        tilec = "\\tile_t.png" #controller
-        #set new orientation
+        """Rotates the tile in hand.
+        ----------
+        Input : sens (the direction of the rotation)
+        No output"""
+        tilec = "\\tile_t.png" # Controller
+        # Set new orientation
         self.orientation_h += sens
-        #prepare the image tile
+        # Prepare the image tile
         self.image_library_i()
         if tilec == './tile_corner.png':
             self.c_tile = self.tile_c
@@ -334,16 +356,16 @@ class GameWindow():
         else:
             self.c_tile = self.tile_s
         
-        self.rotatedc_tile=rotate_image_h(self.c_tile, self.orientation_h)
-        self.dict_r[1]=self.rotatedc_tile  
-        #replace self.bg_h with the rotated image
-        self.canvas_tile.delete(self.bg_h) #delete the old image
-        self.bg_h = self.canvas_tile.create_image(200, 175, image = self.dict_r[1]) #create the new image
+        self.rotatedc_tile = rotate_image_h(self.c_tile, self.orientation_h)
+        self.dict_r[1] = self.rotatedc_tile  
+        # Replace self.bg_h with the rotated image
+        self.canvas_tile.delete(self.bg_h) # Delete the old image
+        self.bg_h = self.canvas_tile.create_image(200, 175, image = self.dict_r[1]) # Create the new image
         self.canvas_tile.lower(self.bg_h)
-
         
     def validate_button(self):
-        """Creates the button under the hand to validate the chosen orientation and insertion
+        """Creates the button under the hand to validate the chosen orientation and insertion.
+        ----------
         No input
         No output"""    
         self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#E8E4CC', fg_color = '#009900', hover_color = "green4")
@@ -352,8 +374,9 @@ class GameWindow():
         # bind it to controller somehow
     
     def check_insertion(self, event, selected_button):
-        """Verify that the player did select where to insert the tile in hand
-        No input
+        """Verify that the player did select where to insert the tile in hand.
+        ----------
+        Input : right click on button_valid, insertion button chosen by the player 
         No output"""
         if self.selected_button == None:
             self.selection_error_messagebox()
@@ -361,13 +384,15 @@ class GameWindow():
             self.anim_slide_tiles()
     
     def selection_error_messagebox(self):
-        """Opens a messagebox reminding the player that they didn't choose where to insert the tile although it is mandatory
+        """Opens a messagebox reminding the player that they didn't choose where to insert the tile although it is mandatory.
+        ----------
         No input
         No output"""
         tk.messagebox.showwarning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.")
      
     def image_library(self):
-        """Loads and sizes all PNG files
+        """Loads and sizes all PNG files as PhotoImages (format used for the display).
+        ----------
         No input
         No output"""
         self.image_dict = {}
@@ -377,7 +402,8 @@ class GameWindow():
         self.tile_s = tk.PhotoImage(file = self.folder + '\\tile_straight.png')
 
     def image_library_i(self):
-        """Loads and sizes all PNG files as Images (this object type can be rotated)
+        """Loads and sizes all PNG files as Images (this object type can be rotated).
+        ----------
         No input
         No output"""
         self.image_dict = {}
@@ -387,8 +413,9 @@ class GameWindow():
         self.tile_s = Image.open(self.folder + '\\tile_straight.png')
 
     def grid_images(self):
-        """Associates tiles to treasures and stocks them 
-        Displays the tiles on the board in its canvas and binds it to the sliding
+        """Associates tiles to treasures and stocks them. 
+        Displays the tiles on the board in its canvas and binds them to the sliding.
+        ----------
         No input
         No output"""
         graphics_dict = {(0, 0): {'filepathTile' : './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': ['blue']}, 
@@ -448,14 +475,14 @@ class GameWindow():
         self.tiles = {}
         for position, tile in graphics_dict.items():
             i += 1
-            #position
+            # Position
             co0 = position[1]
             li0 = position[0]
             co = 70 + co0*100
             li = 70 + li0*100
-            #treasure display
-            if tile["filepathTreas"]!=None:
-                #create and position treasure
+            # Treasure display
+            if tile["filepathTreas"] != None:
+                # Create and position treasure
                 self.treasures[i] = tk.PhotoImage(file = self.folder + tile["filepathTreas"])
                 
                 new_fg = self.canvas_board.create_image(co, li, image = self.treasures[i])
@@ -476,7 +503,7 @@ class GameWindow():
             # Orientate
             self.tiles[i] = rotate_image(self.new_tile, tile["orientation"])
             
-            #display
+            # Display
             new_bg = self.canvas_board.create_image(co, li, image = self.tiles[i])
             self.canvas_board.lower(new_bg)
             
@@ -597,7 +624,10 @@ class GameWindow():
             self.lancer(None)"""
         
     def place_pawns(self):
-        """place circles for the pawn"""
+        """Places each pawn, represented by a circle of its color, on its starting tile (one of the boards corners).
+        ----------
+        No input
+        No output"""
         # Place pawns and bind them to moving animation
         graphics_dict = {(0, 0): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 1, 'pawns': ['blue']}, 
                          (0, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 2, 'pawns': ['red']}, 
@@ -711,10 +741,20 @@ class GameWindow():
             self.text_area.insert(tk.INSERT,item_clicked)"""
     
 def rotate_image(img, orientation):
+    """Rotates any image by 90°.
+    ----------
+    Input : the image, its current orientation
+    Output : the new rotated image"""
     img = img.rotate(orientation* -90)
     print("turn")
     return (ImageTk.PhotoImage(img))
+
 def rotate_image_h(img, orientation):
+    """Rotates the image given as a parameter and enlarges it by 3.
+    Useful to rotate the image displayed in the hand canvas, as it is zoomed by 3.
+    ----------
+    Input : the image, its currrent orientatio
+    Output : the new enlarged and rotated image"""
     w,h = img.size
     img = img.resize((3*w,3*h))
     img_f = rotate_image(img, orientation)
@@ -724,7 +764,7 @@ def rotate_image_h(img, orientation):
 
 
         
-        
+# App launch        
 if __name__ == "__main__":
     app = GameWindow()
     app.root.mainloop()
