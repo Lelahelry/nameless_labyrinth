@@ -4,7 +4,7 @@ from utils import pairwise, adjacent_coords_cw
 import random
 import json
 
-@dataclass(frozen=True)
+@dataclass(frozen = True)
 class Treasure:
     """Represents the treasures and treasure objectives of the game."""
     filepath: str # Path to .png texture file of the treasure.

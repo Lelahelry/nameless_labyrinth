@@ -14,6 +14,11 @@ class GameController:
         self.game_active = False
     
     def move_pawn(self):
+        """Enables moving a player's pawn to the tile they chose, given that this tile can indeed be reached.
+        Otherwise, the player's pawn goes back to where it was.
+        ----------
+         No input
+         No output"""
         pawn_moved = False
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
@@ -36,6 +41,12 @@ class GameController:
                 self.view.show("Pawn didn't have an open path to the given tile.")
     
     def insert_hand(self):
+        """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
+         Then shifts all the tiles of the chosen row or column by one position.
+         A different tile is thus pushed out of the board and becomes the new hand.
+         ----------
+         No input
+         No output"""
         hand_inserted = False
         while not hand_inserted:
             self.view.show("Please choose a valid position to insert the hand at.")
@@ -55,6 +66,11 @@ class GameController:
                 self.view.show("Insert position was invalid.")
 
     def collect_treasure(self):
+        """Checks that the treasure reached by a player corresponds to its current objective.
+        Removes the collected treasure from the player's list of objectives.
+        ----------
+        No input
+        No output"""
         active_pawn = self.model.get_active_player()
         _, active_tile = self.model.get_pawn_container(active_pawn)
 
@@ -64,6 +80,11 @@ class GameController:
             #active_tile.treasure = None ????????
     
     def check_win_state(self):
+        """Checks whether a player won (i.e. collected all their objectives).
+        Ends the game if that's the case.
+        ----------
+        No input
+        No output"""
         active_pawn = self.model.get_active_player()
 
         if len(active_pawn.objectives) == 0:
@@ -71,10 +92,18 @@ class GameController:
             self.winner = active_pawn
     
     def rotate_players(self):
+        """Once a player's turn is over, moves on to the next player in the queue.
+        ----------
+        No input
+        No output"""
         self.model.advance_queue()
         self.view.show_turn_rotation()
 
     def turn(self):
+        """Calls all necessary functions for a player to complete their turn.
+        ----------
+        No input
+        No output"""
         self.insert_hand()
         self.move_pawn()
         self.collect_treasure()
@@ -84,6 +113,10 @@ class GameController:
         self.view.signal_end_turn()
     
     def start_game(self):
+        """Launches the game and every turn until someone won.
+        ----------
+        No input
+        No output"""
         self.game_active = True
         self.view.show_game_start()
         

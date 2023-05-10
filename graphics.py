@@ -328,7 +328,7 @@ class GameWindow():
         """Rotates the tile in hand
         input = sens, the direction of the rotation
         no output"""
-        tilec = "\\tile_t.png" #controller
+        tilec = './tile_t.png' #controller
         #set new orientation
         self.orientation_h += sens
         #prepare the image tile
