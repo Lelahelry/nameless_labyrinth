@@ -641,10 +641,6 @@ class GameWindow():
 
         #comunicate the motuon to the controller
         #self.controller.insert_hand() CONTROLLER
-                
-        
-        
-        
         
 
 
