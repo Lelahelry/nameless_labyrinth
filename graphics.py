@@ -315,7 +315,6 @@ class GameWindow():
         self.dict_r ={}
         
 
-
     def turn_tile_buttons(self):
         """Creates the buttons next to the hand allowing to change the orientation of the tile in hand
         No input
@@ -660,15 +659,19 @@ class GameWindow():
         if not(self.running) :
             self.timer_loop()
         self.running = True
-
-
-    def stop(self, event):
         
+        
+
+
+    def stop(self):
+        """
         Arrêt de la boucle du timer si elle est active
-                
+        """        
         if self.running :
             self.f_graph.after_cancel(self.timer_id) 
         self.running = False
+        
+        #self.tile_dict[init_pos]= None
 
 
     def timer_loop(self):
@@ -763,7 +766,8 @@ class GameWindow():
                          (6, 1): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}, 
                          (6, 3): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_sorceress.png', 'orientation': 0, 'pawns': []}, 
                          (6, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []}}
-        
+        # Pawn storage
+        self.pawn_dict ={}
         # Pawn display
         for position, tile in graphics_dict.items():
             if tile["pawns"]!=None:
@@ -773,8 +777,8 @@ class GameWindow():
                 li = 75 + li0*100
                 co = 75 + co0*100
                 #create circles on the tile
+                new_pawns = []
                 for color in tile["pawns"]:
-                    print(color)
                     if color == "blue": 
                         new_pawn = self.canvas_board.create_oval(co-20, li+20, co, li, fill = color  )
                         
@@ -833,7 +837,7 @@ class GameWindow():
         self.pawn_dict[obj].append(pawn)
         self.dict_anim["previous_step"] = obj  
         if path != []:
-            self.timer_id_pawn = self.f_graph.after(200, self.timer_loop_pawn)  
+            self.timer_id_pawn = self.f_graph.after(2000, self.timer_loop_pawn)  
         else:
             self.stop_pawn()
 
@@ -880,13 +884,13 @@ class GameWindow():
             self.lancer(None)
                
     #inspi
-    #def place_objects():
-    #        grid = #board read through message
-    #        for position, tile in grid.items():
-    #            #get the type of tile and orientation
-    #            self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
-    #           self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
-    #            self.f_graph.canvas.lower(self.item)
+    def place_objects():
+            grid = #board read through message
+            for position, tile in grid.items():
+                #get the type of tile and orientation
+                self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
+                self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
+                self.f_graph.canvas.lower(self.item)
                 #ajouter la taille au dico avec son ident
             #read the current player, display his name and his objective
             #ajouter boutons pour tourner la tuile et placer  
@@ -923,13 +927,11 @@ class GameWindow():
     
 def rotate_image(img, orientation):
     img = img.rotate(orientation* -90)
-    print("turn")
     return (ImageTk.PhotoImage(img))
 def rotate_image_h(img, orientation):
     w,h = img.size
     img = img.resize((3*w,3*h))
     img_f = rotate_image(img, orientation)
-    print("turn+")
     return (img_f)
     
 
