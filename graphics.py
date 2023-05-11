@@ -109,11 +109,16 @@ class GameWindow():
         """Creates the graphic window for current game display
         No input
         No output"""
+        # Initialization of the game variables
         self.running = False
         self.running_pawn = False
         self.timer_id = None
         self.timer_id_pawn = None
         self.pawn_motion = False
+        self.slid = False
+        self.bg_h = None
+        self.fg_h = None
+        self.index = 0
 
         if (self.f_graph == None) :
             self.f_graph = tk.Toplevel(self.root)
@@ -137,17 +142,19 @@ class GameWindow():
             self.canvas_for_hand()
             self.turn_tile_buttons()
             self.validate_button()
-
+            self.queue_display()
         # Reset state of f_graph so that it can be opened again once closed (without rerunning the whole program)
         #self.f_graph = None 
         
-
+    def queue_display(self):
+        """text made of labels display :  NEXT IN LINE:
+        queue, name written in color and remaining objectives counter"""
     def canvas_for_board(self):
         """Creates the canvas for the board with the background
         No input
         No output"""        
         self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752, bg = "#EFEFE1")
-
+        self.image_library_i()
         self.grid_images() 
         self.place_pawns()
 
@@ -226,11 +233,12 @@ class GameWindow():
         """Changes the color of the selected button and gets its position"""
         # Change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
         # Find button selected by the player
-        if button_in.cget("state") != "disabled":
+        if button_in.cget("state") != "disabled" and not self.slid:
             button_in.configure(fg_color = "red4")
             #deselect the previous button
             if self.selected_button != None:
                 self.selected_button.configure(fg_color = "goldenrod")
+                
 
             if self.selected_button == button_in: #case you deselected the line/row after all
                 self.selected_button = None
@@ -241,6 +249,7 @@ class GameWindow():
                 self.opposite_button = button_out
                 # Get button position
                 self.chosen_pos = pos
+            print(self.selected_button, self.opposite_button, self.chosen_pos)
         
 
     def canvas_for_objective(self):
@@ -302,22 +311,38 @@ class GameWindow():
         filepath_ti = "\\tile_corner.png" # address
         filepath_tr = "\\tr_spider.png" # address
         # Set the image of the tile in hand
+        self.hand_tile(filepath_ti)
+
+        # Set the image of the treasure of the tile (if any)
+        self.hand_treasure(filepath_tr)
+              
+        # Useful for the rotation display
+        self.orientation_h = 0 
+        self.dict_r ={}
+
+    def hand_tile(self, filepath_ti):
+        """Displays the tile in hand
+        Input : filepath_ti, the address of the tile image
+        No output"""
+        if self.bg_h != None:
+            self.canvas_tile.delete(self.bg_h)
         self.tile_h = tk.PhotoImage(file = self.folder + filepath_ti)
         self.tile_h_resized = self.tile_h.zoom(3, 3)
         self.bg_h = self.canvas_tile.create_image(200, 175, image = self.tile_h_resized)
         self.canvas_tile.lower(self.bg_h)
 
-        # Set the image of the treasure of the tile (if any) FUNCTION TO CREATE
+    def hand_treasure(self, filepath_tr):
+        """Displays the treasure of the tile in hand
+        Input: filepath_tr, the address of the treasure image
+        No output"""
+        if self.fg_h != None:
+            self.canvas_tile.delete(self.fg_h)
+        # Set the image of the treasure of the tile (if any) 
         if filepath_tr != None:
             self.treas_h = tk.PhotoImage(file = self.folder + filepath_tr)
             self.treas_h_resized = self.treas_h.zoom(3, 3)
             self.fg_h = self.canvas_tile.create_image(205, 175, image = self.treas_h_resized)
             self.canvas_tile.lift(self.fg_h)
-              
-        # Useful for the rotation display
-        self.orientation_h = 1 
-        self.dict_r ={}
-        
 
     def turn_tile_buttons(self):
         """Creates the buttons next to the hand allowing to change the orientation of the tile in hand
@@ -371,6 +396,9 @@ class GameWindow():
         No output"""
         if self.selected_button == None:
             self.selection_error_messagebox()
+        elif self.slid:
+            #messagebox to tell they already slid
+            self.msg_error3 = tk.messagebox.showwarning("Selection error", "You already slid the tile.\nPlease choose where you wantmove your pawn or end your turn.")
         else:
             self.anim_slide_tiles()
     
@@ -379,16 +407,6 @@ class GameWindow():
         No input
         No output"""
         self.msg_error = tk.messagebox.showwarning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.")
-     
-    def image_library(self):
-        """Loads and sizes all PNG files
-        No input
-        No output"""
-        self.image_dict = {}
-        # Load the 3 tile images and resize them
-        self.tile_c = tk.PhotoImage(file = self.folder + '\\tile_corner.png')
-        self.tile_t = tk.PhotoImage(file = self.folder + '\\tile_t.png')
-        self.tile_s = tk.PhotoImage(file = self.folder + '\\tile_straight.png')
 
     def image_library_i(self):
         """Loads and sizes all PNG files as Images (this object type can be rotated)
@@ -455,60 +473,83 @@ class GameWindow():
                          (6, 4): {'filepathTile': './tile_t.png', 'filepathTreas': './tr_grimoire.png', 'orientation': 2, 'pawns': []},                          
                          (6, 5): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 0, 'pawns': []},
                          (6, 6): {'filepathTile': './tile_corner.png', 'filepathTreas': None, 'orientation': 3, 'pawns': []}} #CONTROLLER
-        self.image_library_i()#move that to higher function
+        
         # Get grid
         # For position, tile in self.controller.grid: #grid should be reduced to (positionTuple)={filepathTile, filepathTreas|None, list of colors or empty list]
-        i = 0
+        
+        # Initialisation of storage
         self.treasures = {}
         self.tiles = {}
         self.tile_dict  = {}
-        self.treasure_dict = { }
+        self.treasure_dict = {}
+
         for position, tile in graphics_dict.items():
-            i += 1
-            #position
-            co0 = position[1]
-            li0 = position[0]
-            co = 75 + co0*100
-            li = 75 + li0*100
-            #treasure display
+            self.index += 1
+            
+            # Position
+            li , co = grid_position(position)
+            
+            # Tile display
+            new_bg = self.grid_tile(tile["filepathTile"], tile["orientation"], co, li)    
+           
+            # Treasure display
+            
             if tile["filepathTreas"]!=None:
                 #create and position treasure
-                self.treasures[i] = tk.PhotoImage(file = self.folder + tile["filepathTreas"])
-                
-                new_fg = self.canvas_board.create_image(co, li, image = self.treasures[i])
-                
-                self.canvas_board.lift(new_fg)
-                self.canvas_board.tag_bind(new_fg, '<Button-1>', self.click_tile)
-                
+                new_fg = self.grid_treasure(tile["filepathTreas"], co, li)
             else:
                 new_fg = None
-                
-            # Initialisation
-            if tile["filepathTile"] == './tile_corner.png':
-                self.new_tile = self.tile_c
-            elif tile["filepathTile"] == './tile_t.png':
-                self.new_tile = self.tile_t
-            else:
-                self.new_tile = self.tile_s
 
-            # Orientate
-            self.tiles[i] = rotate_image(self.new_tile, tile["orientation"])
-            
-            # Display
-            new_bg = self.canvas_board.create_image(co, li, image = self.tiles[i])
-            self.canvas_board.lower(new_bg)
-            self.canvas_board.tag_bind(new_bg, '<Button-1>', self.click_tile)
-            
-
-            self.tile_dict[(li0,co0)] = new_bg
-            self.treasure_dict[(li0, co0)] = new_fg
+            # Save
+            self.tile_dict[position] = new_bg
+            self.treasure_dict[position] = new_fg
     
+    def grid_treasure(self, filepath, co, li):
+        """create treasure on board
+        input : str, int, int, int
+        output : PhotoImage on canvas"""
+        #create and position treasure
+        self.treasures[self.index] = tk.PhotoImage(file = self.folder + filepath)
+        new_fg = self.canvas_board.create_image(co, li, image = self.treasures[self.index])
+        self.canvas_board.lift(new_fg)
+        self.canvas_board.tag_bind(new_fg, '<Button-1>', self.click_tile)
+        return new_fg
+    
+    def grid_tile(self, filepath, orientation, co, li):
+        """create tile on board
+        input : str, int, int, int
+        output : PhotoImage on canvas"""
+         # Initialisation
+        self.get_image(filepath)
+        
+        # Orientate
+        self.tiles[self.index] = rotate_image(self.new_tile, orientation)
+        
+        # Display
+        new_bg = self.canvas_board.create_image(co, li, image = self.tiles[self.index])
+        self.canvas_board.lift(new_bg)
+        self.canvas_board.tag_bind(new_bg, '<Button-1>', self.click_tile)
+        return new_bg
+
+    
+    def get_image(self, filepath):
+        """get image from filepath
+        input : str
+        output :Image"""
+        if filepath == './tile_corner.png':
+                self.new_tile = self.tile_c
+        elif filepath == './tile_t.png':
+            self.new_tile = self.tile_t
+        else:
+            self.new_tile = self.tile_s
+        
 
     def anim_slide_tiles(self):
         """pour slider les tiles à l'écran
         input : tuple   """
         #Get which row/column moves
         ##If it is a line
+        self.index += 1
         if self.chosen_pos[1]==0 :
             init_pos = (self.chosen_pos[0], -1)
             out_pos = (self.chosen_pos[0], 6)
@@ -528,54 +569,27 @@ class GameWindow():
             self.slider = 'col_u'
         
         #Add the new tile at the beginning of the row/column TO BE CHANGED FOR CONTROLLER
-        treasure = None
-        treasure_filepath = None
+        treasure = 'bh'
+        treasure_filepath = '\\tr_bat.png'
         hand_filepath = './tile_corner.png'
         hand_orientation = 2
         
         # Initialisation of position
-        co0 = init_pos[1]
-        li0 = init_pos[0]
-        co = 75 + co0*100
-        li = 75 + li0*100
+        li, co = grid_position(init_pos)
 
         # New treasure
-        # place_a_treasure FUNCTION TO CREATE
         #if self.controller.hand.tile.treasure != None: CONTROLLER
         if treasure != None:
                 #create and position treasure
-                if self.treasures.get(init_pos) == None:
-                    self.treasures[init_pos] = []
-                self.treasures[init_pos].append(tk.PhotoImage(file = self.folder + treasure_filepath))#CONTROLLER
-                
-                #self.treasures[init_pos] = tk.PhotoImage(file = self.folder + self.controller.hand.tile.treasure.filepath) CONTROLLER
                 #display
-                new_fg = self.canvas_board.create_image(co, li, image = self.treasures[init_pos][len(self.treasures[init_pos])-1])
-                self.canvas_board.lift(new_fg)
-                self.canvas_board.tag_bind(new_fg, '<Button-1>', self.click_tile)
+                new_fg = self.grid_treasure(treasure_filepath, co, li)
+                
         else:
             new_fg = None     
 
         # New tile
-        #plae_a_tile FUNCTION TO CREATE
-        #if self.controller.hand.filepath == './tile_corner.png':
-        if hand_filepath == './tile_corner.png':
-            self.new_tile = self.tile_c
-        #elif self.controller.hand.filepath == './tile_t.png':
-        elif hand_filepath == './tile_t.png':
-            self.new_tile = self.tile_t
-        else:
-            self.new_tile = self.tile_s
-
-        # Orientate
+        new_bg = self.grid_tile(hand_filepath, hand_orientation, co, li)
         
-        if self.tiles.get(init_pos) == None:
-            self.tiles[init_pos] = []
-        self.tiles[init_pos].append(rotate_image(self.new_tile,random.randint(0,3)))#CONTROLLER
-        # Display
-        new_bg = self.canvas_board.create_image(co, li, image = self.tiles[init_pos][len(self.tiles[init_pos])-1])
-        self.canvas_board.lift(new_bg)
-        self.canvas_board.tag_bind(new_bg, '<Button-1>', self.click_tile)
         
         # Storage
         self.tile_dict[init_pos] = new_bg
@@ -583,6 +597,31 @@ class GameWindow():
         self.pawn_dict[init_pos] = None
 
         # Storage update
+        self.storage_update(init_pos, out_pos, li, co)
+        
+        
+        #start the animation
+        self.lancer()
+
+        #comunicate the motuon to the controller
+        #self.controller.insert_hand() CONTROLLER
+
+        # Handle buttons
+        if self.opposite_button_old != None:
+            self.opposite_button_old.configure(fg_color = "goldenrod", state="normal")
+        self.opposite_button.configure(fg_color = "grey", state="disabled")
+        self.selected_button.configure(fg_color = "goldenrod")
+        # Handle turn unrolling
+        self.pawn_motion = True
+        self.cross = False
+
+        self.slid = True
+
+        
+    def storage_update(self, init_pos, out_pos, li, co):
+        """Updates the dictionnaries of the grid display
+        input: 2 tuples, 2 ints
+        no output"""
         # Delete the tiles+treasures pushed out of the board
         #self.controller.hand = self.tile_dict[out_pos] CONTROLLER
         self.canvas_board.delete(self.tile_dict[out_pos])
@@ -592,13 +631,7 @@ class GameWindow():
         # Move the pawns pushed out of the board
         if self.pawn_dict[out_pos] != None:
             for pawn in self.pawn_dict[out_pos]:
-
-                # place_a_pawn FUNCTION TO  CREATE
-                co = 75 + 100*init_pos[1]
-                li = 75 + 100*init_pos[0]
-                
                 # Find the color of the circle pawn and move in consequence
-                
                 
                 color = self.canvas_board.itemcget(pawn,  "fill")
                 
@@ -613,7 +646,8 @@ class GameWindow():
                     
                 else:
                     self.canvas_board.coords(pawn, co, li+20, co+20, li )
-                #m Mve it in storage
+
+                # Move it in storage
                 self.canvas_board.lift(pawn)
                 if self.pawn_dict[init_pos] == None:
                     self.pawn_dict[init_pos] = []
@@ -635,24 +669,6 @@ class GameWindow():
                 self.pawn_dict[(self.chosen_pos[0], i)] = self.pawn_dict[(self.chosen_pos[0], i+r[2])]
         self.tile_dict[init_pos]= None
         self.treasure_dict[init_pos]= None
-        
-        #start the animation
-        self.lancer()
-
-        #comunicate the motuon to the controller
-        #self.controller.insert_hand() CONTROLLER
-
-        # Handle buttons
-        if self.opposite_button_old != None:
-            self.opposite_button_old.configure(fg_color = "goldenrod", state="normal")
-        self.opposite_button.configure(fg_color = "grey", state="disabled")
-        self.selected_button.configure(fg_color = "goldenrod")
-        # Handle turn unrolling
-        self.pawn_motion = True
-        self.cross = False
-
-        
-    
 
 
     def lancer(self):
@@ -776,10 +792,7 @@ class GameWindow():
         for position, tile in graphics_dict.items():
             if tile["pawns"]!=None:
                 #position
-                li0 = position[0]
-                co0 = position[1]
-                li = 75 + li0*100
-                co = 75 + co0*100
+                li, co = grid_position(position)
                 #create circles on the tile
                 new_pawns = []
                 for color in tile["pawns"]:
@@ -809,11 +822,12 @@ class GameWindow():
         #this will gather the information necessary for move pawn animation
         self.dict_anim = {"path": [(0,5),(1,5),(2,5), (2,4)], "pawn": self.pawn_dict[(0,0)][0], "previous_step": (0,0)}
         
-        self.anim_move_pawn()
+        #self.anim_move_pawn()
         #useful for turn over
         self.opposite_button_old = self.opposite_button
         self.opposite_button = None
         self.pawn_motion = False
+        self.slid= False
 
     def anim_move_pawn(self):
         """animates the movement of the pawn to the destination"""
@@ -867,7 +881,9 @@ class GameWindow():
              
             # take note of the objective coordinates
             self.destination_co = (pos[0]-75)/100
-            self.destination_li = (pos[1]-75)/100    
+            self.destination_li = (pos[1]-75)/100  
+
+            #VERIFIER QUE C EST POSSIBLE D Y ALLER ET RETOURNER BOOLEAN  
         else:
             self.msg_error2 = tk.messagebox.showwarning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
      
@@ -939,3 +955,13 @@ def rotate_image_h(img, orientation):
     img = img.resize((3*w,3*h))
     img_f = rotate_image(img, orientation)
     return (img_f)
+    
+def grid_position(pos):
+    """converts of the grid into canvas coordinates
+    input: tuple (line, column)
+    output: tuple (line, column)"""
+    co0 = pos[1]
+    li0 = pos[0]
+    co = 75 + co0*100
+    li = 75 + li0*100
+    return(li,co)
