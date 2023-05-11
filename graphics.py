@@ -9,7 +9,11 @@ ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
 class GameWindow():
-    def __init__(self):
+    def __init__(self, controller):
+        from controller import GameController
+
+        self.controller: GameController = controller
+
         self.root = ctk.CTk()
         self.root.title("Labyrinth - the aMAZEing game") # Title of the window
         self.root.configure(bg='#103A86')
@@ -88,9 +92,8 @@ class GameWindow():
         # Find the names of the players
         self.get_playernames()
         
-        # Initialize the game through the controller
-        self.controller = controller.Gamecontroller()
-        
+        # Start game (and init model) through the controller
+        self.controller.start_game(self.playernames)
 
         # Creation of the graphic window
         self.graphic_window() 
@@ -846,10 +849,8 @@ class GameWindow():
         else:
             self.msg_error2 = tk.messagebox.showwarning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
      
-    def get_move_pos(self):
-        """returns the coordinates of the tile where the player wants to move the pawn"""
-        self.move_ok = False
-        return self.destination_li, self.destination_co
+    def app_start(self):
+        self.root.mainloop()
 
 
     """   
@@ -926,10 +927,3 @@ def grid_position(pos):
     co = 75 + co0*100
     li = 75 + li0*100
     return(li,co)
-
-
-        
-        
-if __name__ == "__main__":
-    app = GameWindow()
-    app.root.mainloop()
