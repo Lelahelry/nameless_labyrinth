@@ -55,10 +55,36 @@ class GameWindow():
         self.button_quit = ctk.CTkButton(root, text = "Quit", corner_radius = 8, height = 40, width = 15, fg_color = "red4", hover_color = "DodgerBlue4", font = ('Calibri', 20), command = self.root.destroy)
         self.button_quit.pack(fill = 'x', side = tk.BOTTOM)
         
-        # launch game
+        # Launch game
         self.button_launch = ctk.CTkButton(self.root, text = "Start game", corner_radius = 8, height = 60, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
         self.button_launch.bind('<Button-1>', self.game_launch)
         self.button_launch.pack(side = ctk.BOTTOM, fill = 'x')
+
+        # Rules display
+        self.rules_button = ctk.CTkButton(self.root, text = "?", font = ("Calibri", 20), corner_radius = 15, height = 30, width = 10, fg_color = "lightgrey", hover_color = "darkgrey")
+        self.rules_button.bind('<Button-1>', self.show_rules)
+        self.rules_button.bind('<Enter>', self.show_tip)
+        self.rules_button.bind('<Leave>', self.hide_tip)
+        self.rules_button.place(x = 10, y = 10)
+
+    def show_rules(self, event):
+        """Displays the game rules in a Messagebox when the "?" rules_button is clicked.
+        ----------
+        Input : right click from the mouse
+        No input"""
+        tk.messagebox.showinfo("Labyrinth - Rules", "Goal : Navigate the labyrinth to collect your assigned treasures.\n\nHow to play ?\nYour current objective is displayed in the top right corner of the game window. In the bottom left corner is the tile in your hand.\n\nDuring your turn :\n1 - Insert the tile on the board.\n• Select an insertion position (yellow arrow buttons).\n• Rotate the tile in your hand (yellow rounded arrow buttons).\n• Validate to slide the tiles on the board (green check button).\n2 - Move your pawn on the board (optional) :\n• Click on the tile you wish to go to.\n• Click on 'My turn is over'.\n\nGood luck !")
+
+    def show_tip(self, event):
+        """Shows a "Rules" label when hovering the mouse over the "?" rules_button.
+        ----------
+        Input : mouse hovering above the rules_button
+        No output"""
+        self.tip = ctk.CTkLabel(self.root, text = "Rules", font = ("Calibri", 12), bg_color = "gainsboro", width = 50)
+        self.tip.place(x = 55, y = 11)
+    
+    def hide_tip(self, event):
+        """Hides the "Rules" label when the mouse is not over the "?" rules_button anymore."""
+        self.tip.destroy()
  
     def add_playernames(self, event):
         """Adds entry bars for players to enter custom names (optional)"""
@@ -141,10 +167,18 @@ class GameWindow():
             self.queue_display()
         # Reset state of f_graph so that it can be opened again once closed (without rerunning the whole program)
         #self.f_graph = None 
-        
+
     def queue_display(self):
-        """text made of labels display :  NEXT IN LINE:
-        queue, name written in color and remaining objectives counter"""
+        """Text made of labels display : NEXT IN LINE:
+        queue, name written in color and number of remaining objectives"""
+        for pawn in self.controller.queue : 
+            name_label = ctk.CTkLabel(self.f_graph, text = self.controller.queue[pawn].name, font = ("Calibri", 16, "bold"), text_color = self.controller.queue[pawn].color)
+            name_label.pack(side = tk.TOP)
+            tr_label = ctk.CTkLabel(self.f_graph, text = "Treasures left : ", font = ("Calibri", 16), text_color = self.controller.queue[pawn].color)
+            tr_label.pack(side = tk.TOP)
+            number_label = ctk.CTkLabel(self.f_graph, text = len(self.controller.queue[pawn].objectives), font = ("Calibri", 16, "bold"), text_color = self.controller.queue[pawn].color)
+            number_label.pack(side = tk.LEFT)
+
     def canvas_for_board(self):
         """Creates the canvas for the board with the background
         No input
@@ -284,13 +318,6 @@ class GameWindow():
         #display the treasure using the controller CONTROLLER
             #select treasure index 0 in the list of the player's objectives
 
-    #def text_area(self):
-        """creates text area where the controller sends event messages
-        no input
-        no output"""
-        #text area for commmunication through controller
-        #bind it to messagerie method
-
     def canvas_for_hand(self):
         """Creates the canvas for the tile in hand
         No input
@@ -392,9 +419,6 @@ class GameWindow():
         No output"""
         if self.selected_button == None:
             self.selection_error_messagebox()
-        elif self.slid:
-            #messagebox to tell they already slid
-            self.msg_error3 = tk.messagebox.showwarning("Selection error", "You already slid the tile.\nPlease choose where you wantmove your pawn or end your turn.")
         else:
             self.anim_slide_tiles()
     
