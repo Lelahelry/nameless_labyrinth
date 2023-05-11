@@ -837,7 +837,7 @@ class GameWindow():
         self.pawn_dict[obj].append(pawn)
         self.dict_anim["previous_step"] = obj  
         if path != []:
-            self.timer_id_pawn = self.f_graph.after(2000, self.timer_loop_pawn)  
+            self.timer_id_pawn = self.f_graph.after(200, self.timer_loop_pawn)  
         else:
             self.stop_pawn()
 
