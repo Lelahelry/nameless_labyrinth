@@ -129,6 +129,7 @@ class Board:
             case _:
                 raise ValueError("Invalid insertpos type passed.")
         
+        assert isinstance(slideout_tile, MovingTile), "Tile that slid out was a fixed one."
         return slideout_tile
     
     
