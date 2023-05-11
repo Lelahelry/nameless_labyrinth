@@ -17,8 +17,8 @@ class GameController:
         """Enables moving a player's pawn to the tile they chose, given that this tile can indeed be reached.
         Otherwise, the player's pawn goes back to where it was.
         ----------
-         No input
-         No output"""
+        No input
+        No output"""
         pawn_moved = False
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
