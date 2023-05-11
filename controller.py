@@ -124,3 +124,33 @@ class GameController:
             self.turn()
         
         self.view.show_congratulations(self.winner)
+
+    def give_objective(self):
+        """gives the player's current objective
+        output: str (filepath)"""
+        return self.model.get_active_player().objectives[0].filepath
+    
+    def give_hand(self):
+        """gives the hand
+        output:  2 str (filepath)"""
+        if self.model.hand.treasure == None:
+            filepath_treas = None
+        else:
+            filepath_treas = self.model.hand.treasure.filepath
+        return self.model.hand.filepath, filepath_treas
+    
+    def give_grid(self):
+        """gives simplified version of the grid to view
+        output : dict"""
+        graphics_dict = {}
+        for position , tile in self.model.board.grid.items():
+            if tile.treasure != None:
+                pawns = [p.color for p in tile.pawns]
+                graphics_dict[position] = {"filepath_ti" : tile.filepath,"filepath_treas" : tile.treasure.filepath, "orientation" : tile.orientation, "pawns" : pawns}
+            else:
+                pawns = [p.color for p in tile.pawns]
+                graphics_dict[position] = {"filepath_ti" : tile.filepath, "filepath_treas" : None, "orientation" : tile.orientation, "pawns" : pawns}
+        return graphics_dict
+    
+    def give_outpos(self):
+        return self.model.get_slideout_position()
