@@ -848,7 +848,12 @@ class GameWindow():
              
         else:
             self.msg_error2 = tk.messagebox.showwarning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
-     
+
+    def get_move_pos(self):
+        """returns the coordinates of the tile where the player wants to move the pawn"""
+        self.move_ok = False
+        return self.destination_li, self.destination_co
+ 
     def app_start(self):
         self.root.mainloop()
 
