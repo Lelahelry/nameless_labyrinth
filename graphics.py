@@ -673,7 +673,6 @@ class GameWindow():
                         new_pawn =self.canvas_board.create_oval(co, li+20, co+20, li, fill = color  )
 
                     self.canvas_board.lift(new_pawn)
-"""
     
     def turn_over(self, event):
         #validates that the player is done with his turn and communicates the changes of player back and forth with the controller
@@ -683,13 +682,13 @@ class GameWindow():
         
                
     #inspi
-    def place_objects():
-            grid = #board read through message
-            for position, tile in grid.items():
-                #get the type of tile and orientation
-                self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
-                self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
-                self.f_graph.canvas.lower(self.item)
+    #def place_objects():
+    #        grid = #board read through message
+    #        for position, tile in grid.items():
+    #            #get the type of tile and orientation
+    #            self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
+    #           self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
+    #            self.f_graph.canvas.lower(self.item)
                 #ajouter la taille au dico avec son ident
             #read the current player, display his name and his objective
             #ajouter boutons pour tourner la tuile et placer  
@@ -701,15 +700,19 @@ class GameWindow():
             #read the current player, display his name and his objective
 
 
-    récupération des positions de clic
-    def affiche_info_ville(self,event):
-            self.text_area.delete("1.0", "end")
-            mouseX = event.x
-            mouseY = event.y
-            ident = self.f_graph.canevas.find_withtag("current")[0]
-            item_clicked = self.dicoSommetsGraphiques[ident]
-            self.text_area.insert(tk.INSERT,item_clicked)"""
+    #récupération des positions de clic
+    #def affiche_info_ville(self,event):
+    #        self.text_area.delete("1.0", "end")
+    #        mouseX = event.x
+    #        mouseY = event.y
+    #        ident = self.f_graph.canevas.find_withtag("current")[0]
+    #        item_clicked = self.dicoSommetsGraphiques[ident]
+    #        self.text_area.insert(tk.INSERT,item_clicked)'''
     
+
+
+
+
 def rotate_image(img, orientation):
     img = img.rotate(orientation* -90)
     print("turn")
