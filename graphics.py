@@ -755,14 +755,9 @@ class GameWindow():
     def turn_over(self, event):
         #validates that the player is done with his turn and communicates the changes of player back and forth with the controller
         #no input
-        #output
-        if self.pawn_displacement:
-            pass
-        else:
-            pass
-        self.anim_move_pawn()
-        GameController.rotate_players()
-
+        self.queue_display()
+        self.objective_image()
+        self.hand_image()
         #throw animation to move pawn when checked it is possible
         #slide buttons preparation
         #this will gather the information necessary for move pawn animation
