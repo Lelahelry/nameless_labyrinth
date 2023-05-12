@@ -6,11 +6,12 @@ from utils import bfs_walk
 
 @dataclass
 class GameController:
-    model: GameData
     view: GameWindow
+    model: GameData
+    game_active: bool
 
-    def __post_init__(self):
-        self.view.set_controller(self)
+    def __init__(self):
+        self.view = GameWindow(self)
         self.game_active = False
     
     def move_pawn(self):
@@ -24,8 +25,6 @@ class GameController:
         startpos, start_tile = self.model.get_pawn_container(pawn)
 
         while not pawn_moved:
-            self.view.show("Please choose a valid position to move your pawn to.")
-
             newpos = self.view.get_move_pos()
             for pos in bfs_walk(startpos, self.model.get_adjacency_fn()):
                 if pos == newpos:
@@ -38,7 +37,7 @@ class GameController:
                     self.view.show_pawn_move(startpos, newpos)
             
             if not pawn_moved:
-                self.view.show("Pawn didn't have an open path to the given tile.")
+                self.view.show_warning("Pawn didn't have an open path to the given tile.")
     
     def insert_hand(self):
         """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
@@ -49,7 +48,9 @@ class GameController:
          No output"""
         hand_inserted = False
         while not hand_inserted:
-            self.view.show("Please choose a valid position to insert the hand at.")
+            if not self.view.insert_ok:
+                continue
+
             insertpos, rotations = self.view.get_insert_state()
 
             hand = self.model.hand
@@ -60,10 +61,10 @@ class GameController:
                     hand_inserted = True
 
                     self.model.hand = self.model.board.slide_tile(insertpos, hand)
-                    self.view.show_tile_slide(insertpos, hand)
+                    self.view.anim_tile_slide()
             
             if not hand_inserted:
-                self.view.show("Insert position was invalid.")
+                self.view.show_warning("Insert position was invalid.")
 
     def collect_treasure(self):
         """Checks that the treasure reached by a player corresponds to its current objective.
@@ -90,6 +91,36 @@ class GameController:
         if len(active_pawn.objectives) == 0:
             self.game_active = False
             self.winner = active_pawn
+
+    def give_objective(self):
+        """gives the player's current objective
+        output: str (filepath)"""
+        return self.model.get_active_player().objectives[0].filepath
+    
+    def give_hand(self):
+        """gives the hand
+        output:  2 str (filepath)"""
+        if self.model.hand.treasure == None:
+            filepath_treas = None
+        else:
+            filepath_treas = self.model.hand.treasure.filepath
+        return self.model.hand.filepath, filepath_treas
+    
+    def give_grid(self):
+        """gives simplified version of the grid to view
+        output : dict"""
+        graphics_dict = {}
+        for position , tile in self.model.board.grid.items():
+            if tile.treasure != None:
+                pawns = [p.color for p in tile.pawns]
+                graphics_dict[position] = {"filepath_ti" : tile.filepath,"filepath_treas" : tile.treasure.filepath, "orientation" : tile.orientation, "pawns" : pawns}
+            else:
+                pawns = [p.color for p in tile.pawns]
+                graphics_dict[position] = {"filepath_ti" : tile.filepath, "filepath_treas" : None, "orientation" : tile.orientation, "pawns" : pawns}
+        return graphics_dict
+    
+    def give_outpos(self):
+        return self.model.get_slideout_position()
     
     def rotate_players(self):
         """Once a player's turn is over, moves on to the next player in the queue.
@@ -110,13 +141,14 @@ class GameController:
         self.check_win_state()
         self.rotate_players()
 
-        self.view.signal_end_turn()
+        self.view.turn_over()
     
-    def start_game(self):
+    def start_game(self, playernames: list[str]):
         """Launches the game and every turn until someone won.
         ----------
         No input
         No output"""
+        self.model = GameData("", playernames)
         self.game_active = True
         self.view.show_game_start()
         
@@ -124,3 +156,6 @@ class GameController:
             self.turn()
         
         self.view.show_congratulations(self.winner)
+    
+    def launch(self):
+        self.view.app_start()

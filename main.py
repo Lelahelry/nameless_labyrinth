@@ -1,3 +1,6 @@
 import labyrinth
-import controller
+from controller import GameController
 import graphics
+
+app = GameController()
+app.launch()
