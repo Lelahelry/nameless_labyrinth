@@ -775,6 +775,7 @@ class GameWindow():
         self.slid= False
         self.insert_ok = False
         self.move_ok = False
+        self.button_done.config(fg_color='grey', state='disabled')
 
     def anim_move_pawn(self):
         """animates the movement of the pawn to the destination"""
