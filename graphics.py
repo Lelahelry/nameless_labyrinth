@@ -424,7 +424,7 @@ class GameWindow():
         if self.selected_button == None:
             self.selection_error_messagebox()
         else:
-            self.insert_hand()
+            self.controller.insert_hand()
     
     def selection_error_messagebox(self):
         """Opens a messagebox reminding the player that they didn't choose where to insert the tile although it is mandatory
@@ -537,9 +537,7 @@ class GameWindow():
         self.insert_ok = False
         return self.chosen_pos, self.orientation_h
     
-    def insert_hand(self):
-        """validates insertion of tile"""
-        self.insert_ok = True
+    
 
     def anim_tiles_slide(self):
         """pour slider les tiles à l'écran
