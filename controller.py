@@ -152,10 +152,7 @@ class GameController:
         self.game_active = True
         self.view.display_game()
         
-        while self.game_active:
-            self.turn()
         
-        self.view.show_congratulations(self.winner)
     
     def launch(self):
         self.view.app_start()
