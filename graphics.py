@@ -155,8 +155,8 @@ class GameWindow():
             self.f_graph.config(background = '#EFEFE1')
             
             # Button for players to indicate they finished their turn
-            self.button_done = ctk.CTkButton(self.f_graph, text = "My turn is over.", corner_radius = 8, height = 30, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
-            self.button_done.bind('<Button-1>', self.turn_over)
+            self.button_done = ctk.CTkButton(self.f_graph, text = "Validate displacement.", corner_radius = 8, height = 30, width = 15, fg_color = "grey", hover_color = "DodgerBlue4", font = ('Calibri', 20), state = "disabled")
+            self.button_done.bind('<Button-1>', self.move)
             self.button_done.pack(side = ctk.BOTTOM, fill = 'x')
             
             self.image_dict = {} # Dict that stocks all 50 tiles as (bg, fg, pawn) in grid size
@@ -453,7 +453,8 @@ class GameWindow():
         self.tile_c = Image.open(self.folder + '\\tile_corner.png')
         self.tile_t = Image.open(self.folder + '\\tile_t.png')
         self.tile_s = Image.open(self.folder + '\\tile_straight.png')
-        self.target_pic = tk.PhotoImage(file = self.folder + '\\target.png')
+        self.target_pic_o = tk.PhotoImage(file = self.folder + '\\target_ok.png')
+        self.target_pic_n = tk.PhotoImage(file = self.folder + '\\target_no.png')
 
     def grid_images(self):
         """Associates tiles to treasures and stocks them 
@@ -765,7 +766,6 @@ class GameWindow():
         #throw animation to move pawn when checked it is possible
         #slide buttons preparation
         #this will gather the information necessary for move pawn animation
-        self.dict_anim = {"path": [(0,5),(1,5),(2,5), (2,4)], "pawn": self.pawn_dict[(0,0)][0], "previous_step": (0,0)}
         
         #self.anim_move_pawn()
         #useful for turn over
@@ -818,21 +818,43 @@ class GameWindow():
         #si j ai le droit de bouger un pion:
         if self.pawn_motion:
             pos = self.canvas_board.coords(self.canvas_board.find_withtag('current')[0])# get tile position with coords
-            self.move_ok = True
+            # take note of the objective coordinates
+            self.destination_co = int((pos[0]-75)/100)
+            self.destination_li = int((pos[1]-75)/100)
+            self.accessible, self.displacement = self.controller.validate_move(self.destination_li, self.destination_co)
+            
             #if there is a cross
             if self.cross:
                 self.canvas_board.delete(self.target)
-            self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic)
+            if self.accessible:
+                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
+                self.button_done.configure(fg_color = "goldenrod", state = "normal")
+            else:
+                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_n)
+                self.button_done.configure(fg_color = "goldenrod", state = "normal")
+
             self.cross = True
             self.canvas_board.lift(self.target)
              
-            # take note of the objective coordinates
-            self.destination_co = (pos[0]-75)/100
-            self.destination_li = (pos[1]-75)/100  
-            
-             
         else:
             self.msg_error2 = tk.messagebox.showwarning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
+
+    def move(self,event):
+        if self.button_done.cget("state") != "disabled":
+            self.controller.move_pawn(self.destination_li, self.destination_co)
+            depart = self.destination.pop(0)
+            color = self.controller.give_player_color()
+            pawn = self.find_ident(color, depart)
+            self.dict_anim = {"path": self.displacement, "pawn": pawn, "previous_step": depart}
+            self.anim_move_pawn()
+            self.controller.end_turn()
+    def find_ident(self, color, pos):
+        found = None
+        for pawn in self.pawn_dict[pos]:
+            if pawn.cget("fill") == color:
+                found = pawn
+        
+        return pawn
 
     def get_move_pos(self):
         """returns the coordinates of the tile where the player wants to move the pawn"""

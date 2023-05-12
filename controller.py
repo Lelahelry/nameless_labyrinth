@@ -89,6 +89,11 @@ class GameController:
             self.game_active = False
             self.winner = active_pawn
 
+    def give_player_color(self):
+        """gives the active player
+        output: str (color)"""
+        return self.model.get_active_player().color
+
     def give_objective(self):
         """gives the player's current objective
         output: str (filepath)"""
