@@ -3,7 +3,6 @@ import tkinter as tk
 import customtkinter as ctk
 import time
 from PIL import Image, ImageTk
-import controller
 
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
@@ -94,9 +93,6 @@ class GameWindow():
         
         # Start game (and init model) through the controller
         self.controller.start_game(self.playernames)
-
-        # Creation of the graphic window
-        self.graphic_window() 
         
     # Callback functions
     def get_playernames(self):
@@ -110,7 +106,7 @@ class GameWindow():
                 name = "Player" + str(i+1) # Default name
             self.playernames.append(name) #SEND THIS TO CONTROLLER
     
-    def graphic_window(self):
+    def display_game(self):
         """Creates the graphic window for current game display
         No input
         No output"""
