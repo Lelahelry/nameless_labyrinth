@@ -277,7 +277,7 @@ class GameWindow():
         """Displays the right treasure in the objective card
         No input
         No output"""
-        filepath_tr = self.controller.give_objective
+        filepath_tr = self.controller.give_objective()
         # Treasure image settings
         self.treas_c = tk.PhotoImage(file = self.folder + filepath_tr)
         self.treas_c_resized = self.treas_c.zoom(3, 3)
@@ -296,7 +296,7 @@ class GameWindow():
         """Displays the tile in hand in its canvas and binds it to the rotation function
         No input
         No output"""
-        self.filepath_ti_h, self.filepath_tr_h = self.controller.give_hand #address of the tile and treasure images
+        self.filepath_ti_h, self.filepath_tr_h = self.controller.give_hand() #address of the tile and treasure images
         # Set the image of the tile in hand
         self.hand_tile()
 
