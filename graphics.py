@@ -3,6 +3,7 @@ import tkinter as tk
 import customtkinter as ctk
 import time
 from PIL import Image, ImageTk
+from controller import *
 
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
@@ -800,6 +801,13 @@ class GameWindow():
         #validates that the player is done with his turn and communicates the changes of player back and forth with the controller
         #no input
         #output
+        if self.pawn_displacement:
+            pass
+        else:
+            pass
+        self.anim_move_pawn()
+        GameController.rotate_players()
+
         #throw animation to move pawn when checked it is possible
         #slide buttons preparation
         #this will gather the information necessary for move pawn animation
