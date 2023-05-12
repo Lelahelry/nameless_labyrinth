@@ -137,13 +137,20 @@ class GameWindow():
 
             # Functions calls
             self.canvas_for_board()
+         
             self.slide_tiles_buttons()
+
             self.canvas_for_objective() 
+   
             #self.text_area()
             self.canvas_for_hand()
+
             self.turn_tile_buttons()
+   
             self.validate_button()
+  
             self.queue_display()
+ 
         # Reset state of f_graph so that it can be opened again once closed (without rerunning the whole program)
         #self.f_graph = None 
         
@@ -325,7 +332,7 @@ class GameWindow():
         if self.fg_h != None:
             self.canvas_tile.delete(self.fg_h)
         # Set the image of the treasure of the tile (if any) 
-        if self.filepath_tr != None:
+        if self.filepath_tr_h is not None:
             self.treas_h = tk.PhotoImage(file = self.folder + self.filepath_tr_h)
             self.treas_h_resized = self.treas_h.zoom(3, 3)
             self.fg_h = self.canvas_tile.create_image(205, 175, image = self.treas_h_resized)
@@ -352,14 +359,14 @@ class GameWindow():
         #set new orientation
         self.orientation_h += sens
         #prepare the image tile
-        if self.filepath_ti == './tile_corner.png':
+        if self.filepath_ti_h == './tile_corner.png':
             self.c_tile = self.tile_c
-        elif self.filepath_ti == './tile_t.png':
-            self.c_tile = self.tile_t
+        elif self.filepath_ti_h == './tile_t.png':
+            self.filepath_ti_h = self.tile_t
         else:
-            self.c_tile = self.tile_s
+            self.filepath_ti_h = self.tile_s
         
-        self.rotatedc_tile=rotate_image_h(self.c_tile, self.orientation_h)
+        self.rotatedc_tile=rotate_image_h(self.filepath_ti_h, self.orientation_h)
         self.dict_r[1]=self.rotatedc_tile  
         #replace self.bg_h with the rotated image
         self.canvas_tile.delete(self.bg_h) #delete the old image
@@ -805,61 +812,7 @@ class GameWindow():
         self.root.mainloop()
 
 
-    """   
-     
-    def process_click(self, event):
-        
-        Gestion du clic éventuel sur l'image en mouvement
-
-        
-        if self.running :
-            self.stop(None)
-            self. id_boom = self.canevas.create_image((self.x,self.y), anchor = "nw", image = self.boom)
-            self.count += 1
-            messagebox.showinfo("Gagné !", f"Nombre de points : {self.count}")
-            self.lancer(None)
-               
-    #inspi
-    def place_objects():
-            grid = #board read through message
-            for position, tile in grid.items():
-                #get the type of tile and orientation
-                self.background = PhotoImage(file='C:/Users/cleme/Pictures/meduse.png')
-                self.item = self.f_graph.canvas.create_image(100, 100, image=self.background, anchor='c')
-                self.f_graph.canvas.lower(self.item)
-                #ajouter la taille au dico avec son ident
-            #read the current player, display his name and his objective
-            #ajouter boutons pour tourner la tuile et placer  
-        #graphic window
-            #initialize
-            #set background
-            #read grid to fill the graphic grid + read the treasure and pawn to draw them...
-            #read the hand and display it
-            #read the current player, display his name and his objective
-
-
-    récupération des positions de clic
-    def affiche_info_ville(self,event):
-            self.text_area.delete("1.0", "end")
-            mouseX = event.x
-            mouseY = event.y
-            ident = self.f_graph.canevas.find_withtag("current")[0]
-            item_clicked = self.dicoSommetsGraphiques[ident]
-            self.text_area.insert(tk.INSERT,item_clicked)
-            
-            
-            
-            
-             def supprime_oval(self, event):
-        mouseX = event.x
-        mouseY = event.y
-        # find the circle closest to the mouse click
-        # and remove it from the canvas
-        x = self.fen_graphique.canevas.canvasx(mouseX)
-        y = self.fen_graphique.canevas.canvasy(mouseY)
-        item = self.fen_graphique.canevas.find_closest(x, y, halo=None, start=None)
-        self.fen_graphique.canevas.delete(item)
-        """
+    
     
 def rotate_image(img, orientation):
     img = img.rotate(orientation* -90)
