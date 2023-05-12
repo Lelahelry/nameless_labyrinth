@@ -437,7 +437,7 @@ class GameWindow():
         self.tile_dict  = {}
         self.treasure_dict = {}
 
-        for position, tile in graphics_dict.items():
+        for position, tile in self.graphics_dict.items():
             self.index += 1
             
             # Position
