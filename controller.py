@@ -48,9 +48,6 @@ class GameController:
          No output"""
         hand_inserted = False
         while not hand_inserted:
-            if not self.view.insert_ok:
-                continue
-
             insertpos, rotations = self.view.get_insert_state()
 
             hand = self.model.hand
@@ -61,7 +58,7 @@ class GameController:
                     hand_inserted = True
 
                     self.model.hand = self.model.board.slide_tile(insertpos, hand)
-                    self.view.anim_tile_slide()
+                    self.view.anim_tiles_slide()
             
             if not hand_inserted:
                 self.view.show_warning("Insert position was invalid.")
@@ -152,7 +149,10 @@ class GameController:
         self.game_active = True
         self.view.display_game()
         
+        while self.game_active:
+            self.turn()
         
+        self.view.show_congratulations(self.winner)
     
     def launch(self):
         self.view.app_start()
