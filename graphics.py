@@ -3,7 +3,6 @@ import tkinter as tk
 import customtkinter as ctk
 import time
 from PIL import Image, ImageTk
-from controller import *
 
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
