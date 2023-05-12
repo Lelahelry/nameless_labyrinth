@@ -150,7 +150,7 @@ class GameController:
         No output"""
         self.model = GameData("", playernames)
         self.game_active = True
-        self.view.show_game_start()
+        self.view.display_game()
         
         while self.game_active:
             self.turn()
