@@ -166,9 +166,10 @@ class GameWindow():
          
             self.slide_tiles_buttons()
 
+            self.frame_right = tk.Frame(self.f_graph, bg = '#EFEFE1')
+            self.frame_right.pack(side = tk.RIGHT, fill = 'y' )
             self.canvas_for_objective() 
    
-            #self.text_area()
             self.canvas_for_hand()
 
             self.turn_tile_buttons()
@@ -183,13 +184,14 @@ class GameWindow():
     def queue_display(self):
         """Text made of labels display : NEXT IN LINE:
         queue, name written in color and number of remaining objectives"""
-        for pawn in self.controller.queue : 
-            name_label = ctk.CTkLabel(self.f_graph, text = self.controller.queue[pawn].name, font = ("Calibri", 16, "bold"), text_color = self.controller.queue[pawn].color)
-            name_label.pack(side = tk.TOP)
-            tr_label = ctk.CTkLabel(self.f_graph, text = "Treasures left : ", font = ("Calibri", 16), text_color = self.controller.queue[pawn].color)
-            tr_label.pack(side = tk.TOP)
-            number_label = ctk.CTkLabel(self.f_graph, text = len(self.controller.queue[pawn].objectives), font = ("Calibri", 16, "bold"), text_color = self.controller.queue[pawn].color)
-            number_label.pack(side = tk.LEFT)
+        for pawn in self.controller.give_queue().values() : 
+            obj = len(pawn["objectives"])
+            self.name_label = ctk.CTkLabel(self.f_graph, text = pawn["name"], font = ("Calibri", 16, "bold"), text_color = pawn["color"])
+            self.name_label.pack(side = tk.TOP)
+            self.tr_label = ctk.CTkLabel(self.f_graph, text = f"Treasures left : {obj} ", font = ("Calibri", 16), text_color = pawn["color"])
+            self.tr_label.pack(side = tk.TOP)
+            #self.number_label = ctk.CTkLabel(self.f_graph, text = , font = ("Calibri", 16, "bold"), text_color = pawn["color"])
+            #self.number_label.pack(side = tk.LEFT)
 
     def canvas_for_board(self):
         """Creates the canvas for the board with the background
@@ -296,12 +298,12 @@ class GameWindow():
 
     def canvas_for_objective(self):
         """Creates the canvas to display the current objective of the player"""
-        self.canvas_card = tk.Canvas(self.f_graph, width = 360, height = 420, bg = '#EFEFE1')
+        self.canvas_card = tk.Canvas(self.frame_right, width = 360, height = 420, bg = '#EFEFE1')
 
         self.objective_background()
         self.objective_image()
 
-        self.canvas_card.pack(side = tk.TOP, anchor = 'ne')
+        self.canvas_card.pack(side = tk.TOP, anchor = 'n')
 
     def objective_background(self):
         """Sets the image of the empty treasure card, which is the current objective of the player
@@ -329,7 +331,7 @@ class GameWindow():
         """Creates the canvas for the tile in hand
         No input
         No output"""
-        self.canvas_tile = tk.Canvas(self.f_graph, bg = "#EFEFE1", width = 400, height = 400)
+        self.canvas_tile = tk.Canvas(self.frame_right, bg = "#EFEFE1", width = 380, height = 380)
         self.hand_image()
         self.canvas_tile.pack(side = tk.TOP, anchor = 'e')
 
@@ -399,8 +401,8 @@ class GameWindow():
             self.filepath_ti_h = self.tile_t
         else:
             self.filepath_ti_h = self.tile_s
-        
-        self.rotatedc_tile=rotate_image_h(self.filepath_ti_h, self.orientation_h)
+        print(self.filepath_ti_h)
+        self.rotatedc_tile = rotate_image_h(self.filepath_ti_h, self.orientation_h)
         self.dict_r[1]=self.rotatedc_tile  
         #replace self.bg_h with the rotated image
         self.canvas_tile.delete(self.bg_h) #delete the old image
@@ -423,6 +425,8 @@ class GameWindow():
         No output"""
         if self.selected_button == None:
             self.selection_error_messagebox()
+        elif self.button_valid.cget('state') == 'disabled':
+            self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
         else:
             self.controller.insert_hand()
     
@@ -606,6 +610,7 @@ class GameWindow():
             self.opposite_button_old.configure(fg_color = "goldenrod", state="normal")
         self.opposite_button.configure(fg_color = "grey", state="disabled")
         self.selected_button.configure(fg_color = "goldenrod")
+        self.button_valid.configure(state = "disabled", fg_color = "grey")
         # Handle turn unrolling
         self.pawn_motion = True
         self.cross = False
@@ -776,6 +781,7 @@ class GameWindow():
         self.insert_ok = False
         self.move_ok = False
         self.button_done.config(fg_color='grey', state='disabled')
+        self.button_valid.configure(state = 'normal', fg_color = 'green')
 
     def anim_move_pawn(self):
         """animates the movement of the pawn to the destination"""
@@ -822,17 +828,18 @@ class GameWindow():
             # take note of the objective coordinates
             self.destination_co = int((pos[0]-75)/100)
             self.destination_li = int((pos[1]-75)/100)
-            self.accessible, self.displacement = self.controller.validate_move(self.destination_li, self.destination_co)
-            
+            self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
+            print(self.accessible, self.displacement)
             #if there is a cross
             if self.cross:
                 self.canvas_board.delete(self.target)
+
             if self.accessible:
                 self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
                 self.button_done.configure(fg_color = "goldenrod", state = "normal")
             else:
                 self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_n)
-                self.button_done.configure(fg_color = "goldenrod", state = "normal")
+                self.button_done.configure(fg_color = "grey", state = "disabled")
 
             self.cross = True
             self.canvas_board.lift(self.target)
@@ -842,8 +849,8 @@ class GameWindow():
 
     def move(self,event):
         if self.button_done.cget("state") != "disabled":
-            self.controller.move_pawn(self.destination_li, self.destination_co)
-            depart = self.destination.pop(0)
+            self.controller.move_pawn((self.destination_li, self.destination_co))
+            depart = self.displacement.pop(0)
             color = self.controller.give_player_color()
             pawn = self.find_ident(color, depart)
             self.dict_anim = {"path": self.displacement, "pawn": pawn, "previous_step": depart}

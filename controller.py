@@ -88,6 +88,13 @@ class GameController:
             self.game_active = False
             self.winner = active_pawn
 
+    def give_queue(self):
+        """gives the queue of players"""
+        info_dict = {}
+        for pawn in self.model.queue:
+            info_dict[pawn.color] = {'color' : pawn.color, 'name' : pawn.name, 'objectives' : [obj.filepath for obj in pawn.objectives]}
+        return info_dict
+    
     def give_player_color(self):
         """gives the active player
         output: str (color)"""
