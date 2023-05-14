@@ -860,7 +860,6 @@ class GameWindow():
             self.destination_co = int((pos[0] - 75) / 100)
             self.destination_li = int((pos[1] - 75) / 100)
             self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
-            print(self.accessible, self.displacement)
             # If there is a cross
             if self.cross:
                 self.canvas_board.delete(self.target)
