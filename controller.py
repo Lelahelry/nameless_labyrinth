@@ -64,6 +64,13 @@ class GameController:
 
         start_tile.pawns.remove(pawn)
         dest_pawns.append(pawn)
+
+    def end_turn(self):
+        self.collect_treasure()
+        self.check_win_state()
+        self.rotate_players()
+
+        self.view.turn_over()
     
     def collect_treasure(self):
         """Checks that the treasure reached by a player corresponds to its current objective.
@@ -76,8 +83,6 @@ class GameController:
 
         if active_pawn.objectives[0] == active_tile.treasure:
             active_pawn.objectives.pop(0)
-            self.view.show_treasure_collect()
-            #active_tile.treasure = None ????????
     
     def check_win_state(self):
         """Checks whether a player won (i.e. collected all their objectives).
@@ -90,6 +95,13 @@ class GameController:
         if len(active_pawn.objectives) == 0:
             self.game_active = False
             self.winner = active_pawn
+    
+    def rotate_players(self):
+        """Once a player's turn is over, moves on to the next player in the queue.
+        ----------
+        No input
+        No output"""
+        self.model.advance_queue()
 
     def give_queue(self):
         """We use this function to get the players queue.
@@ -153,14 +165,6 @@ class GameController:
         No input
         Output : tuple (slideout_position)"""
         return self.model.get_slideout_position()
-    
-    def rotate_players(self):
-        """Once a player's turn is over, moves on to the next player in the queue.
-        ----------
-        No input
-        No output"""
-        self.model.advance_queue()
-        self.view.show_turn_rotation()
 
     # def turn(self):
     #     """Calls all necessary functions for a player to complete their turn.
