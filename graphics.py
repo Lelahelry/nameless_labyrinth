@@ -36,9 +36,8 @@ class GameWindow():
         # Widgets creation
         self.widgets_creation(self.root)
 
-        # Controller creation
-        self.move_ok = False
-        self.insert_ok = False
+        # Waiting variable
+        self.motion_done = False
 
     def widgets_creation(self, root):
         """Creates all necessary widgets for the welcome window.
@@ -159,6 +158,7 @@ class GameWindow():
         self.bg_h = None
         self.fg_h = None
         self.index = 0
+        self.label_storage = {}
 
         if (self.f_graph == None) :
             self.f_graph = tk.Toplevel(self.root)
@@ -198,20 +198,28 @@ class GameWindow():
         ----------
         No input
         No output"""
-        self.current = ctk.CTkLabel(self.f_graph, text = "CURRENT :", font = ("Calibri", 16, "bold"), text_color = "black")
-        self.current.pack(side = tk.TOP)
+        if self.label_storage != {}:
+            for p in range(len(self.label_storage)):
+                self.label_storage[p].destroy()
+        self.label_storage[0] = ctk.CTkLabel(self.f_graph, text = "CURRENT :", font = ("Calibri", 16, "bold"), text_color = "black")
+        self.label_storage[0].pack(side = tk.TOP)
         i = 0
         queue = self.controller.give_queue().values()
+        
+                
         for pawn in queue : 
             i += 1
             obj = len(pawn["objectives"])
-            self.name_label = ctk.CTkLabel(self.f_graph, text = pawn["name"], font = ("Calibri", 16, "bold"), text_color = pawn["color"])
-            self.name_label.pack(side = tk.TOP)
-            self.tr_label = ctk.CTkLabel(self.f_graph, text = f"Treasures left : {obj}", font = ("Calibri", 16), text_color = pawn["color"])
-            self.tr_label.pack(side = tk.TOP)
+            self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = pawn["name"], font = ("Calibri", 16, "bold"), text_color = pawn["color"])
+            self.label_storage[i].pack(side = tk.TOP)
+            i += 1
+            self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = f"Treasures left : {obj}", font = ("Calibri", 16), text_color = pawn["color"])
+            self.label_storage[i].pack(side = tk.TOP)
+            i += 1
             if i != len(queue):
-                self.next = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
-                self.next.pack(side = tk.TOP)
+                self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
+                self.label_storage[i].pack(side = tk.TOP)
+
 
     def canvas_for_board(self):
         """Creates the canvas for the board with the background.
@@ -347,7 +355,6 @@ class GameWindow():
                 self.opposite_button = button_out
                 # Get button position
                 self.chosen_pos = pos
-            print(self.selected_button, self.opposite_button, self.chosen_pos)
 
     def canvas_for_objective(self):
         """Creates the canvas to display the current objective of the player.
@@ -377,6 +384,7 @@ class GameWindow():
         No input
         No output"""
         filepath_tr = self.controller.give_objective()
+        #penser à delete le précédent
         # Treasure image settings
         self.treas_c = tk.PhotoImage(file = self.folder + filepath_tr)
         self.treas_c_resized = self.treas_c.zoom(3, 3)
@@ -645,7 +653,7 @@ class GameWindow():
         # Storage
         self.tile_dict[init_pos] = new_bg
         self.treasure_dict[init_pos] = new_fg
-        self.pawn_dict[init_pos] = None
+        self.pawn_dict[init_pos] = []
         # Storage update
         self.storage_update(init_pos, out_pos, li, co)
         # Start the animation
@@ -675,13 +683,13 @@ class GameWindow():
                 # Find the color of the circle pawn and move in consequence
                 color = self.canvas_board.itemcget(pawn, "fill")
                 if color == "blue": 
-                    self.canvas_board.coords(pawn, co-20, li+20, co, li)
+                    self.canvas_board.coords(pawn["object"], co-20, li+20, co, li)
                 elif color == "red": 
-                    self.canvas_board.coords(pawn, co, li, co+20, li-20) 
+                    self.canvas_board.coords(pawn["object"], co, li, co+20, li-20) 
                 elif color == "green": 
-                    self.canvas_board.coords(pawn, co-20, li, co, li-20)
+                    self.canvas_board.coords(pawn["object"], co-20, li, co, li-20)
                 else:
-                    self.canvas_board.coords(pawn, co, li+20, co+20, li)
+                    self.canvas_board.coords(pawn["object"], co, li+20, co+20, li)
                 # Move it in storage
                 self.canvas_board.lift(pawn)
                 if self.pawn_dict[init_pos] == None:
@@ -722,7 +730,6 @@ class GameWindow():
         if self.running :
             self.f_graph.after_cancel(self.timer_id) 
         self.running = False
-        #self.tile_dict[init_pos] = None
 
     def timer_loop(self):
         """Defines the loop that is handled by the timer : allows image displacement and display.
@@ -741,8 +748,8 @@ class GameWindow():
                     self.canvas_board.lift(self.treasure_dict[(i,self.chosen_pos[1])])
                 if self.pawn_dict[(i,self.chosen_pos[1])] != None:
                     for pawn in self.pawn_dict[(i,self.chosen_pos[1])]:
-                        self.canvas_board.move(pawn, 0, r[2]*10)
-                        self.canvas_board.lift(pawn)
+                        self.canvas_board.move(pawn['object'], 0, r[2]*10)
+                        self.canvas_board.lift(pawn['object'])
             else:
                 self.canvas_board.move(self.tile_dict[(self.chosen_pos[0], i)], r[2] * 10, 0)
                 if self.treasure_dict[(self.chosen_pos[0], i)] != None:  
@@ -750,8 +757,8 @@ class GameWindow():
                     self.canvas_board.lift(self.treasure_dict[(self.chosen_pos[0], i)])
                 if self.pawn_dict[(self.chosen_pos[0], i)] != None:
                     for pawn in self.pawn_dict[(self.chosen_pos[0], i)]:
-                        self.canvas_board.move(pawn, r[2] * 10, 0)
-                        self.canvas_board.lift(pawn)
+                        self.canvas_board.move(pawn['object'], r[2] * 10, 0)
+                        self.canvas_board.lift(pawn['object'])
         self.i += 1
         if self.i == 10:
            self.stop()
@@ -782,14 +789,22 @@ class GameWindow():
                     else:
                         new_pawn = self.canvas_board.create_oval(co, li+20, co+20, li, fill = color)
                     self.canvas_board.lift(new_pawn)
-                    new_pawns.append(new_pawn)
+                    n_p = {"object":new_pawn, "color":color}
+                    new_pawns.append(n_p)
                 self.pawn_dict[position] = new_pawns
+            else:
+                self.pawn_dict[position] = []
+            
     
     def turn_over(self):
         """Validates that the player is done with their turn and communicates the changes of player back and forth with the controller.
         ----------
         Input : event
         No output"""
+        
+       # while not self.motion_done:
+        #    continue
+        time.sleep(2)
         player = self.controller.give_player_name()
         self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
         #redo the display of the board
@@ -807,8 +822,9 @@ class GameWindow():
         self.slid = False
         self.insert_ok = False
         self.move_ok = False
-        self.button_done.config(fg_color = 'grey', state = 'disabled')
+        self.button_done.configure(fg_color = 'grey', state = 'disabled')
         self.button_valid.configure(state = 'normal', fg_color = 'green')
+        self.motion_done = False
 
     def anim_move_pawn(self):
         """Animates the movement of the pawn to the chosen destination.
@@ -826,8 +842,10 @@ class GameWindow():
         No output"""
         # Get variables
         path = self.dict_anim["path"]
-        pawn = self.dict_anim["pawn"]
+        pawn = self.dict_anim["pawn_info"]["object"]
         previous_step = self.dict_anim["previous_step"]
+    
+        
         obj = path.pop(0)
         step_x = (obj[1] - previous_step[1]) * 100
         step_y = (obj[0] - previous_step[0]) * 100
@@ -836,12 +854,14 @@ class GameWindow():
         self.canvas_board.move(pawn, step_x, step_y)
         self.canvas_board.lift(pawn)
         # Update pawn_dict
-        self.pawn_dict[previous_step].remove(pawn)
-        self.pawn_dict[obj].append(pawn)
+        self.pawn_dict[previous_step].remove(self.dict_anim["pawn_info"])
+        if self.pawn_dict[obj] == None:
+            self.pawn_dict[obj] = []
+        self.pawn_dict[obj].append(self.dict_anim["pawn_info"])
         self.dict_anim["previous_step"] = obj  
         #relaunch the loop
         if path != []:
-            self.timer_id_pawn = self.f_graph.after(2000, self.timer_loop_pawn)  
+            self.timer_id_pawn = self.f_graph.after(200, self.timer_loop_pawn)  
         else:
             self.stop_pawn()
 
@@ -853,7 +873,7 @@ class GameWindow():
         if self.running_pawn :
             self.f_graph.after_cancel(self.timer_id_pawn) 
         self.running_pawn = False
-        print("stop_pawn")
+        self.controller.end_turn()
         
     def click_tile(self, event):
         """Places a cross where the player wants to move their pawn and registers the grid coordinates.
@@ -889,7 +909,7 @@ class GameWindow():
         No output"""
         if self.button_done.cget("state") != "disabled":
             self.controller.move_pawn((self.destination_li, self.destination_co))
-            self.controller.end_turn()
+            
         else:
             self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
 
@@ -898,7 +918,7 @@ class GameWindow():
         depart = self.displacement.pop(0)
         color = self.controller.give_player_color()
         pawn = self.find_ident(color, depart)
-        self.dict_anim = {"path": self.displacement, "pawn": pawn, "previous_step": depart}
+        self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
         self.canvas_board.delete(self.target)
         self.anim_move_pawn()
         
@@ -910,7 +930,7 @@ class GameWindow():
         Output : pawn"""
         found = None
         for pawn in self.pawn_dict[pos]:
-            if pawn.cget("fill") == color:
+            if pawn['color'] == color:
                 found = pawn
         return pawn
 

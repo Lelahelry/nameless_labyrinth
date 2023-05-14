@@ -64,6 +64,7 @@ class GameController:
 
         start_tile.pawns.remove(pawn)
         dest_pawns.append(pawn)
+        self.view.anim_pawn_displacement()
 
     def end_turn(self):
         self.collect_treasure()
