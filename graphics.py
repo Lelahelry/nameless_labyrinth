@@ -785,11 +785,14 @@ class GameWindow():
                     new_pawns.append(new_pawn)
                 self.pawn_dict[position] = new_pawns
     
-    def turn_over(self, event):
+    def turn_over(self):
         """Validates that the player is done with their turn and communicates the changes of player back and forth with the controller.
         ----------
         Input : event
         No output"""
+        player = self.controller.give_player_name()
+        self.messagebox_t = tk.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
+        #redo the display of the board
         self.queue_display()
         self.objective_image()
         self.hand_image()
@@ -821,18 +824,22 @@ class GameWindow():
         ----------
         No input
         No output"""
+        # Get variables
         path = self.dict_anim["path"]
         pawn = self.dict_anim["pawn"]
         previous_step = self.dict_anim["previous_step"]
         obj = path.pop(0)
         step_x = (obj[1] - previous_step[1]) * 100
         step_y = (obj[0] - previous_step[0]) * 100
-        print(step_x, step_y)
+        
+        # Move pawn in display
         self.canvas_board.move(pawn, step_x, step_y)
         self.canvas_board.lift(pawn)
+        # Update pawn_dict
         self.pawn_dict[previous_step].remove(pawn)
         self.pawn_dict[obj].append(pawn)
         self.dict_anim["previous_step"] = obj  
+        #relaunch the loop
         if path != []:
             self.timer_id_pawn = self.f_graph.after(2000, self.timer_loop_pawn)  
         else:
@@ -882,12 +889,19 @@ class GameWindow():
         No output"""
         if self.button_done.cget("state") != "disabled":
             self.controller.move_pawn((self.destination_li, self.destination_co))
-            depart = self.displacement.pop(0)
-            color = self.controller.give_player_color()
-            pawn = self.find_ident(color, depart)
-            self.dict_anim = {"path": self.displacement, "pawn": pawn, "previous_step": depart}
-            self.anim_move_pawn()
             self.controller.end_turn()
+        else:
+            self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
+
+
+    def anim_pawn_displacement(self):        
+        depart = self.displacement.pop(0)
+        color = self.controller.give_player_color()
+        pawn = self.find_ident(color, depart)
+        self.dict_anim = {"path": self.displacement, "pawn": pawn, "previous_step": depart}
+        self.canvas_board.delete(self.target)
+        self.anim_move_pawn()
+        
 
     def find_ident(self, color, pos):
         """Identifies a pawn and communicates the info to the controller.
