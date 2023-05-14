@@ -14,6 +14,30 @@ class GameController:
         self.view = GameWindow(self)
         self.game_active = False
     
+    def insert_hand(self):
+        """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
+        Then shifts all the tiles of the chosen row or column by one position.
+        A different tile is thus pushed out of the board and becomes the new hand.
+        ----------
+        No input
+        No output"""
+        hand_inserted = False
+        while not hand_inserted:
+            insertpos, rotations = self.view.get_insert_state()
+
+            hand = self.model.hand
+            hand.orientation += rotations
+
+            match insertpos:
+                case (0|6, 1|3|5) | (1|3|5, 0|6) if insertpos != self.model.get_slideout_position():
+                    hand_inserted = True
+
+                    self.model.hand = self.model.board.slide_tile(insertpos, hand)
+                    self.view.anim_tiles_slide()
+            
+            if not hand_inserted:
+                self.view.show_warning("Insert position was invalid.")
+
     def validate_move(self, newpos):
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
@@ -41,30 +65,6 @@ class GameController:
         start_tile.pawns.remove(pawn)
         dest_pawns.append(pawn)
     
-    def insert_hand(self):
-        """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
-        Then shifts all the tiles of the chosen row or column by one position.
-        A different tile is thus pushed out of the board and becomes the new hand.
-        ----------
-        No input
-        No output"""
-        hand_inserted = False
-        while not hand_inserted:
-            insertpos, rotations = self.view.get_insert_state()
-
-            hand = self.model.hand
-            hand.orientation += rotations
-
-            match insertpos:
-                case (0|6, 1|3|5) | (1|3|5, 0|6) if insertpos != self.model.get_slideout_position():
-                    hand_inserted = True
-
-                    self.model.hand = self.model.board.slide_tile(insertpos, hand)
-                    self.view.anim_tiles_slide()
-            
-            if not hand_inserted:
-                self.view.show_warning("Insert position was invalid.")
-
     def collect_treasure(self):
         """Checks that the treasure reached by a player corresponds to its current objective.
         Removes the collected treasure from the player's list of objectives.

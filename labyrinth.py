@@ -136,21 +136,14 @@ class Board:
     def connected_tiles(self, origin_pos: tuple[int, int]) -> Iterator[tuple[int, int]]:
         origin = self.grid[origin_pos]
 
-        print('\n', origin_pos, origin)
         for idx, side in enumerate(origin.sides):
-            print('')
-            print('i', idx, end=" ")
             if side:
-                print('or', origin.orientation)
                 idx = (origin.orientation + idx)%4
-                print('idx ', idx)
                 neighb_pos = adjacent_coords_cw(origin_pos, idx)
-                print('neighb_pos', neighb_pos)
                 neighb = self.grid.get(neighb_pos)
                 if neighb is None: continue
 
                 opp = (-neighb.orientation + idx + 2)%4
-                print('opp', opp)
                 if not neighb.sides[opp]: continue
                 
                 yield neighb_pos
