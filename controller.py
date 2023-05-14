@@ -30,7 +30,10 @@ class GameController:
         return move_valid, steps
 
     def move_pawn(self, newpos):
-        """WIP"""
+        """Moves a player's pawn from its current position on the board to the desired position, if this new position can be reached.
+        ----------
+        Input : newpos (tuple)
+        No output"""
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
         dest_pawns = self.model.get_pawns_at_pos(newpos)
@@ -40,11 +43,11 @@ class GameController:
     
     def insert_hand(self):
         """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
-         Then shifts all the tiles of the chosen row or column by one position.
-         A different tile is thus pushed out of the board and becomes the new hand.
-         ----------
-         No input
-         No output"""
+        Then shifts all the tiles of the chosen row or column by one position.
+        A different tile is thus pushed out of the board and becomes the new hand.
+        ----------
+        No input
+        No output"""
         hand_inserted = False
         while not hand_inserted:
             insertpos, rotations = self.view.get_insert_state()
@@ -89,25 +92,34 @@ class GameController:
             self.winner = active_pawn
 
     def give_queue(self):
-        """gives the queue of players"""
+        """We use this function to get the players queue.
+        ----------
+        No input
+        Output : info_dict (dictionary)"""
         info_dict = {}
         for pawn in self.model.queue:
             info_dict[pawn.color] = {'color' : pawn.color, 'name' : pawn.name, 'objectives' : [obj.filepath for obj in pawn.objectives]}
         return info_dict
     
     def give_player_color(self):
-        """gives the active player
-        output: str (color)"""
+        """Gives the active player's color
+        ----------
+        No input
+        Output : str (color)"""
         return self.model.get_active_player().color
 
     def give_objective(self):
-        """gives the player's current objective
-        output: str (filepath)"""
+        """Gives the player's current objective
+        ----------
+        No input
+        Output : str (filepath)"""
         return self.model.get_active_player().objectives[0].filepath
     
     def give_hand(self):
-        """gives the hand
-        output:  2 str (filepath)"""
+        """Gives the info on the current hand
+        ----------
+        No input
+        Output :  2 str (filepath)"""
         if self.model.hand.treasure == None:
             filepath_treas = None
         else:
@@ -115,8 +127,10 @@ class GameController:
         return self.model.hand.filepath, filepath_treas
     
     def give_grid(self):
-        """gives simplified version of the grid to view
-        output : dict"""
+        """Gives a simplified version of the grid to view
+        ----------
+        No input
+        Output : dict (the grid)"""
         graphics_dict = {}
         for position , tile in self.model.board.grid.items():
             if tile.treasure != None:
@@ -128,6 +142,10 @@ class GameController:
         return graphics_dict
     
     def give_outpos(self):
+        """Gives the coordinates of the position the tile in hand was ejected from.
+        ----------
+        No input
+        Output : tuple (slideout_position)"""
         return self.model.get_slideout_position()
     
     def rotate_players(self):
@@ -161,4 +179,8 @@ class GameController:
         self.view.display_game()
     
     def launch(self):
+        """Launches the game.
+        ----------
+        No input
+        No output"""
         self.view.app_start()
