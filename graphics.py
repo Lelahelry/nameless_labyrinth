@@ -201,7 +201,7 @@ class GameWindow():
         self.current = ctk.CTkLabel(self.f_graph, text = "CURRENT :", font = ("Calibri", 16, "bold"), text_color = "black")
         self.current.pack(side = tk.TOP)
         i = 0
-        queue = self.controller.give_queue().values()
+        queue = self.controller.get_queue().values()
         for pawn in queue : 
             i += 1
             obj = len(pawn["objectives"])
@@ -376,7 +376,7 @@ class GameWindow():
         ----------
         No input
         No output"""
-        filepath_tr = self.controller.give_objective()
+        filepath_tr = self.controller.get_objective_filepath()
         # Treasure image settings
         self.treas_c = tk.PhotoImage(file = self.folder + filepath_tr)
         self.treas_c_resized = self.treas_c.zoom(3, 3)
@@ -397,7 +397,7 @@ class GameWindow():
         ----------
         No input
         No output"""
-        self.filepath_ti_h, self.filepath_tr_h = self.controller.give_hand() #address of the tile and treasure images
+        self.filepath_ti_h, self.filepath_tr_h = self.controller.get_hand_filepath() #address of the tile and treasure images
         # Set the image of the tile in hand
         self.hand_tile()
 
@@ -531,7 +531,7 @@ class GameWindow():
         No input
         No output"""
         # Get grid
-        self.graphics_dict = self.controller.give_grid()        
+        self.graphics_dict = self.controller.get_display_grid()        
         # Initialisation of storage
         self.treasures = {}
         self.tiles = {}
@@ -609,7 +609,7 @@ class GameWindow():
         No output"""
         # Get which row/column moves
         self.index += 1
-        out_pos = self.controller.give_outpos()
+        out_pos = self.controller.get_slideout_pos()
         ## If it is a line
         if self.chosen_pos[1] == 0:
             init_pos = (self.chosen_pos[0], -1)
@@ -883,7 +883,7 @@ class GameWindow():
         if self.button_done.cget("state") != "disabled":
             self.controller.move_pawn((self.destination_li, self.destination_co))
             depart = self.displacement.pop(0)
-            color = self.controller.give_player_color()
+            color = self.controller.get_player_color()
             pawn = self.find_ident(color, depart)
             self.dict_anim = {"path": self.displacement, "pawn": pawn, "previous_step": depart}
             self.anim_move_pawn()

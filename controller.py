@@ -74,6 +74,16 @@ class GameController:
 
         self.view.turn_over()
     
+        
+        self.view.anim_pawn_displacement()
+    
+    def end_turn(self):
+        self.collect_treasure()
+        self.check_win_state()
+        self.rotate_players()
+
+        self.view.turn_over()
+    
     def collect_treasure(self):
         """Checks that the treasure reached by a player corresponds to its current objective.
         Removes the collected treasure from the player's list of objectives.
@@ -100,7 +110,7 @@ class GameController:
             self.game_active = False
             self.winner = active_pawn
 
-    def give_queue(self):
+    def get_queue(self):
         """We use this function to get the players queue.
         ----------
         No input
@@ -110,21 +120,21 @@ class GameController:
             info_dict[pawn.color] = {'color' : pawn.color, 'name' : pawn.name, 'objectives' : [obj.filepath for obj in pawn.objectives]}
         return info_dict
     
-    def give_player_color(self):
+    def get_player_color(self):
         """Gives the active player's color
         ----------
         No input
         Output : str (color)"""
         return self.model.get_active_player().color
 
-    def give_objective(self):
+    def get_objective_filepath(self):
         """Gives the player's current objective
         ----------
         No input
         Output : str (filepath)"""
         return self.model.get_active_player().objectives[0].filepath
     
-    def give_hand(self):
+    def get_hand_filepath(self):
         """Gives the info on the current hand
         ----------
         No input
@@ -135,7 +145,7 @@ class GameController:
             filepath_treas = self.model.hand.treasure.filepath
         return self.model.hand.filepath, filepath_treas
     
-    def give_grid(self):
+    def get_display_grid(self):
         """Gives a simplified version of the grid to view
         ----------
         No input
@@ -150,7 +160,7 @@ class GameController:
                 graphics_dict[position] = {"filepath_ti" : tile.filepath, "filepath_treas" : None, "orientation" : tile.orientation, "pawns" : pawns}
         return graphics_dict
     
-    def give_outpos(self):
+    def get_slideout_pos(self):
         """Gives the coordinates of the position the tile in hand was ejected from.
         ----------
         No input
