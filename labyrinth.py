@@ -46,11 +46,11 @@ class MovingTile(Tile):
     
     def rotate_cw(self) -> None:
         """Rotates the tile clockwise."""
-        self.orientation = (self.orientation+1)%(4)
+        self.orientation = (self.orientation+1)%4
     
     def rotate_ccw(self) -> None:
         """Rotates the tile counterclockwise."""
-        self.orientation = (self.orientation-1)%(4)
+        self.orientation = (self.orientation-1)%4
 
 @dataclass
 class Board:
@@ -136,22 +136,24 @@ class Board:
     def connected_tiles(self, origin_pos: tuple[int, int]) -> Iterator[tuple[int, int]]:
         origin = self.grid[origin_pos]
 
-        for side in enumerate(origin.sides):
-            match side:
+        print('\n', origin_pos, origin)
+        for idx, side in enumerate(origin.sides):
+            print('')
+            print('i', idx, end=" ")
+            if side:
+                print('or', origin.orientation)
+                idx = (origin.orientation + idx)%4
+                print('idx ', idx)
+                neighb_pos = adjacent_coords_cw(origin_pos, idx)
+                print('neighb_pos', neighb_pos)
+                neighb = self.grid.get(neighb_pos)
+                if neighb is None: continue
 
-                case (idx, True):
-                    idx = (origin.orientation - idx)%4
-                    neighb_pos = adjacent_coords_cw(origin_pos, idx)
-                    neighb = self.grid.get(neighb_pos)
-                    if neighb is None: continue
-
-                    opp = (neighb.orientation + idx + 2)%4
-                    if not neighb.sides[opp]: continue
-                    
-                    yield neighb_pos
+                opp = (-neighb.orientation + idx + 2)%4
+                print('opp', opp)
+                if not neighb.sides[opp]: continue
                 
-                case _:
-                    continue
+                yield neighb_pos
 
 @dataclass
 class GameData:

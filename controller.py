@@ -19,7 +19,7 @@ class GameController:
         startpos, start_tile = self.model.get_pawn_container(pawn)
         move_valid = False
 
-        steps = [startpos]
+        steps = []
         for pos in bfs_walk(startpos, self.model.get_adjacency_fn()):
             steps.append(pos)
             if pos == newpos:
