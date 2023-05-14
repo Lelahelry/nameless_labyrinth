@@ -64,15 +64,6 @@ class GameController:
 
         start_tile.pawns.remove(pawn)
         dest_pawns.append(pawn)
-        
-        self.view.anim_pawn_displacement()
-    
-    def end_turn(self):
-        self.collect_treasure()
-        self.check_win_state()
-        self.rotate_players()
-
-        self.view.turn_over()
     
     def collect_treasure(self):
         """Checks that the treasure reached by a player corresponds to its current objective.
@@ -100,7 +91,7 @@ class GameController:
             self.game_active = False
             self.winner = active_pawn
 
-    def get_queue(self):
+    def give_queue(self):
         """We use this function to get the players queue.
         ----------
         No input
@@ -110,21 +101,27 @@ class GameController:
             info_dict[pawn.color] = {'color' : pawn.color, 'name' : pawn.name, 'objectives' : [obj.filepath for obj in pawn.objectives]}
         return info_dict
     
-    def get_player_color(self):
+    def give_player_color(self):
         """Gives the active player's color
         ----------
         No input
         Output : str (color)"""
         return self.model.get_active_player().color
 
-    def get_objective_filepath(self):
+    def give_player_name(self):
+        """Gives the active player's name
+        ----------
+        No input
+        Output : str (name)"""
+        return self.model.get_active_player().name
+    def give_objective(self):
         """Gives the player's current objective
         ----------
         No input
         Output : str (filepath)"""
         return self.model.get_active_player().objectives[0].filepath
     
-    def get_hand_filepath(self):
+    def give_hand(self):
         """Gives the info on the current hand
         ----------
         No input
@@ -135,7 +132,7 @@ class GameController:
             filepath_treas = self.model.hand.treasure.filepath
         return self.model.hand.filepath, filepath_treas
     
-    def get_display_grid(self):
+    def give_grid(self):
         """Gives a simplified version of the grid to view
         ----------
         No input
@@ -150,7 +147,7 @@ class GameController:
                 graphics_dict[position] = {"filepath_ti" : tile.filepath, "filepath_treas" : None, "orientation" : tile.orientation, "pawns" : pawns}
         return graphics_dict
     
-    def get_slideout_pos(self):
+    def give_outpos(self):
         """Gives the coordinates of the position the tile in hand was ejected from.
         ----------
         No input
@@ -164,6 +161,19 @@ class GameController:
         No output"""
         self.model.advance_queue()
         self.view.show_turn_rotation()
+
+    # def turn(self):
+    #     """Calls all necessary functions for a player to complete their turn.
+    #     ----------
+    #     No input
+    #     No output"""
+    #     self.insert_hand()
+    #     self.move_pawn()
+    #     self.collect_treasure()
+    #     self.check_win_state()
+    #     self.rotate_players()
+
+    #     self.view.turn_over()
     
     def start_game(self, playernames: list[str]):
         """Launches the game and every turn until someone won.
