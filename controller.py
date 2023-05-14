@@ -117,7 +117,7 @@ class GameController:
         Output : str (color)"""
         return self.model.get_active_player().color
 
-    def give_objective(self):
+    def get_objective_filepath(self):
         """Gives the player's current objective
         ----------
         No input
