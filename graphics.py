@@ -176,9 +176,14 @@ class GameWindow():
 
             # Functions calls
             self.image_library_i()
-            self.canvas_for_board()
-            self.slide_tiles_buttons()
 
+            self.frame_left = tk.Frame(self.f_graph, bg = '#EFEFE1')
+            self.frame_left.pack(side = tk.LEFT, fill = 'y' )
+
+            
+            self.slide_tiles_buttons()
+            self.canvas_for_board()
+            
             self.frame_right = tk.Frame(self.f_graph, bg = '#EFEFE1')
             self.frame_right.pack(side = tk.RIGHT, fill = 'y' )
 
@@ -195,21 +200,25 @@ class GameWindow():
         No output"""
         self.current = ctk.CTkLabel(self.f_graph, text = "CURRENT :", font = ("Calibri", 16, "bold"), text_color = "black")
         self.current.pack(side = tk.TOP)
-        for pawn in self.controller.give_queue().values() : 
+        i = 0
+        queue = self.controller.give_queue().values()
+        for pawn in queue : 
+            i += 1
             obj = len(pawn["objectives"])
             self.name_label = ctk.CTkLabel(self.f_graph, text = pawn["name"], font = ("Calibri", 16, "bold"), text_color = pawn["color"])
             self.name_label.pack(side = tk.TOP)
             self.tr_label = ctk.CTkLabel(self.f_graph, text = f"Treasures left : {obj}", font = ("Calibri", 16), text_color = pawn["color"])
             self.tr_label.pack(side = tk.TOP)
-            self.next = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
-            self.next.pack(side = tk.TOP)
+            if i != len(queue):
+                self.next = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
+                self.next.pack(side = tk.TOP)
 
     def canvas_for_board(self):
         """Creates the canvas for the board with the background.
         ----------
         No input
         No output"""        
-        self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752, bg = "#EFEFE1")
+        self.canvas_board = tk.Canvas(self.frame_left, width = 752, height = 752, bg = "#EFEFE1")
         
         self.grid_images() 
         self.place_pawns()
@@ -219,7 +228,7 @@ class GameWindow():
         self.item = self.canvas_board.create_image(378, 378, image = self.background)
         self.canvas_board.lower(self.item)
 
-        self.canvas_board.pack(side = tk.LEFT, padx = 40, pady = 32)
+        self.canvas_board.pack()
 
     def slide_tiles_buttons(self):
         """Creates the buttons around the board allowing to choose where to insert the tile in hand.
@@ -232,56 +241,87 @@ class GameWindow():
         self.selected_button = None
         
         # Top side buttons
-        self.bouton01 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.frame_left_topbar = tk.Frame(self.frame_left, bg = '#EFEFE1')
+        self.frame_left_topbar.pack(side = tk.TOP, fill = 'x', pady = 1, padx= 175)
+
+        self.bouton01 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton01.bind('<Button-1>', lambda event: self.select_insertion_button((0,1), self.bouton01, self.bouton61))
-        self.bouton01.place(x = 161, y = 1)
+        #self.bouton01.place(x = 161, y = 1)
+        self.bouton01.pack(side = tk.LEFT, padx = 20)
+        
 
-        self.bouton03 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton03.bind('<Button-1>', lambda event:  self.select_insertion_button( (0,3), self.bouton03, self.bouton63))
-        self.bouton03.place(x = 318, y = 1)
-
-        self.bouton05 = ctk.CTkButton(self.f_graph, text = "▼", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton05 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton05.bind('<Button-1>', lambda event: self.select_insertion_button( (0,5), self.bouton05, self.bouton65))
-        self.bouton05.place(x = 475, y = 1)
+        #self.bouton05.place(x = 475, y = 1)
+        self.bouton05.pack(side = tk.RIGHT, padx = 20)
 
-        # Left side buttons
-        self.bouton10 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton10.bind('<Button-1>', lambda event: self.select_insertion_button( (1,0), self.bouton10, self.bouton16))
-        self.bouton10.place(x = 1, y = 161)
-
-        self.bouton30 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton30.bind('<Button-1>',  lambda event: self.select_insertion_button((3,0), self.bouton30, self.bouton36))
-        self.bouton30.place(x = 1, y = 318)
-
-        self.bouton50 = ctk.CTkButton(self.f_graph, text = "►", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton50.bind('<Button-1>', lambda event: self.select_insertion_button((5,0), self.bouton50, self.bouton56))
-        self.bouton50.place(x = 1, y = 475)
+        self.bouton03 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton03.bind('<Button-1>', lambda event:  self.select_insertion_button( (0,3), self.bouton03, self.bouton63))
+        #self.bouton03.place(x = 318, y = 1)
+        self.bouton03.pack(padx =10)
 
         # Bottom side buttons
-        self.bouton61 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.frame_left_bottombar = tk.Frame(self.frame_left, bg = '#EFEFE1')
+        self.frame_left_bottombar.pack(side = tk.BOTTOM, fill = 'x', pady = 1, padx = 175)
+
+        self.bouton61 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton61.bind('<Button-1>',  lambda event: self.select_insertion_button((6,1), self.bouton61, self.bouton01))
-        self.bouton61.place(x = 161, y = 635)
+        #self.bouton61.place(x = 161, y = 635)
+        self.bouton61.pack(side = tk.LEFT, padx = 20)
 
-        self.bouton63 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton63.bind('<Button-1>', lambda event: self.select_insertion_button((6,3), self.bouton63, self.bouton03))
-        self.bouton63.place(x = 318, y = 635)
 
-        self.bouton65 = ctk.CTkButton(self.f_graph, text = "▲", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton65 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton65.bind('<Button-1>', lambda event: self.select_insertion_button((6,5), self.bouton65, self.bouton05))
-        self.bouton65.place(x = 475, y = 635)
+        #self.bouton65.place(x = 475, y = 635)
+        self.bouton65.pack(side = tk.RIGHT, padx = 20)
+
+        self.bouton63 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton63.bind('<Button-1>', lambda event: self.select_insertion_button((6,3), self.bouton63, self.bouton03))
+        #self.bouton63.place(x = 318, y = 635)
+        self.bouton63.pack(padx = 10)
+
+
+        # Left side buttons
+        self.frame_left_leftbar = tk.Frame(self.frame_left, bg = '#EFEFE1')
+        self.frame_left_leftbar.pack(side = tk.LEFT, padx = 3, pady = 10)
+
+        self.bouton10 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton10.bind('<Button-1>', lambda event: self.select_insertion_button( (1,0), self.bouton10, self.bouton16))
+        #self.bouton10.place(x = 1, y = 161)
+        self.bouton10.pack(side = tk.TOP, pady = 55)
+
+        
+
+        self.bouton50 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton50.bind('<Button-1>', lambda event: self.select_insertion_button((5,0), self.bouton50, self.bouton56))
+        #self.bouton50.place(x = 1, y = 475)
+        self.bouton50.pack(side = tk.BOTTOM, pady = 55)
+
+        self.bouton30 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton30.bind('<Button-1>',  lambda event: self.select_insertion_button((3,0), self.bouton30, self.bouton36))
+        #self.bouton30.place(x = 1, y = 318)
+        self.bouton30.pack( pady = 55)
 
         # Right side buttons
-        self.bouton16 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton16.bind('<Button-1>', lambda event: self.select_insertion_button((1,6), self.bouton16, self.bouton10))
-        self.bouton16.place(x = 635, y = 161)
+        self.frame_left_rightbar = tk.Frame(self.frame_left, bg = '#EFEFE1')
+        self.frame_left_rightbar.pack(side = tk.RIGHT, padx = 3, pady = 10)
 
-        self.bouton36 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
-        self.bouton36.bind('<Button-1>', lambda event: self.select_insertion_button((3,6), self.bouton36, self.bouton30))
-        self.bouton36.place(x = 635, y = 318)
+        self.bouton16 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton16.bind('<Button-1>', lambda event: self.select_insertion_button((1,6), self.bouton16, self.bouton10))
+        #self.bouton16.place(x = 635, y = 161)
+        self.bouton16.pack(side = tk.TOP, pady = 55)
+
         
-        self.bouton56 = ctk.CTkButton(self.f_graph, text = "◄", font = ('Calibri', 20), width = 33, height = 33, fg_color = "goldenrod", hover_color = "red4")
+
+        self.bouton56 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton56.bind('<Button-1>', lambda event: self.select_insertion_button((5,6), self.bouton56, self.bouton50))
-        self.bouton56.place(x = 635, y = 475)
+        #self.bouton56.place(x = 635, y = 475)
+        self.bouton56.pack(side = tk.BOTTOM, pady = 55)
+
+        self.bouton36 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
+        self.bouton36.bind('<Button-1>', lambda event: self.select_insertion_button((3,6), self.bouton36, self.bouton30))
+        #self.bouton36.place(x = 635, y = 318)
+        self.bouton36.pack( pady =55)
 
         self.opposite_button_old = None
     
