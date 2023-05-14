@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import json
 import random
-from labyrinth import Pawn, Treasure, Tile, MovingTile, FixedTile, Board
+from model import Pawn, Treasure, Tile, MovingTile, FixedTile, Board
 
 
 

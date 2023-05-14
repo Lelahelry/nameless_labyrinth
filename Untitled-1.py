@@ -1,4 +1,4 @@
-from labyrinth import Pawn, Treasure
+from model import Pawn, Treasure
     
 t1=Treasure("1","a")
 t2=Treasure("1","b")

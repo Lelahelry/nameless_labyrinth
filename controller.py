@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from labyrinth import GameData
+from model import GameData
 from graphics import GameWindow
 from utils import bfs_walk
 
