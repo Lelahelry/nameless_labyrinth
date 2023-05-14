@@ -175,6 +175,7 @@ class GameWindow():
             self.image_dict = {} # Dict that stocks all 50 tiles as (bg, fg, pawn) in grid size
 
             # Functions calls
+            self.image_library_i()
             self.canvas_for_board()
             self.slide_tiles_buttons()
 
@@ -209,7 +210,7 @@ class GameWindow():
         No input
         No output"""        
         self.canvas_board = tk.Canvas(self.f_graph, width = 752, height = 752, bg = "#EFEFE1")
-        self.image_library_i()
+        
         self.grid_images() 
         self.place_pawns()
 
@@ -415,13 +416,13 @@ class GameWindow():
         self.orientation_h += sens
         # Prepare the image tile
         if self.filepath_ti_h == './tile_corner.png':
-            self.c_tile = self.tile_c
+            self.ti_h = self.tile_c
         elif self.filepath_ti_h == './tile_t.png':
-            self.filepath_ti_h = self.tile_t
+            self.ti_h = self.tile_t
         else:
-            self.filepath_ti_h = self.tile_s
-        print(self.filepath_ti_h)
-        self.rotatedc_tile = rotate_image_h(self.filepath_ti_h, self.orientation_h)
+            self.ti_h = self.tile_s
+        
+        self.rotatedc_tile = rotate_image_h(self.ti_h, self.orientation_h)
         self.dict_r[1] = self.rotatedc_tile  
         # Replace self.bg_h with the rotated image
         self.canvas_tile.delete(self.bg_h) # Delete the old image
