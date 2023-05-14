@@ -204,11 +204,13 @@ class GameWindow():
         self.label_storage[0] = ctk.CTkLabel(self.f_graph, text = "CURRENT :", font = ("Calibri", 16, "bold"), text_color = "black")
         self.label_storage[0].pack(side = tk.TOP)
         i = 0
+        j = 0
         queue = self.controller.give_queue().values()
         
                 
         for pawn in queue : 
             i += 1
+            j += 1
             obj = len(pawn["objectives"])
             self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = pawn["name"], font = ("Calibri", 16, "bold"), text_color = pawn["color"])
             self.label_storage[i].pack(side = tk.TOP)
@@ -216,7 +218,7 @@ class GameWindow():
             self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = f"Treasures left : {obj}", font = ("Calibri", 16), text_color = pawn["color"])
             self.label_storage[i].pack(side = tk.TOP)
             i += 1
-            if i != len(queue):
+            if j != len(queue):
                 self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
                 self.label_storage[i].pack(side = tk.TOP)
 
