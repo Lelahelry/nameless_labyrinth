@@ -108,6 +108,12 @@ class GameController:
         Output : str (color)"""
         return self.model.get_active_player().color
 
+    def give_player_name(self):
+        """Gives the active player's name
+        ----------
+        No input
+        Output : str (name)"""
+        return self.model.get_active_player().name
     def give_objective(self):
         """Gives the player's current objective
         ----------
