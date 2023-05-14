@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from labyrinth import GameData
+from model import GameData
 from graphics import GameWindow
 from utils import bfs_walk
 
@@ -64,6 +64,15 @@ class GameController:
 
         start_tile.pawns.remove(pawn)
         dest_pawns.append(pawn)
+        
+        self.view.anim_pawn_displacement()
+    
+    def end_turn(self):
+        self.collect_treasure()
+        self.check_win_state()
+        self.rotate_players()
+
+        self.view.turn_over()
     
     def collect_treasure(self):
         """Checks that the treasure reached by a player corresponds to its current objective.
@@ -156,18 +165,6 @@ class GameController:
         self.model.advance_queue()
         self.view.show_turn_rotation()
 
-    # def turn(self):
-    #     """Calls all necessary functions for a player to complete their turn.
-    #     ----------
-    #     No input
-    #     No output"""
-    #     self.insert_hand()
-    #     self.move_pawn()
-    #     self.collect_treasure()
-    #     self.check_win_state()
-    #     self.rotate_players()
-
-    #     self.view.turn_over()
     
     def start_game(self, playernames: list[str]):
         """Launches the game and every turn until someone won.
