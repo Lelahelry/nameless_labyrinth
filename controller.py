@@ -18,13 +18,13 @@ class GameController:
         self.game_active = False
         self.next_path = []
     
-    def insert_hand(self, insertpos):
+    def insert_hand(self, insertpos: tuple[int, int]):
         """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
         Then shifts all the tiles of the chosen row or column by one position and inserts the hand.
         A different tile is thus pushed out of the board and becomes the new hand.
         Finally calls the animation on the view side.
         ----------
-        No input
+        Input: insert position
         No output"""
         hand = self.model.hand
 
@@ -38,25 +38,31 @@ class GameController:
                 self.view.show_warning("Insert position was invalid.")
 
     def validate_move(self, newpos: tuple[int, int]):
+        """Walks through the board starting from the active player's position until the destination is reached.
+        If destination is reached, stores the path in a class attribute and returns True, else returns False.
+        ----------
+        Input: destination position
+        Output: bool"""
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
-        path_found = False
+        end_reached = False
 
         steps = []
-        paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not path_found)
+        paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not end_reached)
         for path in paths:
-            
 
             endpos = path[-1]
             if endpos == newpos:
-                path_found = True
+                end_reached = True
                 steps = path
 
         self.next_path = steps
-        return path_found
+        return end_reached
 
     def apply_move(self):
-        """Moves a player's pawn from its current position on the board to the desired position, if this new position can be reached.
+        """Moves a player's pawn from its current position on the board to the previously inputted destination,
+        then clears the path memory and starts move animation.
+        If no valid destination has been inputted, does nothing.
         ----------
         Input : newpos (tuple)
         No output"""
@@ -99,7 +105,7 @@ class GameController:
     
     def check_win_state(self):
         """Checks whether a player won (i.e. collected all their objectives).
-        Ends the game if that's the case.
+        Sets end of game state if that's the case.
         ----------
         No input
         No output"""
@@ -195,7 +201,7 @@ class GameController:
         self.view.display_game()
     
     def launch(self):
-        """Launches the game.
+        """Launches the main game window.
         ----------
         No input
         No output"""
