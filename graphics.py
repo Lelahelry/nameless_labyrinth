@@ -803,30 +803,35 @@ class GameWindow():
         ----------
         Input : event
         No output"""
-        
-       # while not self.motion_done:
-        #    continue
-        time.sleep(2)
-        player = self.controller.give_player_name()
-        self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
-        #redo the display of the board
-        self.queue_display()
-        self.objective_image()
-        self.hand_image()
-        #throw animation to move pawn when checked it is possible
-        #slide buttons preparation
-        #this will gather the information necessary for move pawn animation
-        #self.anim_move_pawn()
-        #useful for turn over
-        self.opposite_button_old = self.opposite_button
-        self.opposite_button = None
-        self.pawn_motion = False
-        self.slid = False
-        self.insert_ok = False
-        self.move_ok = False
-        self.button_done.configure(fg_color = 'grey', state = 'disabled')
-        self.button_valid.configure(state = 'normal', fg_color = 'green')
-        self.motion_done = False
+        if not self.controller.game_active:
+            #message the end of the game with scores and destroy self.f_graph
+            queue = self.controller.give_queue()
+            winner=  None
+            losers_scores = f""
+            for player in queue.values():
+                if player["objectives"]==[]:
+                    winner = player
+                else:
+                    losers_scores += f"{winner['name']} (player in {winner['color']}) found {(24/len(queue))-len(winner['objectives'])} treasures. \n"
+            self.messagebox(f"{winner['name']} (player in {winner['color']}) won! \n"+losers_scores)
+        else:
+            time.sleep(1)
+            player = self.controller.give_player_name()
+            self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
+            #redo the display of the board
+            self.queue_display()
+            self.objective_image()
+            self.hand_image()
+        #reset varibles
+            self.opposite_button_old = self.opposite_button
+            self.opposite_button = None
+            self.pawn_motion = False
+            self.slid = False
+            self.insert_ok = False
+            self.move_ok = False
+            self.button_done.configure(fg_color = 'grey', state = 'disabled')
+            self.button_valid.configure(state = 'normal', fg_color = 'green')
+            self.motion_done = False
 
     def anim_move_pawn(self):
         """Animates the movement of the pawn to the chosen destination.

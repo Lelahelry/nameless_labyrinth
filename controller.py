@@ -72,7 +72,6 @@ class GameController:
         self.collect_treasure()
         self.check_win_state()
         self.rotate_players()
-
         self.view.turn_over()
     
     def collect_treasure(self):
@@ -85,7 +84,8 @@ class GameController:
         _, active_tile = self.model.get_pawn_container(active_pawn)
 
         if active_pawn.objectives[0] == active_tile.treasure:
-            active_pawn.objectives.pop(0)
+            found = active_pawn.objectives.pop(0)
+            self.view.messagebox(f"You found the {found.name}. \n You still have {len(active_pawn.objectives)} treasures to find.")
     
     def check_win_state(self):
         """Checks whether a player won (i.e. collected all their objectives).
