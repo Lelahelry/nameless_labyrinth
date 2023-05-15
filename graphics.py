@@ -922,7 +922,7 @@ class GameWindow():
 
 
     def anim_pawn_displacement(self):        
-        depart = self.displacement.pop(0)
+        depart = self.displacement[0]
         color = self.controller.give_player_color()
         pawn = self.find_ident(color, depart)
         self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
