@@ -23,10 +23,9 @@ class GameController:
         No output"""
         hand_inserted = False
         while not hand_inserted:
-            insertpos, rotations = self.view.get_insert_state()
+            insertpos = self.view.get_insert_state()
 
             hand = self.model.hand
-            hand.orientation += rotations
 
             match insertpos:
                 case (0|6, 1|3|5) | (1|3|5, 0|6) if insertpos != self.model.get_slideout_position():
@@ -43,7 +42,7 @@ class GameController:
         startpos, start_tile = self.model.get_pawn_container(pawn)
         path_found = False
 
-        print('cc')
+        print('=======================================================')
         steps = []
         paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not path_found)
         for path in paths:
@@ -170,18 +169,11 @@ class GameController:
         Output : tuple (slideout_position)"""
         return self.model.get_slideout_position()
 
-    # def turn(self):
-    #     """Calls all necessary functions for a player to complete their turn.
-    #     ----------
-    #     No input
-    #     No output"""
-    #     self.insert_hand()
-    #     self.move_pawn()
-    #     self.collect_treasure()
-    #     self.check_win_state()
-    #     self.rotate_players()
+    def rotate_hand_clockwise(self):
+        self.model.hand.rotate_cw()
 
-    #     self.view.turn_over()
+    def rotate_hand_counterclockwise(self):
+        self.model.hand.rotate_ccw()
     
     def start_game(self, playernames: list[str]):
         """Launches the game and every turn until someone won.
