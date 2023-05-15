@@ -38,18 +38,17 @@ class GameController:
             
             if not hand_inserted:
                 self.view.show_warning("Insert position was invalid.")
-        print(self.model.board.grid)
+        
 
     def validate_move(self, newpos):
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
         path_found = False
 
-        print('=======================================================')
         steps = []
         paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not path_found)
         for path in paths:
-            print(path)
+            
 
             endpos = path[-1]
             if endpos == newpos:
@@ -193,3 +192,6 @@ class GameController:
         No input
         No output"""
         self.view.app_start()
+
+    def done(self):
+        return self.game_active 

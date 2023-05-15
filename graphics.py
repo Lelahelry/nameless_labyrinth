@@ -470,7 +470,6 @@ class GameWindow():
             self.ti_h = self.tile_s
 
         self.orientation_h = self.controller.give_hand()[2]
-        print(self.orientation_h)
         self.rotatedc_tile = rotate_image_h(self.ti_h, self.orientation_h)
         self.dict_r[1] = self.rotatedc_tile  
         # Replace self.bg_h with the rotated image
@@ -493,7 +492,7 @@ class GameWindow():
         Input : right click from the mouse on validate_button
         No output"""
         if self.selected_button == None:
-            self.show_warning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.")
+            self.show_warning("Selection error\nYou need to select an insertion button.\nPlease choose where you want to insert the tile.")
         elif self.button_valid.cget('state') == 'disabled':
             self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
         else:
@@ -589,7 +588,7 @@ class GameWindow():
         Input : str
         Output : Image"""
         if filepath == './tile_corner.png':
-                self.new_tile = self.tile_c
+            self.new_tile = self.tile_c
         elif filepath == './tile_t.png':
             self.new_tile = self.tile_t
         else:
@@ -633,7 +632,7 @@ class GameWindow():
         treasure_filepath = self.filepath_tr_h
         hand_filepath = self.filepath_ti_h
         hand_orientation = self.orientation_h
-        print(hand_orientation, self.controller.give_hand()[2])
+        
         # Initialisation of position
         li, co = grid_position(init_pos)
         # New treasure
@@ -795,7 +794,7 @@ class GameWindow():
         ----------
         Input : event
         No output"""
-        if not self.controller.game_active:
+        if not self.controller.done():
             #message the end of the game with scores and destroy self.f_graph
             queue = self.controller.give_queue()
             winner=  None
@@ -808,6 +807,7 @@ class GameWindow():
             self.messagebox(f"{winner['name']} (player in {winner['color']}) won! \n"+losers_scores)
         else:
             time.sleep(1)
+            self.canvas_card.delete(self.fg_c)
             player = self.controller.give_player_name()
             self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
             #redo the display of the board
@@ -830,6 +830,7 @@ class GameWindow():
         ----------
         No input
         No output"""
+        print('anim begin', self.running_pawn)
         if not(self.running_pawn):
             self.timer_loop_pawn()
         self.running_pawn = True       
@@ -840,7 +841,7 @@ class GameWindow():
         No input
         No output"""
         # Get variables
-        print('panw loop')
+        print('pawn loop')
         path = self.dict_anim["path"]
         pawn = self.dict_anim["pawn_info"]["object"]
         previous_step = self.dict_anim["previous_step"]
@@ -873,6 +874,7 @@ class GameWindow():
         if self.running_pawn :
             self.f_graph.after_cancel(self.timer_id_pawn) 
         self.running_pawn = False
+        print('pawn stop', self.running_pawn)
         self.controller.end_turn()
        
         
@@ -888,6 +890,8 @@ class GameWindow():
             self.destination_co = int((pos[0] - 75) / 100)
             self.destination_li = int((pos[1] - 75) / 100)
             self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
+            print("displacemant")
+            print(self.displacement)
             # If there is a cross
             if self.cross:
                 self.canvas_board.delete(self.target)
@@ -901,7 +905,7 @@ class GameWindow():
             self.canvas_board.lift(self.target)
         # If its not the right time to move the pawn
         else:
-            self.show_warning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
+            self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
 
     def move(self, event):
         """Moves the player's pawn.
@@ -921,7 +925,7 @@ class GameWindow():
         pawn = self.find_ident(color, depart)
         self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
         self.canvas_board.delete(self.target)
-        print(self.displacement)
+        self.running_pawn = False
         self.anim_move_pawn()
         
 
