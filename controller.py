@@ -43,7 +43,7 @@ class GameController:
         startpos, start_tile = self.model.get_pawn_container(pawn)
         path_found = False
 
-        print('cc')
+        print('=======================================================')
         steps = []
         paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not path_found)
         for path in paths:
