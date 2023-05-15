@@ -750,17 +750,13 @@ class GameWindow():
         ----------
         Input : event
         No output"""
-        if not self.controller.done():
+        done = self.controller.done()
+        if not done:
             #message the end of the game with scores and destroy self.f_graph
-            queue = self.controller.give_queue()
-            winner=  None
-            losers_scores = f""
-            for player in queue.values():
-                if player["objectives"]==[]:
-                    winner = player
-                else:
-                    losers_scores += f"{winner['name']} (player in {winner['color']}) found {(24/len(queue))-len(winner['objectives'])} treasures. \n"
-            self.messagebox(f"{winner['name']} (player in {winner['color']}) won! \n"+losers_scores)
+            self.messagebox(" You are the winner!")
+            self.f_graph.destroy()
+            self.button_launch.configure(state = 'normal')
+            self.f_graph = None
         else:
             time.sleep(1)
             self.canvas_card.delete(self.fg_c)
