@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from model import Pawn, Treasure
     
 t1=Treasure("1","a")

@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import random
 import tkinter as tk
 import customtkinter as ctk
 import time
 from PIL import Image, ImageTk
-
 
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
@@ -19,7 +20,6 @@ class GameWindow():
         self.root.configure(bg='#103A86')
         self.root.iconbitmap('tr_chest.ico') # Icon of the window
         self.root.geometry("1200x700") # Initial dimensions of the window
-            
 
         ########################################
         # Graphic window settings
@@ -183,7 +183,6 @@ class GameWindow():
 
             self.frame_left = tk.Frame(self.f_graph, bg = '#EFEFE1')
             self.frame_left.pack(side = tk.LEFT, fill = 'y' )
-
             
             self.slide_tiles_buttons()
             self.canvas_for_board()
@@ -214,7 +213,6 @@ class GameWindow():
         j = 0
         queue = self.controller.give_queue().values()
         
-                
         for pawn in queue : 
             i += 1
             j += 1
@@ -228,7 +226,6 @@ class GameWindow():
             if j != len(queue):
                 self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
                 self.label_storage[i].pack(side = tk.TOP)
-
 
     def canvas_for_board(self):
         """Creates the canvas for the board with the background.
@@ -266,7 +263,6 @@ class GameWindow():
         #self.bouton01.place(x = 161, y = 1)
         self.bouton01.pack(side = tk.LEFT, padx = 20)
         
-
         self.bouton05 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton05.bind('<Button-1>', lambda event: self.select_insertion_button( (0,5), self.bouton05, self.bouton65))
         #self.bouton05.place(x = 475, y = 1)
@@ -286,7 +282,6 @@ class GameWindow():
         #self.bouton61.place(x = 161, y = 635)
         self.bouton61.pack(side = tk.LEFT, padx = 20)
 
-
         self.bouton65 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton65.bind('<Button-1>', lambda event: self.select_insertion_button((6,5), self.bouton65, self.bouton05))
         #self.bouton65.place(x = 475, y = 635)
@@ -297,7 +292,6 @@ class GameWindow():
         #self.bouton63.place(x = 318, y = 635)
         self.bouton63.pack(padx = 10)
 
-
         # Left side buttons
         self.frame_left_leftbar = tk.Frame(self.frame_left, bg = '#EFEFE1')
         self.frame_left_leftbar.pack(side = tk.LEFT, padx = 3, pady = 10)
@@ -306,8 +300,6 @@ class GameWindow():
         self.bouton10.bind('<Button-1>', lambda event: self.select_insertion_button( (1,0), self.bouton10, self.bouton16))
         #self.bouton10.place(x = 1, y = 161)
         self.bouton10.pack(side = tk.TOP, pady = 55)
-
-        
 
         self.bouton50 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton50.bind('<Button-1>', lambda event: self.select_insertion_button((5,0), self.bouton50, self.bouton56))
@@ -327,8 +319,6 @@ class GameWindow():
         self.bouton16.bind('<Button-1>', lambda event: self.select_insertion_button((1,6), self.bouton16, self.bouton10))
         #self.bouton16.place(x = 635, y = 161)
         self.bouton16.pack(side = tk.TOP, pady = 55)
-
-        
 
         self.bouton56 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton56.bind('<Button-1>', lambda event: self.select_insertion_button((5,6), self.bouton56, self.bouton50))

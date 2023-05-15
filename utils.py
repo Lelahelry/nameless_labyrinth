@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from typing import Iterable, Callable, Iterator, TypeVar
 
 T = TypeVar('T')
