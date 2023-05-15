@@ -10,18 +10,22 @@ def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
         yield (a, b)
         a = b
 
-def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterator[T]]) -> Iterator[T]:
-    queue = [origin]
-    done = {origin}
+def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterator[T]]) -> Iterator[list[T]]:
+    queue = [[origin]]
+    visited = {origin}
 
     while len(queue):
-        node = queue.pop(0)
-        yield node
+        path = queue.pop(0)
+        yield path
+
+        node = path[-1]
 
         for neighb in adjacency_fn(node):
-            if neighb not in done:
-                done.add(neighb)
-                queue.append(neighb)
+            newpath = path + [neighb]
+
+            if neighb not in visited:
+                visited.add(neighb)
+                queue.append(newpath)
 
 def adjacent_coords_cw(pos: tuple[int, int], side) -> tuple[int, int]:
     i, j = pos

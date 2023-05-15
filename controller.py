@@ -41,19 +41,20 @@ class GameController:
     def validate_move(self, newpos):
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
-        move_valid = False
-        
+        path_found = False
+
         print('cc')
         steps = []
-        for pos in bfs_walk(startpos, self.model.get_adjacency_fn()):
-            print(pos)
-            steps.append(pos)
-            if pos == newpos:
-                move_valid = True
-        
-        if not move_valid: steps = []
+        paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not path_found)
+        for path in paths:
+            print(path)
 
-        return move_valid, steps
+            endpos = path[-1]
+            if endpos == newpos:
+                path_found = True
+                steps = path
+
+        return path_found, steps
 
     def move_pawn(self, newpos):
         """Moves a player's pawn from its current position on the board to the desired position, if this new position can be reached.
