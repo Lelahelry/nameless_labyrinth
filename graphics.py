@@ -171,7 +171,7 @@ class GameWindow():
             self.f_graph.config(background = '#EFEFE1')
             
             # Button for players to indicate they finished their turn
-            self.button_done = ctk.CTkButton(self.f_graph, text = "Validate displacement.", corner_radius = 8, height = 30, width = 15, fg_color = "grey", hover_color = "DodgerBlue4", font = ('Calibri', 20), state = "disabled")
+            self.button_done = ctk.CTkButton(self.f_graph, text = "Confirm pawn displacement", corner_radius = 8, height = 30, width = 15, fg_color = "grey", hover_color = "DodgerBlue4", font = ('Calibri', 20), state = "disabled")
             self.button_done.bind('<Button-1>', self.move)
             self.button_done.pack(side = ctk.BOTTOM, fill = 'x')
             
