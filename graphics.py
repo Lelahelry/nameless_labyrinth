@@ -173,7 +173,7 @@ class GameWindow():
             
             # Button for players to indicate they finished their turn
             self.button_done = ctk.CTkButton(self.f_graph, text = "Confirm pawn displacement", corner_radius = 8, height = 30, width = 15, fg_color = "grey", hover_color = "DodgerBlue4", font = ('Calibri', 20), state = "disabled")
-            self.button_done.bind('<Button-1>', self.move)
+            self.button_done.bind('<Button-1>', self.confirm_move)
             self.button_done.pack(side = ctk.BOTTOM, fill = 'x')
             
             self.image_dict = {} # Dict that stocks all 50 tiles as (bg, fg, pawn) in grid size
@@ -889,13 +889,12 @@ class GameWindow():
             # Take note of the objective coordinates
             self.destination_co = int((pos[0] - 75) / 100)
             self.destination_li = int((pos[1] - 75) / 100)
-            self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
-            print("displacemant")
-            print(self.displacement)
+            reachable = self.controller.validate_move((self.destination_li, self.destination_co))
+            
             # If there is a cross
             if self.cross:
                 self.canvas_board.delete(self.target)
-            if self.accessible:
+            if reachable:
                 self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
                 self.button_done.configure(fg_color = "goldenrod", state = "normal")
             else:
@@ -907,23 +906,23 @@ class GameWindow():
         else:
             self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
 
-    def move(self, event):
+    def confirm_move(self, event):
         """Moves the player's pawn.
         ----------
-        Input : right click from the mouse on the "validate displacement" button
+        Input : left click from the mouse on the "confirm displacement" button
         No output"""
         if self.button_done.cget("state") != "disabled":
-            self.controller.move_pawn((self.destination_li, self.destination_co))
+            self.controller.apply_move()
             
         else:
             self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
 
 
-    def anim_pawn_displacement(self):        
-        depart = self.displacement[0]
+    def anim_pawn_displacement(self, path):        
+        depart = path[0]
         color = self.controller.give_player_color()
         pawn = self.find_ident(color, depart)
-        self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
+        self.dict_anim = {"path": path, "pawn_info": pawn, "previous_step": depart}
         self.canvas_board.delete(self.target)
         self.running_pawn = False
         self.anim_move_pawn()

@@ -11,10 +11,12 @@ class GameController:
     view: GameWindow
     model: GameData
     game_active: bool
+    next_path: list[tuple[int, int]]
 
     def __init__(self):
         self.view = GameWindow(self)
         self.game_active = False
+        self.next_path = []
     
     def insert_hand(self):
         """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
@@ -36,7 +38,7 @@ class GameController:
 
                     self.model.hand = self.model.board.slide_tile(insertpos, hand)
                     self.view.anim_tiles_slide()
-            
+
             if not hand_inserted:
                 self.view.show_warning("Insert position was invalid.")
 
@@ -55,20 +57,27 @@ class GameController:
                 path_found = True
                 steps = path
 
-        return path_found, steps
+        self.next_path = steps
+        return path_found
 
-    def move_pawn(self, newpos):
+    def apply_move(self):
         """Moves a player's pawn from its current position on the board to the desired position, if this new position can be reached.
         ----------
         Input : newpos (tuple)
         No output"""
-        pawn = self.model.get_active_player()
-        startpos, start_tile = self.model.get_pawn_container(pawn)
-        dest_pawns = self.model.get_pawns_at_pos(newpos)
+        if len(self.next_path):
+            newpos = self.next_path[-1]
+            pawn = self.model.get_active_player()
+            startpos, start_tile = self.model.get_pawn_container(pawn)
+            dest_pawns = self.model.get_pawns_at_pos(newpos)
 
-        start_tile.pawns.remove(pawn)
-        dest_pawns.append(pawn)
-        self.view.anim_pawn_displacement()
+            start_tile.pawns.remove(pawn)
+            dest_pawns.append(pawn)
+            
+            path = self.next_path.copy()
+            self.next_path.clear()
+
+            self.view.anim_pawn_displacement(path)
 
     def end_turn(self):
         """Performs end of turn routines and calls the its view equivalent.
