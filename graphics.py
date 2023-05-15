@@ -187,6 +187,9 @@ class GameWindow():
             self.frame_right = tk.Frame(self.f_graph, bg = '#EFEFE1')
             self.frame_right.pack(side = tk.RIGHT, fill = 'y' )
 
+            self.frame_right_bottombar = tk.Frame(self.frame_right, bg = '#EFEFE1')
+            self.frame_right_bottombar.pack(side = tk.BOTTOM )
+
             self.canvas_for_objective() 
             self.canvas_for_hand()
             self.turn_tile_buttons()
@@ -362,7 +365,7 @@ class GameWindow():
         """Creates the canvas to display the current objective of the player.
         ----------
         No input
-        No output"""
+        No output """
         self.canvas_card = tk.Canvas(self.frame_right, width = 360, height = 420, bg = '#EFEFE1')
         self.objective_background()
         self.objective_image()
@@ -450,10 +453,10 @@ class GameWindow():
         No input
         No output"""
         # Turning buttons
-        self.button_counterclockwise = ctk.CTkButton(self.f_graph, text = "⤹", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
-        self.button_clockwise = ctk.CTkButton(self.f_graph, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
-        self.button_counterclockwise.place(x = 980, y = 610)
-        self.button_clockwise.place(x = 1068, y = 610)
+        self.button_counterclockwise = ctk.CTkButton(self.frame_right_bottombar, text = "⤹", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
+        self.button_clockwise = ctk.CTkButton(self.frame_right_bottombar, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
+        self.button_counterclockwise.pack(side = tk.LEFT)
+        self.button_clockwise.pack(side = tk.RIGHT)
         self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(-1))
         self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))
 
@@ -484,9 +487,9 @@ class GameWindow():
         ----------
         No input
         No output"""    
-        self.button_valid = ctk.CTkButton(self.f_graph, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#E8E4CC', fg_color = '#009900', hover_color = "green4")
+        self.button_valid = ctk.CTkButton(self.frame_right_bottombar, text = "✔", font = ('Calibri', 30, 'bold'), width = 50, height = 50, bg_color = '#E8E4CC', fg_color = '#009900', hover_color = "green4")
         self.button_valid.bind('<Button-1>', self.check_insertion)
-        self.button_valid.place(x = 1015, y = 605)
+        self.button_valid.pack()
         
     def check_insertion(self, event):
         """Verify that the player did select where to insert the tile in hand.
@@ -505,21 +508,21 @@ class GameWindow():
         ----------
         No input
         No output"""
-        self.msg_error = tk.messagebox.showwarning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.")
+        self.msg_error = tk.messagebox.showwarning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.", parent=self.f_graph)
 
     def show_warning(self, text):
         """Opens a messagebox with a custom text.
         ----------
         Input : str (text)
         No output"""
-        self.msg_error2 = tk.messagebox.showwarning("Warning", text)
+        self.msg_error2 = tk.messagebox.showwarning("Warning", text, parent = self.f_graph)
 
     def messagebox(self, text):
         """Opens a messagebox with a custom text.
         ----------
         Input : str (text)
         No output"""
-        self.msg = tk.messagebox.showinfo("Message", text)
+        self.msg = tk.messagebox.showinfo("Message", text, parent=self.f_graph)
 
     def image_library_i(self):
         """Loads and sizes all PNG files as Images (this object type can be rotated).
@@ -881,6 +884,7 @@ class GameWindow():
             self.f_graph.after_cancel(self.timer_id_pawn) 
         self.running_pawn = False
         self.controller.end_turn()
+       
         
     def click_tile(self, event):
         """Places a cross where the player wants to move their pawn and registers the grid coordinates.
@@ -939,7 +943,7 @@ class GameWindow():
         for pawn in self.pawn_dict[pos]:
             if pawn['color'] == color:
                 found = pawn
-        return pawn
+        return found
 
     def get_move_pos(self):
         """Returns the coordinates of the tile where the player wants to move the pawn.
