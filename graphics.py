@@ -456,9 +456,12 @@ class GameWindow():
         Input = integer (sens, i.e., the direction of the rotation)
         No output"""
         # Set new orientation
-        self.controller.turn_hand_tile(sens)
+        if sens==-1:
+            self.controller.rotate_hand_clockwise()
+        else:
+            self.controller.rotate_hand_counterclockwise()
         #redo the image
-        self.hand_image
+        self.hand_tile()
     
     def hand_tile(self):
         """Displays the tile in hand.
@@ -613,9 +616,8 @@ class GameWindow():
         ----------
         No input
         Output : tuple, int"""
-        self.orientation_h = self.orientation_h%(4)
         self.insert_ok = False
-        return self.chosen_pos, self.orientation_h
+        return self.chosen_pos
 
     def anim_tiles_slide(self):
         """Slides the tile on the screen using a timer.
