@@ -616,7 +616,7 @@ class GameWindow():
         elif self.button_valid.cget('state') == 'disabled':
             self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
         else:
-            self.controller.insert_hand()
+            self.controller.insert_hand(self.chosen_pos)
 
     def click_tile(self, event):
         """Places a cross where the player wants to move their pawn and registers the grid coordinates.
@@ -659,14 +659,6 @@ class GameWindow():
     # Controller communication methods
     def app_start(self):
         self.root.mainloop()
-
-    def get_insert_state(self):
-        """Sends position and tile orientation to controller.
-        ----------
-        No input
-        Output : tuple, int"""
-        self.insert_ok = False
-        return self.chosen_pos
     
     def anim_tiles_slide(self):
         """Slides the tile on the screen using a timer.
@@ -771,7 +763,6 @@ class GameWindow():
             self.opposite_button = None
             self.pawn_motion = False
             self.slid = False
-            self.insert_ok = False
             self.move_ok = False
             self.button_done.configure(fg_color = 'grey', state = 'disabled')
             self.button_valid.configure(state = 'normal', fg_color = 'green')
