@@ -18,7 +18,7 @@ class GameController:
         self.game_active = False
         self.next_path = []
     
-    def insert_hand(self):
+    def insert_hand(self, insertpos):
         """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
         Then shifts all the tiles of the chosen row or column by one position and inserts the hand.
         A different tile is thus pushed out of the board and becomes the new hand.
@@ -26,20 +26,15 @@ class GameController:
         ----------
         No input
         No output"""
-        hand_inserted = False
-        while not hand_inserted:
-            insertpos = self.view.get_insert_state()
+        hand = self.model.hand
 
-            hand = self.model.hand
+        match insertpos:
+            case (0|6, 1|3|5) | (1|3|5, 0|6) if insertpos != self.model.get_slideout_position():
 
-            match insertpos:
-                case (0|6, 1|3|5) | (1|3|5, 0|6) if insertpos != self.model.get_slideout_position():
-                    hand_inserted = True
-
-                    self.model.hand = self.model.board.slide_tile(insertpos, hand)
-                    self.view.anim_tiles_slide()
-
-            if not hand_inserted:
+                self.model.hand = self.model.board.slide_tile(insertpos, hand)
+                self.view.anim_tiles_slide()
+                
+            case _:
                 self.view.show_warning("Insert position was invalid.")
 
     def validate_move(self, newpos: tuple[int, int]):
