@@ -107,7 +107,7 @@ class Board:
                 self.grid[(first, col)] = tile
                 #remove the pawns from the removed tile
                 while len(slideout_tile.pawns):
-                    tile.pawns.append(slideout_tile.pawns.pop())
+                    self.grid[(first, col)].pawns.append(slideout_tile.pawns.pop())
             
             case ((1 | 3 | 5) as row, (0 | 6) as col):
                 first = col
@@ -121,7 +121,7 @@ class Board:
                 self.grid[(row, first)] = tile
                 #remove the pawns from the removed tile
                 while len(slideout_tile.pawns):
-                    tile.pawns.append(slideout_tile.pawns.pop())
+                    self.grid[(first, col)].pawns.append(slideout_tile.pawns.pop())
 
             case (a, b) if (a is int) and (b is int):
                 raise ValueError("Invalid insert position")
