@@ -18,8 +18,9 @@ class GameController:
     
     def insert_hand(self):
         """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
-        Then shifts all the tiles of the chosen row or column by one position.
+        Then shifts all the tiles of the chosen row or column by one position and inserts the hand.
         A different tile is thus pushed out of the board and becomes the new hand.
+        Finally calls the animation on the view side.
         ----------
         No input
         No output"""
@@ -38,9 +39,8 @@ class GameController:
             
             if not hand_inserted:
                 self.view.show_warning("Insert position was invalid.")
-        
 
-    def validate_move(self, newpos):
+    def validate_move(self, newpos: tuple[int, int]):
         pawn = self.model.get_active_player()
         startpos, start_tile = self.model.get_pawn_container(pawn)
         path_found = False
@@ -71,14 +71,18 @@ class GameController:
         self.view.anim_pawn_displacement()
 
     def end_turn(self):
+        """Performs end of turn routines and calls the its view equivalent.
+        ----------
+        No input
+        No output"""
         self.collect_treasure()
         self.check_win_state()
         self.rotate_players()
+
         self.view.turn_over()
     
     def collect_treasure(self):
-        """Checks that the treasure reached by a player corresponds to its current objective.
-        Removes the collected treasure from the player's list of objectives.
+        """Removes the current player's first objective if it is standing on the same tile.
         ----------
         No input
         No output"""
@@ -102,7 +106,7 @@ class GameController:
             self.winner = active_pawn
     
     def rotate_players(self):
-        """Once a player's turn is over, moves on to the next player in the queue.
+        """Permute the players in the queue to allow for the next one to play.
         ----------
         No input
         No output"""
