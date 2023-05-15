@@ -38,9 +38,6 @@ class GameWindow():
         # Widgets creation
         self.widgets_creation(self.root)
 
-        # Waiting variable
-        self.motion_done = False
-
     def widgets_creation(self, root):
         """Creates all necessary widgets for the welcome window.
         ----------
@@ -134,7 +131,7 @@ class GameWindow():
             self.controller.start_game(self.playernames)
         self.button_launch.configure(state = 'disabled')
         
-    # Callback functions
+    # Callback methods
     def get_playernames(self):
         """Recovers each player's name.
         Default names are provided in case players don't add names.
@@ -145,7 +142,7 @@ class GameWindow():
             name = str(self.playernames_e[i].get()) # Names the players chose for themselves
             if name == "":
                 name = "Player" + str(i+1) # Default name
-            self.playernames.append(name) #SEND THIS TO CONTROLLER
+            self.playernames.append(name) 
     
     def display_game(self):
         """Creates the graphic window for current game display.
@@ -181,7 +178,7 @@ class GameWindow():
             # Functions calls
             self.image_library_i()
 
-            self.frame_left = tk.Frame(self.f_graph, bg = '#EFEFE1')
+            self.frame_left = tk.Frame(self.f_graph, bg = '#EFEFE1') # Frames will allow us to place easily the widgets that should be displayed together
             self.frame_left.pack(side = tk.LEFT, fill = 'y' )
             
             self.slide_tiles_buttons()
@@ -199,14 +196,60 @@ class GameWindow():
             self.validate_button()
             self.queue_display()
 
+    # Display material methods
+    def image_library_i(self):
+        """Loads and sizes all PNG files as Images (this object type can be rotated).
+        ----------
+        No input
+        No output"""
+        self.image_dict = {}
+        # Load the 3 tile images and resize them
+        self.tile_c = Image.open(self.folder + '\\tile_corner.png')
+        self.tile_t = Image.open(self.folder + '\\tile_t.png')
+        self.tile_s = Image.open(self.folder + '\\tile_straight.png')
+        self.target_pic_o = tk.PhotoImage(file = self.folder + '\\target_ok.png')
+        self.target_pic_n = tk.PhotoImage(file = self.folder + '\\target_no.png')
+    
+    def get_image(self, filepath):
+        """Get image from filepath.
+        ----------
+        Input : str
+        Output : Image"""
+        tile = None
+        if filepath == './tile_corner.png':
+            tile = self.tile_c
+        elif filepath == './tile_t.png':
+            tile = self.tile_t
+        else:
+            tile = self.tile_s
+        return tile
+
+    # Messageboxes calls    
+    def show_warning(self, text):
+        """Opens a messagebox with a custom text.
+        ----------
+        Input : str (text)
+        No output"""
+        self.msg_error2 = tk.messagebox.showwarning("Warning", text, parent = self.f_graph)
+
+    def messagebox(self, text):
+        """Opens a messagebox with a custom text.
+        ----------
+        Input : str (text)
+        No output"""
+        self.msg = tk.messagebox.showinfo("Message", text, parent=self.f_graph)
+
+    # Display window methods
     def queue_display(self):
         """Queue (playing order) displayed with labels containing : player's name written in color, number of remaining objectives.
         ----------
         No input
         No output"""
+        # Empty the storage of labels
         if self.label_storage != {}:
             for p in range(len(self.label_storage)):
                 self.label_storage[p].destroy()
+        # Display the state of the pawn
         self.label_storage[0] = ctk.CTkLabel(self.f_graph, text = "CURRENT :", font = ("Calibri", 16, "bold"), text_color = "black")
         self.label_storage[0].pack(side = tk.TOP)
         i = 0
@@ -217,12 +260,14 @@ class GameWindow():
             i += 1
             j += 1
             obj = len(pawn["objectives"])
+            # Pawn display
             self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = pawn["name"], font = ("Calibri", 16, "bold"), text_color = pawn["color"])
             self.label_storage[i].pack(side = tk.TOP)
             i += 1
             self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = f"Treasures left : {obj}", font = ("Calibri", 16), text_color = pawn["color"])
             self.label_storage[i].pack(side = tk.TOP)
             i += 1
+            # Display the state of the pawn
             if j != len(queue):
                 self.label_storage[i] = ctk.CTkLabel(self.f_graph, text = "NEXT :", font = ("Calibri", 16, "bold"), text_color = "black")
                 self.label_storage[i].pack(side = tk.TOP)
@@ -239,8 +284,8 @@ class GameWindow():
 
         # Set the background image of the canvas
         self.background = tk.PhotoImage(file = self.folder + '\\board.png')
-        self.item = self.canvas_board.create_image(378, 378, image = self.background)
-        self.canvas_board.lower(self.item)
+        self.bg_board = self.canvas_board.create_image(378, 378, image = self.background)
+        self.canvas_board.lower(self.bg_board)
 
         self.canvas_board.pack()
 
@@ -253,14 +298,15 @@ class GameWindow():
 
         # Initialisation of state of selected_button variable
         self.selected_button = None
-        
+        self.opposite_button_old = None
+
         # Top side buttons
+        
         self.frame_left_topbar = tk.Frame(self.frame_left, bg = '#EFEFE1')
         self.frame_left_topbar.pack(side = tk.TOP, fill = 'x', pady = 1, padx= 175)
 
         self.bouton01 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton01.bind('<Button-1>', lambda event: self.select_insertion_button((0,1), self.bouton01, self.bouton61))
-        #self.bouton01.place(x = 161, y = 1)
         self.bouton01.pack(side = tk.LEFT, padx = 20)
         
         self.bouton05 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
@@ -270,7 +316,6 @@ class GameWindow():
 
         self.bouton03 = ctk.CTkButton(self.frame_left_topbar, text = "▼", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton03.bind('<Button-1>', lambda event:  self.select_insertion_button( (0,3), self.bouton03, self.bouton63))
-        #self.bouton03.place(x = 318, y = 1)
         self.bouton03.pack(padx =10)
 
         # Bottom side buttons
@@ -279,17 +324,14 @@ class GameWindow():
 
         self.bouton61 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton61.bind('<Button-1>',  lambda event: self.select_insertion_button((6,1), self.bouton61, self.bouton01))
-        #self.bouton61.place(x = 161, y = 635)
         self.bouton61.pack(side = tk.LEFT, padx = 20)
 
         self.bouton65 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton65.bind('<Button-1>', lambda event: self.select_insertion_button((6,5), self.bouton65, self.bouton05))
-        #self.bouton65.place(x = 475, y = 635)
         self.bouton65.pack(side = tk.RIGHT, padx = 20)
 
         self.bouton63 = ctk.CTkButton(self.frame_left_bottombar, text = "▲", font = ('Calibri', 20), width = 52, height = 33, fg_color = "goldenrod", hover_color = "red4")
         self.bouton63.bind('<Button-1>', lambda event: self.select_insertion_button((6,3), self.bouton63, self.bouton03))
-        #self.bouton63.place(x = 318, y = 635)
         self.bouton63.pack(padx = 10)
 
         # Left side buttons
@@ -298,17 +340,14 @@ class GameWindow():
 
         self.bouton10 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton10.bind('<Button-1>', lambda event: self.select_insertion_button( (1,0), self.bouton10, self.bouton16))
-        #self.bouton10.place(x = 1, y = 161)
         self.bouton10.pack(side = tk.TOP, pady = 55)
 
         self.bouton50 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton50.bind('<Button-1>', lambda event: self.select_insertion_button((5,0), self.bouton50, self.bouton56))
-        #self.bouton50.place(x = 1, y = 475)
         self.bouton50.pack(side = tk.BOTTOM, pady = 55)
 
         self.bouton30 = ctk.CTkButton(self.frame_left_leftbar, text = "►", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton30.bind('<Button-1>',  lambda event: self.select_insertion_button((3,0), self.bouton30, self.bouton36))
-        #self.bouton30.place(x = 1, y = 318)
         self.bouton30.pack( pady = 55)
 
         # Right side buttons
@@ -317,43 +356,15 @@ class GameWindow():
 
         self.bouton16 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton16.bind('<Button-1>', lambda event: self.select_insertion_button((1,6), self.bouton16, self.bouton10))
-        #self.bouton16.place(x = 635, y = 161)
         self.bouton16.pack(side = tk.TOP, pady = 55)
 
         self.bouton56 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton56.bind('<Button-1>', lambda event: self.select_insertion_button((5,6), self.bouton56, self.bouton50))
-        #self.bouton56.place(x = 635, y = 475)
         self.bouton56.pack(side = tk.BOTTOM, pady = 55)
 
         self.bouton36 = ctk.CTkButton(self.frame_left_rightbar, text = "◄", font = ('Calibri', 20), width = 33, height = 52, fg_color = "goldenrod", hover_color = "red4")
         self.bouton36.bind('<Button-1>', lambda event: self.select_insertion_button((3,6), self.bouton36, self.bouton30))
-        #self.bouton36.place(x = 635, y = 318)
         self.bouton36.pack( pady =55)
-
-        self.opposite_button_old = None
-    
-    def select_insertion_button(self, pos, button_in, button_out):
-        """Changes the color of the selected button and gets its position.
-        ----------
-        Input : tuple (pos), 2 widgets (button_in, button_out)
-        No output"""
-        # Change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
-        # Find button selected by the player
-        if button_in.cget("state") != "disabled" and not self.slid:
-            button_in.configure(fg_color = "red4")
-            #deselect the previous button
-            if self.selected_button != None:
-                self.selected_button.configure(fg_color = "goldenrod")
-                
-            if self.selected_button == button_in: # Case you deselected the line/row after all
-                self.selected_button = None
-                self.opposite_button = None
-                self.chosen_pos = None
-            else:
-                self.selected_button = button_in
-                self.opposite_button = button_out
-                # Get button position
-                self.chosen_pos = pos
 
     def canvas_for_objective(self):
         """Creates the canvas to display the current objective of the player.
@@ -371,19 +382,19 @@ class GameWindow():
         No input
         No output"""
         # Background image settings
-        self.canvas_card.original_background = tk.PhotoImage(file = self.folder + '\\card.png')
-        self.canvas_card.background = self.canvas_card.original_background.zoom(6, 6)
-        self.canvas_card.item = self.canvas_card.create_image(160, 212, image = self.canvas_card.background)
+        self.canvas_card_original_background = tk.PhotoImage(file = self.folder + '\\card.png')
+        self.canvas_card_background = self.canvas_card_original_background.zoom(6, 6)
+        self.bg_treasure = self.canvas_card.create_image(160, 212, image = self.canvas_card_background)
 
-        self.canvas_card.lower(self.item)
+        self.canvas_card.lower(self.bg_treasure)
 
     def objective_image(self):
         """Displays the right treasure in the objective card.
         ----------
         No input
         No output"""
+        # Find the filepath of the treasure image
         filepath_tr = self.controller.give_objective()
-        #penser à delete le précédent
         # Treasure image settings
         self.treas_c = tk.PhotoImage(file = self.folder + filepath_tr)
         self.treas_c_resized = self.treas_c.zoom(3, 3)
@@ -404,6 +415,7 @@ class GameWindow():
         ----------
         No input
         No output"""
+        # Get all the hand tile infos
         self.filepath_ti_h, self.filepath_tr_h, self.orientation_h = self.controller.give_hand() #address of the tile and treasure images
         self.dict_r ={}
         # Set the image of the tile in hand
@@ -411,8 +423,6 @@ class GameWindow():
 
         # Set the image of the treasure of the tile (if any)
         self.hand_treasure()
-                      
-
 
     def hand_treasure(self):
         """Displays the treasure of the tile in hand.
@@ -428,6 +438,28 @@ class GameWindow():
             self.fg_h = self.canvas_tile.create_image(205, 175, image = self.treas_h_resized)
             self.canvas_tile.lift(self.fg_h)
 
+    def hand_tile(self):
+        """Displays the tile in hand.
+        ----------
+        No input
+        No output"""
+        if self.bg_h != None:
+           self.canvas_tile.delete(self.bg_h)
+        
+        # Prepare the image tile
+        
+        self.ti_h = self.get_image(self.filepath_ti_h)
+        # Get the newest orientation from the model and controller
+        self.orientation_h = self.controller.give_hand()[2]
+        # Image creation
+        self.rotatedc_tile = rotate_image_h(self.ti_h, self.orientation_h)
+        self.dict_r[1] = self.rotatedc_tile  
+
+        # Replace self.bg_h with the rotated image
+        self.canvas_tile.delete(self.bg_h) # Delete the old image
+        self.bg_h = self.canvas_tile.create_image(200, 175, image = self.dict_r[1]) # Create the new image
+        self.canvas_tile.lower(self.bg_h)
+
     def turn_tile_buttons(self):
         """Creates the buttons next to the hand allowing to change the orientation of the tile in hand.
         ----------
@@ -440,42 +472,6 @@ class GameWindow():
         self.button_clockwise.pack(side = tk.RIGHT)
         self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))
         self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(-1))
-
-    def turn_hand_tile(self, sens):
-        """Rotates the tile in hand.
-        ----------
-        Input = integer (sens, i.e., the direction of the rotation)
-        No output"""
-        # Set new orientation
-        if sens==-1:
-            self.controller.rotate_hand_clockwise()
-        else:
-            self.controller.rotate_hand_counterclockwise()
-        #redo the image
-        self.hand_tile()
-    
-    def hand_tile(self):
-        """Displays the tile in hand.
-        ----------
-        No input
-        No output"""
-        if self.bg_h != None:
-           self.canvas_tile.delete(self.bg_h)
-        # Prepare the image tile
-        if self.filepath_ti_h == './tile_corner.png':
-            self.ti_h = self.tile_c
-        elif self.filepath_ti_h == './tile_t.png':
-            self.ti_h = self.tile_t
-        else:
-            self.ti_h = self.tile_s
-
-        self.orientation_h = self.controller.give_hand()[2]
-        self.rotatedc_tile = rotate_image_h(self.ti_h, self.orientation_h)
-        self.dict_r[1] = self.rotatedc_tile  
-        # Replace self.bg_h with the rotated image
-        self.canvas_tile.delete(self.bg_h) # Delete the old image
-        self.bg_h = self.canvas_tile.create_image(200, 175, image = self.dict_r[1]) # Create the new image
-        self.canvas_tile.lower(self.bg_h)
         
     def validate_button(self):
         """Creates the button under the hand to validate the chosen orientation and insertion.
@@ -486,45 +482,6 @@ class GameWindow():
         self.button_valid.bind('<Button-1>', self.check_insertion)
         self.button_valid.pack()
         
-    def check_insertion(self, event):
-        """Verify that the player did select where to insert the tile in hand.
-        ----------
-        Input : right click from the mouse on validate_button
-        No output"""
-        if self.selected_button == None:
-            self.show_warning("Selection error\nYou need to select an insertion button.\nPlease choose where you want to insert the tile.")
-        elif self.button_valid.cget('state') == 'disabled':
-            self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
-        else:
-            self.controller.insert_hand()
-
-    def show_warning(self, text):
-        """Opens a messagebox with a custom text.
-        ----------
-        Input : str (text)
-        No output"""
-        self.msg_error2 = tk.messagebox.showwarning("Warning", text, parent = self.f_graph)
-
-    def messagebox(self, text):
-        """Opens a messagebox with a custom text.
-        ----------
-        Input : str (text)
-        No output"""
-        self.msg = tk.messagebox.showinfo("Message", text, parent=self.f_graph)
-
-    def image_library_i(self):
-        """Loads and sizes all PNG files as Images (this object type can be rotated).
-        ----------
-        No input
-        No output"""
-        self.image_dict = {}
-        # Load the 3 tile images and resize them
-        self.tile_c = Image.open(self.folder + '\\tile_corner.png')
-        self.tile_t = Image.open(self.folder + '\\tile_t.png')
-        self.tile_s = Image.open(self.folder + '\\tile_straight.png')
-        self.target_pic_o = tk.PhotoImage(file = self.folder + '\\target_ok.png')
-        self.target_pic_n = tk.PhotoImage(file = self.folder + '\\target_no.png')
-
     def grid_images(self):
         """Associates tiles to treasures and stocks them.
         Displays the tiles on the board in its canvas and binds it to the sliding.
@@ -573,7 +530,7 @@ class GameWindow():
         Input : str, int, int, int
         Output : PhotoImage on canvas"""
         # Initialisation
-        self.get_image(filepath)
+        self.new_tile = self.get_image(filepath)
         # Orientate
         self.tiles[self.index] = rotate_image(self.new_tile, orientation)
         # Display
@@ -582,18 +539,127 @@ class GameWindow():
         self.canvas_board.tag_bind(new_bg, '<Button-1>', self.click_tile)
         return new_bg
 
-    def get_image(self, filepath):
-        """Get image from filepath.
+    def place_pawns(self):
+        """Places circles for the pawns on the boards.
         ----------
-        Input : str
-        Output : Image"""
-        if filepath == './tile_corner.png':
-            self.new_tile = self.tile_c
-        elif filepath == './tile_t.png':
-            self.new_tile = self.tile_t
-        else:
-            self.new_tile = self.tile_s
+        No input
+        No output"""
+        # Initialisation of pawn storage
+        self.pawn_dict = {}
+        # Pawn display
+        for position, tile in self.graphics_dict.items():
+            if tile["pawns"] != None:
+                # Position
+                li, co = grid_position(position)
+                # Create circles on the tiles
+                new_pawns = []
+                for color in tile["pawns"]:
+                    if color == "blue": 
+                        new_pawn = self.canvas_board.create_oval(co-20, li+20, co, li, fill = color)
+                    elif color == "red": 
+                        new_pawn =self.canvas_board.create_oval(co, li, co+20, li-20, fill = color) 
+                    elif color == "green": 
+                        new_pawn = self.canvas_board.create_oval(co-20, li, co, li-20, fill = color)
+                    else:
+                        new_pawn = self.canvas_board.create_oval(co, li+20, co+20, li, fill = color)
+                    self.canvas_board.lift(new_pawn)
+                    n_p = {"object":new_pawn, "color":color}
+                    new_pawns.append(n_p)
+                self.pawn_dict[position] = new_pawns
+            else:
+                self.pawn_dict[position] = []
         
+    # Buttons methods
+    def select_insertion_button(self, pos, button_in, button_out):
+        """Changes the color of the selected button and gets its position.
+        ----------
+        Input : tuple (pos), 2 widgets (button_in, button_out)
+        No output"""
+        # Change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
+        # Find button selected by the player
+        if button_in.cget("state") != "disabled" and not self.slid:
+            button_in.configure(fg_color = "red4")
+            #deselect the previous button
+            if self.selected_button != None:
+                self.selected_button.configure(fg_color = "goldenrod")
+                
+            if self.selected_button == button_in: # Case you deselected the line/row after all
+                self.selected_button = None
+                self.opposite_button = None
+                self.chosen_pos = None
+            else:
+                self.selected_button = button_in
+                self.opposite_button = button_out
+                # Get button position
+                self.chosen_pos = pos    
+
+    def turn_hand_tile(self, sens):
+        """Rotates the tile in hand.
+        ----------
+        Input = integer (sens, i.e., the direction of the rotation)
+        No output"""
+        # Set new orientation in the model and controller
+        if sens==-1:
+            self.controller.rotate_hand_clockwise()
+        else:
+            self.controller.rotate_hand_counterclockwise()
+        #redo the image
+        self.hand_tile() 
+
+    def check_insertion(self, event):
+        """Verify that the player did select where to insert the tile in hand.
+        ----------
+        Input : right click from the mouse on validate_button
+        No output"""
+        if self.selected_button == None:
+            self.show_warning("Selection error\nYou need to select an insertion button.\nPlease choose where you want to insert the tile.")
+        elif self.button_valid.cget('state') == 'disabled':
+            self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
+        else:
+            self.controller.insert_hand()
+
+    def click_tile(self, event):
+        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
+        ----------
+        Input : right click from the mouse on a tile of the board
+        No output"""
+        # If the pawn can be moved
+        if self.pawn_motion:
+            pos = self.canvas_board.coords(self.canvas_board.find_withtag('current')[0]) # Get tile position with coords
+            # Take note of the objective coordinates
+            self.destination_co = int((pos[0] - 75) / 100)
+            self.destination_li = int((pos[1] - 75) / 100)
+            self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
+            # If there is a cross
+            if self.cross:
+                self.canvas_board.delete(self.target)
+            if self.accessible:
+                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
+                self.button_done.configure(fg_color = "goldenrod", state = "normal")
+            else:
+                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_n)
+                self.button_done.configure(fg_color = "grey", state = "disabled")
+            self.cross = True
+            self.canvas_board.lift(self.target)
+        # If its not the right time to move the pawn
+        else:
+            self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
+
+    def move(self, event):
+        """Moves the player's pawn.
+        ----------
+        Input : right click from the mouse on the "validate displacement" button
+        No output"""
+        if self.button_done.cget("state") != "disabled":
+            self.controller.move_pawn((self.destination_li, self.destination_co))
+            
+        else:
+            self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
+
+    # Controller communication methods
+    def app_start(self):
+        self.root.mainloop()
+
     def get_insert_state(self):
         """Sends position and tile orientation to controller.
         ----------
@@ -601,7 +667,7 @@ class GameWindow():
         Output : tuple, int"""
         self.insert_ok = False
         return self.chosen_pos
-
+    
     def anim_tiles_slide(self):
         """Slides the tile on the screen using a timer.
         ----------
@@ -661,7 +727,62 @@ class GameWindow():
         self.pawn_motion = True
         self.cross = False
         self.slid = True
-        
+
+    def get_move_pos(self):
+        """Returns the coordinates of the tile where the player wants to move the pawn.
+        ----------
+        No input
+        Output : 2 intergers"""
+        self.move_ok = False
+        return self.destination_li, self.destination_co
+    
+    def anim_pawn_displacement(self):        
+        depart = self.displacement[0]
+        color = self.controller.give_player_color()
+        pawn = self.find_ident(color, depart)
+        self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
+        self.canvas_board.delete(self.target)
+        self.running_pawn = False
+        self.anim_move_pawn()
+
+    def turn_over(self):
+        """Validates that the player is done with their turn and communicates the changes of player back and forth with the controller.
+        ----------
+        Input : event
+        No output"""
+        if not self.controller.done():
+            #message the end of the game with scores and destroy self.f_graph
+            queue = self.controller.give_queue()
+            winner=  None
+            losers_scores = f""
+            for player in queue.values():
+                if player["objectives"]==[]:
+                    winner = player
+                else:
+                    losers_scores += f"{winner['name']} (player in {winner['color']}) found {(24/len(queue))-len(winner['objectives'])} treasures. \n"
+            self.messagebox(f"{winner['name']} (player in {winner['color']}) won! \n"+losers_scores)
+        else:
+            time.sleep(1)
+            self.canvas_card.delete(self.fg_c)
+            player = self.controller.give_player_name()
+            self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
+            #redo the display of the board
+            self.queue_display()
+            self.objective_image()
+            self.hand_image()
+        #reset varibles
+            self.opposite_button_old = self.opposite_button
+            self.opposite_button = None
+            self.pawn_motion = False
+            self.slid = False
+            self.insert_ok = False
+            self.move_ok = False
+            self.button_done.configure(fg_color = 'grey', state = 'disabled')
+            self.button_valid.configure(state = 'normal', fg_color = 'green')
+   
+    # Animation things
+    ## Animation of tiles
+           
     def storage_update(self, init_pos, out_pos, li, co):
         """Updates the dictionnaries of the grid display.
         ----------
@@ -704,7 +825,7 @@ class GameWindow():
                 self.pawn_dict[(self.chosen_pos[0], i)] = self.pawn_dict[(self.chosen_pos[0], i + r[2])]
         self.tile_dict[init_pos] = None
         self.treasure_dict[init_pos] = None
-
+    
     def lancer(self):
         """Launches the timer loop if it's not already running.
         ----------
@@ -758,79 +879,13 @@ class GameWindow():
         else:
             self.timer_id = self.f_graph.after(100, self.timer_loop)
         
-    def place_pawns(self):
-        """Places circles for the pawns on the boards.
-        ----------
-        No input
-        No output"""
-        # Initialisation of pawn storage
-        self.pawn_dict = {}
-        # Pawn display
-        for position, tile in self.graphics_dict.items():
-            if tile["pawns"] != None:
-                # Position
-                li, co = grid_position(position)
-                # Create circles on the tiles
-                new_pawns = []
-                for color in tile["pawns"]:
-                    if color == "blue": 
-                        new_pawn = self.canvas_board.create_oval(co-20, li+20, co, li, fill = color)
-                    elif color == "red": 
-                        new_pawn =self.canvas_board.create_oval(co, li, co+20, li-20, fill = color) 
-                    elif color == "green": 
-                        new_pawn = self.canvas_board.create_oval(co-20, li, co, li-20, fill = color)
-                    else:
-                        new_pawn = self.canvas_board.create_oval(co, li+20, co+20, li, fill = color)
-                    self.canvas_board.lift(new_pawn)
-                    n_p = {"object":new_pawn, "color":color}
-                    new_pawns.append(n_p)
-                self.pawn_dict[position] = new_pawns
-            else:
-                self.pawn_dict[position] = []
-            
-    
-    def turn_over(self):
-        """Validates that the player is done with their turn and communicates the changes of player back and forth with the controller.
-        ----------
-        Input : event
-        No output"""
-        if not self.controller.done():
-            #message the end of the game with scores and destroy self.f_graph
-            queue = self.controller.give_queue()
-            winner=  None
-            losers_scores = f""
-            for player in queue.values():
-                if player["objectives"]==[]:
-                    winner = player
-                else:
-                    losers_scores += f"{winner['name']} (player in {winner['color']}) found {(24/len(queue))-len(winner['objectives'])} treasures. \n"
-            self.messagebox(f"{winner['name']} (player in {winner['color']}) won! \n"+losers_scores)
-        else:
-            time.sleep(1)
-            self.canvas_card.delete(self.fg_c)
-            player = self.controller.give_player_name()
-            self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
-            #redo the display of the board
-            self.queue_display()
-            self.objective_image()
-            self.hand_image()
-        #reset varibles
-            self.opposite_button_old = self.opposite_button
-            self.opposite_button = None
-            self.pawn_motion = False
-            self.slid = False
-            self.insert_ok = False
-            self.move_ok = False
-            self.button_done.configure(fg_color = 'grey', state = 'disabled')
-            self.button_valid.configure(state = 'normal', fg_color = 'green')
-            self.motion_done = False
-
+             
+    ## Animation of pawns 
     def anim_move_pawn(self):
         """Animates the movement of the pawn to the chosen destination.
         ----------
         No input
         No output"""
-        print('anim begin', self.running_pawn)
         if not(self.running_pawn):
             self.timer_loop_pawn()
         self.running_pawn = True       
@@ -841,11 +896,9 @@ class GameWindow():
         No input
         No output"""
         # Get variables
-        print('pawn loop')
         path = self.dict_anim["path"]
         pawn = self.dict_anim["pawn_info"]["object"]
         previous_step = self.dict_anim["previous_step"]
-    
         
         obj = path.pop(0)
         step_x = (obj[1] - previous_step[1]) * 100
@@ -874,60 +927,9 @@ class GameWindow():
         if self.running_pawn :
             self.f_graph.after_cancel(self.timer_id_pawn) 
         self.running_pawn = False
-        print('pawn stop', self.running_pawn)
         self.controller.end_turn()
        
-        
-    def click_tile(self, event):
-        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
-        ----------
-        Input : right click from the mouse on a tile of the board
-        No output"""
-        # If the pawn can be moved
-        if self.pawn_motion:
-            pos = self.canvas_board.coords(self.canvas_board.find_withtag('current')[0]) # Get tile position with coords
-            # Take note of the objective coordinates
-            self.destination_co = int((pos[0] - 75) / 100)
-            self.destination_li = int((pos[1] - 75) / 100)
-            self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
-            print("displacemant")
-            print(self.displacement)
-            # If there is a cross
-            if self.cross:
-                self.canvas_board.delete(self.target)
-            if self.accessible:
-                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
-                self.button_done.configure(fg_color = "goldenrod", state = "normal")
-            else:
-                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_n)
-                self.button_done.configure(fg_color = "grey", state = "disabled")
-            self.cross = True
-            self.canvas_board.lift(self.target)
-        # If its not the right time to move the pawn
-        else:
-            self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
-
-    def move(self, event):
-        """Moves the player's pawn.
-        ----------
-        Input : right click from the mouse on the "validate displacement" button
-        No output"""
-        if self.button_done.cget("state") != "disabled":
-            self.controller.move_pawn((self.destination_li, self.destination_co))
-            
-        else:
-            self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
-
-
-    def anim_pawn_displacement(self):        
-        depart = self.displacement[0]
-        color = self.controller.give_player_color()
-        pawn = self.find_ident(color, depart)
-        self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
-        self.canvas_board.delete(self.target)
-        self.running_pawn = False
-        self.anim_move_pawn()
-        
+    # Other useful methods
 
     def find_ident(self, color, pos):
         """Identifies a pawn and communicates the info to the controller.
@@ -939,18 +941,6 @@ class GameWindow():
             if pawn['color'] == color:
                 found = pawn
         return found
-
-    def get_move_pos(self):
-        """Returns the coordinates of the tile where the player wants to move the pawn.
-        ----------
-        No input
-        Output : 2 intergers"""
-        self.move_ok = False
-        return self.destination_li, self.destination_co
- 
-    def app_start(self):
-        self.root.mainloop()
-
 
 # General functions    
 def rotate_image(img, orientation):
