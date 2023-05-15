@@ -146,7 +146,7 @@ class GameController:
             filepath_treas = None
         else:
             filepath_treas = self.model.hand.treasure.filepath
-        return self.model.hand.filepath, filepath_treas
+        return self.model.hand.filepath, filepath_treas, self.model.hand.orientation
     
     def give_grid(self):
         """Gives a simplified version of the grid to view

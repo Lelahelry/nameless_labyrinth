@@ -410,7 +410,8 @@ class GameWindow():
         ----------
         No input
         No output"""
-        self.filepath_ti_h, self.filepath_tr_h = self.controller.give_hand() #address of the tile and treasure images
+        self.filepath_ti_h, self.filepath_tr_h, self.orientation_h = self.controller.give_hand() #address of the tile and treasure images
+        self.dict_r ={}
         # Set the image of the tile in hand
         self.hand_tile()
 
@@ -419,19 +420,8 @@ class GameWindow():
               
         # Useful for the rotation display
         self.orientation_h = 0 
-        self.dict_r ={}
+        
 
-    def hand_tile(self):
-        """Displays the tile in hand.
-        ----------
-        No input
-        No output"""
-        if self.bg_h != None:
-            self.canvas_tile.delete(self.bg_h)
-        self.tile_h = tk.PhotoImage(file = self.folder + self.filepath_ti_h)
-        self.tile_h_resized = self.tile_h.zoom(3, 3)
-        self.bg_h = self.canvas_tile.create_image(200, 175, image = self.tile_h_resized)
-        self.canvas_tile.lower(self.bg_h)
 
     def hand_treasure(self):
         """Displays the treasure of the tile in hand.
@@ -466,7 +456,17 @@ class GameWindow():
         Input = integer (sens, i.e., the direction of the rotation)
         No output"""
         # Set new orientation
-        self.orientation_h += sens
+        self.controller.turn_hand_tile(sens)
+        #redo the image
+        self.hand_image
+    
+    def hand_tile(self):
+        """Displays the tile in hand.
+        ----------
+        No input
+        No output"""
+        if self.bg_h != None:
+           self.canvas_tile.delete(self.bg_h)
         # Prepare the image tile
         if self.filepath_ti_h == './tile_corner.png':
             self.ti_h = self.tile_c
@@ -474,6 +474,8 @@ class GameWindow():
             self.ti_h = self.tile_t
         else:
             self.ti_h = self.tile_s
+
+        self.orientation_h = self.controller.give_hand()[2]
         
         self.rotatedc_tile = rotate_image_h(self.ti_h, self.orientation_h)
         self.dict_r[1] = self.rotatedc_tile  
