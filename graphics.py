@@ -503,7 +503,7 @@ class GameWindow():
         Input : right click from the mouse on validate_button
         No output"""
         if self.selected_button == None:
-            self.show_warning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.")
+            self.show_warning("Selection error\nYou need to select an insertion button.\nPlease choose where you want to insert the tile.")
         elif self.button_valid.cget('state') == 'disabled':
             self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
         else:
