@@ -4,6 +4,7 @@ import customtkinter as ctk
 import time
 from PIL import Image, ImageTk
 
+
 ctk.set_appearance_mode("light")  # Modes: system (default), light, dark
 ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
@@ -420,10 +421,7 @@ class GameWindow():
 
         # Set the image of the treasure of the tile (if any)
         self.hand_treasure()
-              
-        # Useful for the rotation display
-        self.orientation_h = 0 
-        
+                      
 
 
     def hand_treasure(self):
@@ -482,7 +480,7 @@ class GameWindow():
             self.ti_h = self.tile_s
 
         self.orientation_h = self.controller.give_hand()[2]
-        
+        print(self.orientation_h)
         self.rotatedc_tile = rotate_image_h(self.ti_h, self.orientation_h)
         self.dict_r[1] = self.rotatedc_tile  
         # Replace self.bg_h with the rotated image
@@ -645,6 +643,7 @@ class GameWindow():
         treasure_filepath = self.filepath_tr_h
         hand_filepath = self.filepath_ti_h
         hand_orientation = self.orientation_h
+        print(hand_orientation, self.controller.give_hand()[2])
         # Initialisation of position
         li, co = grid_position(init_pos)
         # New treasure
@@ -851,6 +850,7 @@ class GameWindow():
         No input
         No output"""
         # Get variables
+        print('panw loop')
         path = self.dict_anim["path"]
         pawn = self.dict_anim["pawn_info"]["object"]
         previous_step = self.dict_anim["previous_step"]
@@ -931,6 +931,7 @@ class GameWindow():
         pawn = self.find_ident(color, depart)
         self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
         self.canvas_board.delete(self.target)
+        print(self.displacement)
         self.anim_move_pawn()
         
 

@@ -36,6 +36,7 @@ class GameController:
             
             if not hand_inserted:
                 self.view.show_warning("Insert position was invalid.")
+        print(self.model.board.grid)
 
     def validate_move(self, newpos):
         pawn = self.model.get_active_player()
