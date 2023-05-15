@@ -19,6 +19,7 @@ class GameWindow():
         self.root.iconbitmap('tr_chest.ico') # Icon of the window
         self.root.geometry("1200x700") # Initial dimensions of the window
             
+
         ########################################
         # Graphic window settings
         ########################################
@@ -65,7 +66,7 @@ class GameWindow():
         self.button_quit.pack(fill = 'x', side = tk.BOTTOM)
         
         # Launch game
-        self.button_launch = ctk.CTkButton(self.root, text = "Start game", corner_radius = 8, height = 60, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20))
+        self.button_launch = ctk.CTkButton(self.root, text = "Start game", corner_radius = 8, height = 60, width = 15, fg_color = "goldenrod", hover_color = "DodgerBlue4", font = ('Calibri', 20), state='normal')
         self.button_launch.bind('<Button-1>', self.game_launch)
         self.button_launch.pack(side = ctk.BOTTOM, fill = 'x')
 
@@ -124,11 +125,13 @@ class GameWindow():
         ----------
         Input : message (str)
         No output"""
-        # Find the names of the players
-        self.get_playernames()
-        
-        # Start game (and init model) through the controller
-        self.controller.start_game(self.playernames)
+        if self.button_launch.cget('state') != 'disabled':  
+            # Find the names of the players
+            self.get_playernames()
+            
+            # Start game (and init model) through the controller
+            self.controller.start_game(self.playernames)
+        self.button_launch.configure(state = 'disabled')
         
     # Callback functions
     def get_playernames(self):
@@ -447,8 +450,8 @@ class GameWindow():
         self.button_clockwise = ctk.CTkButton(self.frame_right_bottombar, text = "⤸", font = ('Calibri', 30, 'bold'), width = 33, height = 33, bg_color = "#EFEFE1", fg_color = "goldenrod", hover_color = "red4")
         self.button_counterclockwise.pack(side = tk.LEFT)
         self.button_clockwise.pack(side = tk.RIGHT)
-        self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(-1))
-        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))
+        self.button_counterclockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(1))
+        self.button_clockwise.bind('<Button-1>', lambda event: self.turn_hand_tile(-1))
 
     def turn_hand_tile(self, sens):
         """Rotates the tile in hand.
@@ -502,18 +505,11 @@ class GameWindow():
         Input : right click from the mouse on validate_button
         No output"""
         if self.selected_button == None:
-            self.selection_error_messagebox()
+            self.show_warning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.")
         elif self.button_valid.cget('state') == 'disabled':
             self.show_warning("You already inserted a tile this turn.\nPlease end your turn.")
         else:
             self.controller.insert_hand()
-    
-    def selection_error_messagebox(self):
-        """Opens a messagebox reminding the player that they didn't choose where to insert the tile although it is mandatory.
-        ----------
-        No input
-        No output"""
-        self.msg_error = tk.messagebox.showwarning("Selection error", "You need to select an insertion button.\nPlease choose where you want to insert the tile.", parent=self.f_graph)
 
     def show_warning(self, text):
         """Opens a messagebox with a custom text.
@@ -915,7 +911,7 @@ class GameWindow():
             self.canvas_board.lift(self.target)
         # If its not the right time to move the pawn
         else:
-            self.msg_error2 = tk.messagebox.showwarning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
+            self.show_warning("Selection error", "You can't choose a displacement now.\nPlease insert your tile first.")
 
     def move(self, event):
         """Moves the player's pawn.
