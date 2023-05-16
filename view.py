@@ -665,6 +665,7 @@ class GameWindow():
         ----------
         No input
         No output"""
+
         # Get which row/column moves
         self.index += 1
         out_pos = self.controller.give_outpos()
@@ -715,6 +716,7 @@ class GameWindow():
         self.opposite_button.configure(fg_color = "grey", state = "disabled")
         self.selected_button.configure(fg_color = "goldenrod")
         self.button_valid.configure(state = "disabled", fg_color = "grey")
+        self.selected_button = None
         # Handle turn unrolling
         self.pawn_motion = True
         self.cross = False
