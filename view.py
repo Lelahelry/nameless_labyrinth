@@ -745,7 +745,7 @@ class GameWindow():
         done = self.controller.done()
         if not done:
             #message the end of the game with scores and destroy self.f_graph
-            self.messagebox(" You are the winner!")
+            self.messagebox("Congratulations, you won!")
             self.f_graph.destroy()
             self.button_launch.configure(state = 'normal')
             self.f_graph = None
@@ -753,7 +753,7 @@ class GameWindow():
             time.sleep(1)
             self.canvas_card.delete(self.fg_c)
             player = self.controller.give_player_name()
-            self.messagebox(text = f"It is {player}'s turn. Please click on ok to start your turn.")
+            self.messagebox(text = f"It is {player}'s turn. Please click on OK to start your turn.")
             #redo the display of the board
             self.queue_display()
             self.objective_image()
