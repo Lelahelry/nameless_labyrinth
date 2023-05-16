@@ -80,7 +80,7 @@ class GameWindow():
         ----------
         Input : right click from the mouse
         No output"""
-        tk.messagebox.showinfo("Labyrinth - Rules", "Goal : Navigate the labyrinth to collect your assigned treasures.\n\nHow to play ?\nYour current objective is displayed in the top right corner of the game window. In the bottom left corner is the tile in your hand.\n\nDuring your turn :\n1 - Insert the tile on the board.\n• Select an insertion position (yellow arrow buttons).\n• Rotate the tile in your hand (yellow rounded arrow buttons).\n• Validate to slide the tiles on the board (green check button).\n2 - Move your pawn on the board (optional) :\n• Click on the tile you wish to go to.\n• Click on 'My turn is over'.\n\nGood luck !")
+        tk.messagebox.showinfo("Labyrinth - Rules", "Goal : Navigate the labyrinth to collect your assigned treasures. The first one to find all their treasures wins! \n\nHow to play ?\nYour current objective is displayed in the top right corner of the game window. In the bottom left corner is the tile in your hand.\n\nDuring your turn :\n1 - Insert the tile on the board.\n• Select an insertion position (yellow arrow buttons).\n• Rotate the tile in your hand (yellow rounded arrow buttons).\n• Validate to slide the tiles on the board (green check button).\n2 - Move your pawn on the board (optional) :\n• Click on the tile you wish to go to.\n• Click on 'My turn is over'.\n\nGood luck !")
 
     def show_tip(self, event):
         """Shows a "Rules" label when hovering the mouse over the "?" rules_button.
