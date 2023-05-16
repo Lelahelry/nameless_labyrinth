@@ -12,7 +12,7 @@ def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
         yield (a, b)
         a = b
 
-def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterator[T]]) -> Iterator[list[T]]:
+def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterable[T]]) -> Iterator[list[T]]:
     queue = [[origin]]
     visited = {origin}
 

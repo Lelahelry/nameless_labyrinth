@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from model import GameData
-from graphics import GameWindow
+from view import GameWindow
 from utils import bfs_walk
 
 
@@ -37,14 +37,14 @@ class GameController:
             case _:
                 self.view.show_warning("Insert position was invalid.")
 
-    def validate_move(self, newpos: tuple[int, int]):
+    def validate_move(self, newpos: tuple[int, int]) -> bool:
         """Walks through the board starting from the active player's position until the destination is reached.
         If destination is reached, stores the path in a class attribute and returns True, else returns False.
         ----------
         Input: destination position
         Output: bool"""
         pawn = self.model.get_active_player()
-        startpos, start_tile = self.model.get_pawn_container(pawn)
+        startpos, _ = self.model.get_pawn_container(pawn)
         end_reached = False
 
         steps = []
