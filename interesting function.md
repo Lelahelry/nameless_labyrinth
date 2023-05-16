@@ -1,5 +1,7 @@
 # Non-trivial function description
 
+## Introduction, MVC
+
 For the **algorithmically interesting function description**, we're going to take a deep dive through the code of the `GameController.validate_move` method.
 
 In order to properly introduce this method, we'll first talk about the `GameController` class, which defines the object that will orchestrate game flow, provide interaction between the **User Interface** and the **Game State** and be the entrypoint of the application. This class posseses two main attributes:
@@ -11,7 +13,11 @@ As a technical fact, this design pattern is called a **Model-View-Controller arc
 
 All this talk is relevant to our explanation, first because it provides context on why we do things the way we do, and second because it now allows us to describe the calling context of our interesting method.
 
-We can now say that the `validate_move` is called by the view upon the user clicking on a `Tile` on which they want to move their `Pawn` by way of an intermediate callback method tied to the `Board` canvas. Now, let's look at the code of our method:
+We can now say that the `validate_move` is called by the view upon the user clicking on a `Tile` on which they want to move their `Pawn` by way of an intermediate callback method tied to the `Board` canvas.
+
+## Destructuring / Unpacking
+
+Now, let's look at the code of our method:
 
 ```py
 class GameController:
@@ -52,9 +58,12 @@ Since the `get_pawn_container` method returns a 2-tuple, we use a **destructurin
 
 Then we simply initialize another boolean variable that will enable us to optimize our code.
 
+## Iterables, Iterators, Generators
+
 Now, reaching the meat of the method.
 
 ```py
+...
 steps = []
 paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not end_reached)
 for path in paths:
@@ -63,6 +72,7 @@ for path in paths:
     if endpos == newpos:
         end_reached = True
         steps = path
+...
 ```
 
 We first initialize the steps variable as an empty list since we need it define on every possible code path. From here, we finally need to understand the concepts of `Iterable`, `Iterator` and `Generator` as they are defined **in Python**.
@@ -76,6 +86,8 @@ We first initialize the steps variable as an empty list since we need it define 
 Per the previous definitions, we understand that **using generators gives us iterators**, that **iterators are iterables** and that **iterables can be, but are not always iterators**.
 
 Examples of **common iterables are most sequence and container types**, such as `list`, `dict`, `tuple`, `set` and more. Examples of **common generator functions** are the `enumerate` and `zip` utilities. There are really no common examples of iterators as they are a common, unseen part of **Python**'s inner workings.
+
+## For loops, examples
 
 Now, we can understand what really happens when using a `for` loop. Let's review a few examples:
 
@@ -119,10 +131,14 @@ In practice, it is preferable to use functions such as `enumerate` and `zip` wit
 With all that, we can now understand the next line of our interesting method:
 
 ```py
+...
 paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if not end_reached)
+...
 ```
 
 Here, we use **generator comprehension** syntax to create a generator from another generator. We simply arrange the elements as they are given by `bfs_walk`, only adding a confition for passing the elements at the end. What needs to be known here is that conditinal expressions are **lazy evaluated** in generator expressions. This means that the condition will actually be inspected by the interpreter **only when it actually needs to access each element** (i.e., when `__next__` is called), and **not at instanciation time** like if we had used a list comprehension. This allows us to **dynamically adjust the iterator by updating the condition**.
+
+## BFS, adjacency function
 
 By now, you may have guessed that `bfs_walk` is another generator that yields elements in BFS order, and you'd be almost right! Let's take a look at its definition:
 
@@ -171,9 +187,13 @@ class Board:
 We see that this `Board` method takes the origin coordinates as input, computes the origin's adjacencies with that of its neighbors, and then yields the connected neighbors' positions.
 
 Now, we understand that **paths is an iterator over the possible paths that the current player can take**, starting from its own position.
+
+## Method end
+
 Finally, we can take a look at the rest of the method:
 
 ```py
+...
 for path in paths:
 
     endpos = path[-1]
@@ -187,4 +207,10 @@ return end_reached
 
 Iterating over the BFS paths in BFS order, we are confident that **we will reach our objective if it is possible to do so**. We check if we reach our desired position and if so, update the condition and the steps list. Thanks to lazy evaluation, changing `end_reached` to `True` allows us to **stop iterating uselessly as soon as possible** (all while avoid the use of `break` keywords and `while` loops).
 
-We finally record the path so that the controller can remember it and return the validity of the move to the caller
+We finally record the path so that the controller can remember it and return the validity of the move to the caller.
+
+## Conclusion
+
+This marks the end of the `validate_move` algorithmic description. To sum up, you now should grasp the concepts of MVC design patterns, destructuring/unpacking, Iterables/Iterators/Generators, For-loop internals and BFS!
+
+Thanks for reading us, we hope you liked this :)
