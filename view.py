@@ -75,27 +75,6 @@ class GameWindow():
         self.rules_button.bind('<Leave>', self.hide_tip)
         self.rules_button.place(x = 10, y = 10)
 
-    def show_rules(self, event):
-        """Displays the game rules in a Messagebox when the "?" rules_button is clicked.
-        ----------
-        Input : right click from the mouse
-        No output"""
-        tk.messagebox.showinfo("Labyrinth - Rules", "Goal : Navigate the labyrinth to collect your assigned treasures. The first one to find all their treasures wins! \n\nHow to play ?\nYour current objective is displayed in the top right corner of the game window. In the bottom left corner is the tile in your hand.\n\nDuring your turn :\n1 - Insert the tile on the board.\n• Select an insertion position (yellow arrow buttons).\n• Rotate the tile in your hand (yellow rounded arrow buttons).\n• Validate to slide the tiles on the board (green check button).\n2 - Move your pawn on the board (optional) :\n• Click on the tile you wish to go to.\n• Click on 'My turn is over'.\n\nGood luck !")
-
-    def show_tip(self, event):
-        """Shows a "Rules" label when hovering the mouse over the "?" rules_button.
-        ----------
-        Input : mouse hovering above the rules_button
-        No output"""
-        self.tip = ctk.CTkLabel(self.root, text = "Rules", font = ("Calibri", 12), bg_color = "gainsboro", width = 50)
-        self.tip.place(x = 55, y = 11)
-    
-    def hide_tip(self, event):
-        """Hides the "Rules" label when the mouse is not over the "?" rules_button anymore.
-        ----------
-        Input : mouse left the rules_button area
-        No output"""
-        self.tip.destroy()
  
     def add_playernames(self, event):
         """Adds entry bars for players to enter custom names (optional).
@@ -143,6 +122,28 @@ class GameWindow():
             if name == "":
                 name = "Player" + str(i+1) # Default name
             self.playernames.append(name) 
+
+    def show_rules(self, event):
+        """Displays the game rules in a Messagebox when the "?" rules_button is clicked.
+        ----------
+        Input : right click from the mouse
+        No output"""
+        tk.messagebox.showinfo("Labyrinth - Rules", "Goal : Navigate the labyrinth to collect your assigned treasures. The first one to find all their treasures wins! \n\nHow to play ?\nYour current objective is displayed in the top right corner of the game window. In the bottom right corner is the tile in your hand.\n\nDuring your turn :\n1 - Insert the tile on the board.\n• Select an available insertion position (yellow arrow buttons).\n• Rotate the tile in your hand (yellow rounded arrow buttons).\n• Validate to slide the tiles on the board (green check button).\n2 - Move your pawn on the board :\n• Click on the tile you wish to go to.\n• If you want to stay on your tile, click on the tile where your pawn stands.\n• Click on 'Confirm pawn displacement'.\n\nGood luck !")
+
+    def show_tip(self, event):
+        """Shows a "Rules" label when hovering the mouse over the "?" rules_button.
+        ----------
+        Input : mouse hovering above the rules_button
+        No output"""
+        self.tip = ctk.CTkLabel(self.root, text = "Rules", font = ("Calibri", 12), bg_color = "gainsboro", width = 50)
+        self.tip.place(x = 55, y = 11)
+    
+    def hide_tip(self, event):
+        """Hides the "Rules" label when the mouse is not over the "?" rules_button anymore.
+        ----------
+        Input : mouse left the rules_button area
+        No output"""
+        self.tip.destroy()
     
     def display_game(self):
         """Creates the graphic window for current game display.
@@ -723,11 +724,10 @@ class GameWindow():
         self.slid = True
 
     def get_move_pos(self):
-        """Returns the coordinates of the tile where the player wants to move the pawn.
+        """Returns the coordinates of the tile where the player wants to move the pawn. 
         ----------
         No input
         Output : 2 intergers"""
-        self.move_ok = False
         return self.destination_li, self.destination_co
     
     def anim_pawn_displacement(self):        
@@ -765,7 +765,6 @@ class GameWindow():
             self.opposite_button = None
             self.pawn_motion = False
             self.slid = False
-            self.move_ok = False
             self.button_done.configure(fg_color = 'grey', state = 'disabled')
             self.button_valid.configure(state = 'normal', fg_color = 'green')
    
