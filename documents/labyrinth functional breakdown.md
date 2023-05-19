@@ -13,15 +13,19 @@
 - Congratulate winner
 
 ## Data structures
- The code was split into 5 separate python files:
-   - model: this code has all the declarations of classes useful for the game and the game class in itself
-   - view: this code handles all the aspects of the graphic display
-   - controller: this code is used as a communication medium linking the view to its model
-   - utils: this code contains all the functions useful for the unrolling of the game algorithm but directly manipulating the objects
-   - main : this code is the one initialising the game. It is the code that should be executed to start our program.
+
+The code was split into 5 separate python files:
+
+- model: this code has all the declarations of classes useful for the game and the game class in itself
+- view: this code handles all the aspects of the graphic display
+- controller: this code is used as a communication medium linking the view to its model
+- utils: this code contains all the functions useful for the unrolling of the game algorithm but directly manipulating the objects
+- main : this code is the one initialising the game. It is the code that should be executed to start our program.
 
 ## Description of model.py
+
   The model creates all the objects used in the labyrinth game and the game object in itself, which stores the state of the game.
+
 ```python
 @dataclass(frozen = True)
 class Treasure:
@@ -194,7 +198,9 @@ class GameData:
 ```
 
 ## Description of view.py
+
 - The view is all about the graphic interface elements. There are 2 main windows: the window to prepare the game and the one that represents the current game.
+
 ``` python
 class GameWindow():
     def __init__(self, controller):
@@ -523,7 +529,9 @@ def grid_position(pos):
 ```
 
 ## Descrition of controller.py
-  The controller establishes communication between the model and the view. It is able to communicate with both and is responsible for both their creation. It is represented by a class instance, calling its method allow to modify the view and the model or to get information from them.
+
+The controller establishes communication between the model and the view, as well as orchestrating most of the game flow and logic. It is able to communicate with both and is responsible for both their creation. It is represented by a class instance, calling its methods allow to modify the view and the model or to get information from them.
+
 ```python
 @dataclass
 class GameController:
@@ -660,11 +668,15 @@ class GameController:
         Output : bool (game_active)"""
 
 ```
+
 ## Description of main
-  Main executes and creates the controller which is in charge of distributing the tasks to view and model.
+
+Main executes and creates the controller which is in charge of distributing the tasks to view and model.
 
 ## Description of utils
-  Functions contained: 
+
+Functions contained:
+
   ```python
 def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
     """Iterates over an iterable pairwise, i.e. (0, 1), (1, 2), (2, 3), ...
@@ -684,4 +696,3 @@ def adjacent_coords_cw(pos: tuple[int, int], side) -> tuple[int, int]:
     Input: position (tuple[int,int]), side
     Output: adjacent position (tuple[int,int])"""
 ```
-
