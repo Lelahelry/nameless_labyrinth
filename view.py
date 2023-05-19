@@ -621,8 +621,7 @@ class GameWindow():
             self.controller.insert_hand(self.chosen_pos)
 
     def click_tile(self, event):
-        """Places a cross where the player wants to move their pawn. The cross color depends on whether the tile is accessible or not.
-        Controller verfies accessiblity and gives a possible path if so. The destination coordinates on the grid are registered.
+        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
         ----------
         Input : right click from the mouse on a tile of the board
         No output"""
@@ -632,11 +631,12 @@ class GameWindow():
             # Take note of the objective coordinates
             self.destination_co = int((pos[0] - 75) / 100)
             self.destination_li = int((pos[1] - 75) / 100)
-            self.accessible, self.displacement = self.controller.validate_move((self.destination_li, self.destination_co))
+            reachable = self.controller.validate_move((self.destination_li, self.destination_co))
+            
             # If there is a cross
             if self.cross:
                 self.canvas_board.delete(self.target)
-            if self.accessible:
+            if reachable:
                 self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
                 self.button_done.configure(fg_color = "goldenrod", state = "normal")
             else:
@@ -648,13 +648,14 @@ class GameWindow():
         else:
             self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
 
-    def move(self, event):
-        """Moves the player's pawn in the model(through controller) and the view.
+
+    def confirm_move(self, event):
+        """Moves the player's pawn.
         ----------
-        Input : right click from the mouse on the "validate displacement" button
+        Input : left click from the mouse on the "confirm displacement" button
         No output"""
         if self.button_done.cget("state") != "disabled":
-            self.controller.move_pawn((self.destination_li, self.destination_co))
+            self.controller.apply_move()
             
         else:
             self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
@@ -735,15 +736,15 @@ class GameWindow():
         Output : 2 intergers"""
         return self.destination_li, self.destination_co
     
-    def anim_pawn_displacement(self):    
+    def anim_pawn_displacement(self, path):    
         """Prepares the required information for the animation of the pawn. And begins the animation of the pawn
         ----------
-        No input
+        Input : list of tuples
         No output"""       
-        depart = self.displacement[0]
+        depart = path[0]
         color = self.controller.give_player_color()
         pawn = self.find_ident(color, depart)
-        self.dict_anim = {"path": self.displacement, "pawn_info": pawn, "previous_step": depart}
+        self.dict_anim = {"path": path, "pawn_info": pawn, "previous_step": depart}
         self.canvas_board.delete(self.target)
         self.running_pawn = False
         self.anim_move_pawn()
@@ -937,6 +938,12 @@ class GameWindow():
             if pawn['color'] == color:
                 found = pawn
         return found
+    
+
+
+
+        
+
 
 # General functions    
 def rotate_image(img, orientation):

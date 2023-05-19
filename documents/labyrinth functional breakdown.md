@@ -407,7 +407,7 @@ class GameWindow():
         Input : right click from the mouse on a tile of the board
         No output"""
         
-    def move(self, event):
+    def confirm_move(self, event):
         """Moves the player's pawn in the model(through controller) and the view.
         ----------
         Input : right click from the mouse on the "validate displacement" button
