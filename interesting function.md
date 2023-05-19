@@ -136,7 +136,7 @@ paths = (path for path in bfs_walk(startpos, self.model.get_adjacency_fn()) if n
 ...
 ```
 
-Here, we use **generator comprehension** syntax to create a generator from another generator. We simply arrange the elements as they are given by `bfs_walk`, only adding a confition for passing the elements at the end. What needs to be known here is that conditinal expressions are **lazy evaluated** in generator expressions. This means that the condition will actually be inspected by the interpreter **only when it actually needs to access each element** (i.e., when `__next__` is called), and **not at instanciation time** like if we had used a list comprehension. This allows us to **dynamically adjust the iterator by updating the condition**.
+Here, we use **generator comprehension** syntax to create a generator from another generator. We simply arrange the elements as they are given by `bfs_walk`, only adding a condition for passing the elements at the end. What needs to be known here is that conditionnal expressions are **lazy evaluated** in generator expressions. This means that the condition will actually be inspected by the interpreter **only when it actually needs to access each element** (i.e., when `__next__` is called), and **not at instanciation time** like if we had used a list comprehension. This allows us to **dynamically adjust the iterator by updating the condition**.
 
 ## BFS, adjacency function
 
