@@ -186,13 +186,21 @@ class GameController:
         return self.model.get_slideout_position()
 
     def rotate_hand_clockwise(self):
+        """Rotates the hand clockwise in the model.
+        ----------
+        No input
+        No output"""
         self.model.hand.rotate_cw()
 
     def rotate_hand_counterclockwise(self):
+        """Rotates the hand counterclockwise in the model.
+        ----------
+        No input
+        No output"""
         self.model.hand.rotate_ccw()
     
     def start_game(self, playernames: list[str]):
-        """Launches the game and every turn until someone won.
+        """Launches the game in general.
         ----------
         No input
         No output"""
@@ -208,4 +216,8 @@ class GameController:
         self.view.app_start()
 
     def done(self):
+        """Verifies if someone won the game.
+        ----------
+        No input
+        Output : bool (game_active)"""
         return self.game_active 

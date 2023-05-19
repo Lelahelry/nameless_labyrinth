@@ -5,6 +5,10 @@ from typing import Iterable, Callable, Iterator, TypeVar
 T = TypeVar('T')
 
 def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
+    """Iterates over an iterable pairwise, i.e. (0, 1), (1, 2), (2, 3), ...
+    ----------
+    Input: iterable
+    Output: iterator of tuples"""
     it = iter(r)
 
     a = next(it)
@@ -13,6 +17,10 @@ def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
         a = b
 
 def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterable[T]]) -> Iterator[list[T]]:
+    """Walks through a graph using breadth-first search.
+    ----------
+    Input: origin node, adjacency function
+    Output: iterator of paths"""
     queue = [[origin]]
     visited = {origin}
 
@@ -30,6 +38,10 @@ def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterable[T]]) -> Iterator[li
                 queue.append(newpath)
 
 def adjacent_coords_cw(pos: tuple[int, int], side) -> tuple[int, int]:
+    """Returns the coordinates of the tile adjacent to the given position on the given side.
+    ----------
+    Input: position (tuple[int,int]), side
+    Output: adjacent position (tuple[int,int])"""
     i, j = pos
 
     match side:
