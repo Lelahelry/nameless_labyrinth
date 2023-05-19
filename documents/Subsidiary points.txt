@@ -1,0 +1,12 @@
+Since every student took part in the project and gave time to make it happen, 
+we didn't feel there should be inequalities in the points repartition between us.
+Each student of the team will get 1 point.
+
+General task repartition:
+- architecture reflexion: all
+- coding the model : Léa, Lélahel, Clémentine
+- coding the graphical display : Clémentine, Marine, Léa
+- coding the controller and describing the complex function: Lélahel
+- json file and all the graphic identtiy of the game: Marine
+- functionnal breakdown : all
+- final presentation video : Marine, Léa
