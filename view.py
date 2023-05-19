@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import random
 import tkinter as tk
 import customtkinter as ctk
 import time
@@ -11,6 +10,9 @@ ctk.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
 class GameWindow():
     def __init__(self, controller):
+        """Creates the welcome window and some game variables.
+        Input : GameController
+        No output"""
         from controller import GameController
 
         self.controller: GameController = controller
@@ -39,10 +41,10 @@ class GameWindow():
         self.widgets_creation(self.root)
 
     def widgets_creation(self, root):
-        """Creates all necessary widgets for the welcome window.
+        """Creates all necessary widgets and variables for the welcome window.
         ----------
         Input : root
-        No output"""
+        No output""" 
         # Text : game title
         self.welcome = ctk.CTkLabel(root, height = 120, text = "Welcome to the aMAZEing Labyrinth - Software version !", text_color = "DodgerBlue4", font = ('Calibri', 28, 'bold'))
         self.welcome.pack(side = tk.TOP)
@@ -74,29 +76,7 @@ class GameWindow():
         self.rules_button.bind('<Enter>', self.show_tip)
         self.rules_button.bind('<Leave>', self.hide_tip)
         self.rules_button.place(x = 10, y = 10)
-
- 
-    def add_playernames(self, event):
-        """Adds entry bars for players to enter custom names (optional).
-        ----------
-        Input : Slider is released at a position (i.e. a new number of players)
-        No output"""
-        length = self.player_number.get()
-
-        if length > len(self.playernames_e):
-            # Add new player name entries
-            for i in range(1, length - len(self.playernames_e) + 1):
-                name = "Player" + str(len(self.playernames_e) + 1)
-                entry = ctk.CTkEntry(self.root,text_color = "DodgerBlue4", placeholder_text = name,  height = 50, width = 200, font = ('Calibri', 16))
-                entry.pack(padx = 10, pady = 10, anchor = ctk.CENTER)
-                self.playernames_e.append(entry)
-
-        elif length < len(self.playernames_e): 
-            diff = len(self.playernames_e) - length
-            # Empty player names and change entries
-            for i in range(diff):
-                self.playernames_e.pop().pack_forget()
-           
+          
     def game_launch(self, message):
         """Creation of the current game window.
         ----------
@@ -145,6 +125,27 @@ class GameWindow():
         No output"""
         self.tip.destroy()
     
+    def add_playernames(self, event):
+        """Adds or removes entry bars for players to enter custom names (optional).
+        ----------
+        Input : Slider is released at a position (i.e. a new number of players)
+        No output"""
+        length = self.player_number.get()
+
+        if length > len(self.playernames_e):
+            # Add new player name entries
+            for i in range(1, length - len(self.playernames_e) + 1):
+                name = "Player" + str(len(self.playernames_e) + 1)
+                entry = ctk.CTkEntry(self.root,text_color = "DodgerBlue4", placeholder_text = name,  height = 50, width = 200, font = ('Calibri', 16))
+                entry.pack(padx = 10, pady = 10, anchor = ctk.CENTER)
+                self.playernames_e.append(entry)
+
+        elif length < len(self.playernames_e): 
+            diff = len(self.playernames_e) - length
+            # Empty player names and change entries
+            for i in range(diff):
+                self.playernames_e.pop().pack_forget()
+
     def display_game(self):
         """Creates the graphic window for current game display.
         ----------
@@ -274,10 +275,10 @@ class GameWindow():
                 self.label_storage[i].pack(side = tk.TOP)
 
     def canvas_for_board(self):
-        """Creates the canvas for the board with the background.
+        """Creates the canvas for the board with the background and the foreground.
         ----------
         No input
-        No output"""        
+        No output"""    
         self.canvas_board = tk.Canvas(self.frame_left, width = 752, height = 752, bg = "#EFEFE1")
         
         self.grid_images() 
@@ -368,7 +369,7 @@ class GameWindow():
         self.bouton36.pack( pady =55)
 
     def canvas_for_objective(self):
-        """Creates the canvas to display the current objective of the player.
+        """Creates the canvas to display the current objective of the player filles it with the background and foreground.
         ----------
         No input
         No output """
@@ -403,7 +404,7 @@ class GameWindow():
         self.canvas_card.lift(self.fg_c)
         
     def canvas_for_hand(self):
-        """Creates the canvas for the tile in hand.
+        """Creates the canvas for the tile in hand in its canvas.
         ----------
         No input
         No output"""
@@ -412,7 +413,7 @@ class GameWindow():
         self.canvas_tile.pack(side = tk.TOP, anchor = 'e')
 
     def hand_image(self):
-        """Displays the tile in hand in its canvas and binds it to the rotation function.
+        """Displays the tile in hand in its canvas.
         ----------
         No input
         No output"""
@@ -440,7 +441,7 @@ class GameWindow():
             self.canvas_tile.lift(self.fg_h)
 
     def hand_tile(self):
-        """Displays the tile in hand.
+        """Displays the tile background in hand.
         ----------
         No input
         No output"""
@@ -462,7 +463,7 @@ class GameWindow():
         self.canvas_tile.lower(self.bg_h)
 
     def turn_tile_buttons(self):
-        """Creates the buttons next to the hand allowing to change the orientation of the tile in hand.
+        """Creates the buttons next to the hand allowing to change the orientation of the tile in hand and binds them to the image and model update.
         ----------
         No input
         No output"""
@@ -484,8 +485,8 @@ class GameWindow():
         self.button_valid.pack()
         
     def grid_images(self):
-        """Associates tiles to treasures and stocks them.
-        Displays the tiles on the board in its canvas and binds it to the sliding.
+        """Displays the tiles on the board in its canvas and binds it to the sliding.
+        Same actions for the treasures. All images are stocked as images and as elements of the canvas.
         ----------
         No input
         No output"""
@@ -572,10 +573,10 @@ class GameWindow():
         
     # Buttons methods
     def select_insertion_button(self, pos, button_in, button_out):
-        """Changes the color of the selected button and gets its position.
+        """Changes the color of the selected button to mark it as chosen and gets its position.
         ----------
         Input : tuple (pos), 2 widgets (button_in, button_out)
-        No output"""
+        No output""" 
         # Change color : when clicked, becomes red4 and stays that way unless a different insertion button was selected
         # Find button selected by the player
         if button_in.cget("state") != "disabled" and not self.slid:
@@ -608,7 +609,7 @@ class GameWindow():
         self.hand_tile() 
 
     def check_insertion(self, event):
-        """Verify that the player did select where to insert the tile in hand.
+        """Verify that the player did select a valid place to insert the tile in hand.
         ----------
         Input : right click from the mouse on validate_button
         No output"""
@@ -620,7 +621,8 @@ class GameWindow():
             self.controller.insert_hand(self.chosen_pos)
 
     def click_tile(self, event):
-        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
+        """Places a cross where the player wants to move their pawn. The cross color depends on whether the tile is accessible or not.
+        Controller verfies accessiblity and gives a possible path if so. The destination coordinates on the grid are registered.
         ----------
         Input : right click from the mouse on a tile of the board
         No output"""
@@ -647,7 +649,7 @@ class GameWindow():
             self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
 
     def move(self, event):
-        """Moves the player's pawn.
+        """Moves the player's pawn in the model(through controller) and the view.
         ----------
         Input : right click from the mouse on the "validate displacement" button
         No output"""
@@ -659,10 +661,13 @@ class GameWindow():
 
     # Controller communication methods
     def app_start(self):
+        """Starts the interface
+        No input
+        No output"""
         self.root.mainloop()
     
     def anim_tiles_slide(self):
-        """Slides the tile on the screen using a timer.
+        """Slides the tile on the screen using a timer. Prepares the animation by changing the displayed tiles. Updates the sorage of every graphical object and manages the turn unrolling by enabling the pawn movement features and disabling the tile insertion features.
         ----------
         No input
         No output"""
@@ -730,7 +735,11 @@ class GameWindow():
         Output : 2 intergers"""
         return self.destination_li, self.destination_co
     
-    def anim_pawn_displacement(self):        
+    def anim_pawn_displacement(self):    
+        """Prepares the required information for the animation of the pawn. And begins the animation of the pawn
+        ----------
+        No input
+        No output"""       
         depart = self.displacement[0]
         color = self.controller.give_player_color()
         pawn = self.find_ident(color, depart)
@@ -740,9 +749,9 @@ class GameWindow():
         self.anim_move_pawn()
 
     def turn_over(self):
-        """Validates that the player is done with their turn and communicates the changes of player back and forth with the controller.
+        """Verifies if the game is over and if not, prepares the next turn.
         ----------
-        Input : event
+        No input 
         No output"""
         done = self.controller.done()
         if not done:
@@ -815,7 +824,7 @@ class GameWindow():
         self.treasure_dict[init_pos] = None
     
     def lancer(self):
-        """Launches the timer loop if it's not already running.
+        """Launches the timer loop if it's not already running for the tile animation.
         ----------
         No input
         No output"""
@@ -825,19 +834,19 @@ class GameWindow():
         self.running = True
         
     def stop(self):
-        """Stops the timer loop if it is running.
+        """Stops the timer loop if it is running for the tile animation.
         ----------
         No input
-        No output"""        
+        No output"""     
         if self.running :
             self.f_graph.after_cancel(self.timer_id) 
         self.running = False
 
     def timer_loop(self):
-        """Defines the loop that is handled by the timer : allows image displacement and display.
+        """Defines the loop that is handled by the timer : allows image displacement and display fror the tile animation.
         ----------
         No input
-        No output"""
+        No output"""     
         if self.slider == "col_d" or self.slider == "lin_r":
             r = (0, 7, 1)
         else:
@@ -870,16 +879,16 @@ class GameWindow():
              
     ## Animation of pawns 
     def anim_move_pawn(self):
-        """Animates the movement of the pawn to the chosen destination.
+        """Launches the timer loop if it's not already running for the pawn animation.
         ----------
         No input
-        No output"""
+        No output""" 
         if not(self.running_pawn):
             self.timer_loop_pawn()
         self.running_pawn = True       
     
     def timer_loop_pawn(self):
-        """Moves the pawn one step at a time on the board.
+        """Defines the loop that is handled by the timer : allows image displacement and display fror the pawn animation.
         ----------
         No input
         No output"""
@@ -908,7 +917,7 @@ class GameWindow():
             self.stop_pawn()
 
     def stop_pawn(self):
-        """Stops the animation of the pawn.
+        """Stops the timer loop if it is running for the pawn animation.
         ----------
         No input
         No output"""
@@ -916,63 +925,13 @@ class GameWindow():
             self.f_graph.after_cancel(self.timer_id_pawn) 
         self.running_pawn = False
         self.controller.end_turn()
-       
-        
-    def click_tile(self, event):
-        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
-        ----------
-        Input : right click from the mouse on a tile of the board
-        No output"""
-        # If the pawn can be moved
-        if self.pawn_motion:
-            pos = self.canvas_board.coords(self.canvas_board.find_withtag('current')[0]) # Get tile position with coords
-            # Take note of the objective coordinates
-            self.destination_co = int((pos[0] - 75) / 100)
-            self.destination_li = int((pos[1] - 75) / 100)
-            reachable = self.controller.validate_move((self.destination_li, self.destination_co))
-            
-            # If there is a cross
-            if self.cross:
-                self.canvas_board.delete(self.target)
-            if reachable:
-                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_o)
-                self.button_done.configure(fg_color = "goldenrod", state = "normal")
-            else:
-                self.target = self.canvas_board.create_image(pos[0], pos[1], image = self.target_pic_n)
-                self.button_done.configure(fg_color = "grey", state = "disabled")
-            self.cross = True
-            self.canvas_board.lift(self.target)
-        # If its not the right time to move the pawn
-        else:
-            self.show_warning("Selection error \nYou can't choose a displacement now.\nPlease insert your tile first.")
 
-    def confirm_move(self, event):
-        """Moves the player's pawn.
-        ----------
-        Input : left click from the mouse on the "confirm displacement" button
-        No output"""
-        if self.button_done.cget("state") != "disabled":
-            self.controller.apply_move()
-            
-        else:
-            self.show_warning("Move error \n You can't move your pawn here or you can't move for the moment.")
-
-
-    def anim_pawn_displacement(self, path):        
-        depart = path[0]
-        color = self.controller.give_player_color()
-        pawn = self.find_ident(color, depart)
-        self.dict_anim = {"path": path, "pawn_info": pawn, "previous_step": depart}
-        self.canvas_board.delete(self.target)
-        self.running_pawn = False
-        self.anim_move_pawn()
-        
-
+    # Useful method for the pawn animation
     def find_ident(self, color, pos):
-        """Identifies a pawn and communicates the info to the controller.
+        """Identifies a pawn circle on the canvas using its position tile and its color.
         ----------
         Input : str, tuple
-        Output : pawn"""
+        Output : Int (identifier of the canvas object)"""
         found = None
         for pawn in self.pawn_dict[pos]:
             if pawn['color'] == color:
