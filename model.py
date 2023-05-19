@@ -195,7 +195,7 @@ class GameData:
     board: Board
     hand: MovingTile # Tile that last slid out of the board, returned by Board.slide_tile method
 
-    def __init__(self, datapath: str, playernames: list[str]):
+    def __init__(self, playernames: list[str]):
         '''Initializes the game objects.
         Input : str, list[str]
         Output : None'''

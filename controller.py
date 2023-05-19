@@ -204,7 +204,7 @@ class GameController:
         ----------
         No input
         No output"""
-        self.model = GameData("", playernames)
+        self.model = GameData(playernames)
         self.game_active = True
         self.view.display_game()
     

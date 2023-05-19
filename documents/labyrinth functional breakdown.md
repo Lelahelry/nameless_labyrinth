@@ -147,13 +147,13 @@ class Board:
 @dataclass
 class GameData:
     """Encapsulates all data related to an individual game's state and can provide insight into it to external callers.
-    Input : str, list[str]
+    Input : list[str]
     No output"""
     queue: list[Pawn] # Rotating queue for playing order
     board: Board
     hand: MovingTile # Tile that last slid out of the board, returned by Board.slide_tile method
 
-    def __init__(self, datapath: str, playernames: list[str]):
+    def __init__(self, playernames: list[str]):
         '''Initializes the game objects.
         ----------
         Input : str, list[str]
