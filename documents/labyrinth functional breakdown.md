@@ -379,7 +379,7 @@ class GameWindow():
         """Places circles for the pawns on the boards.
         ----------
         No input
-        Output: Colored circles on canvas"""
+        No output"""
         
     # Buttons methods
     def select_insertion_button(self, pos, button_in, button_out):
@@ -407,12 +407,18 @@ class GameWindow():
         Input : right click from the mouse on a tile of the board
         No output"""
         
-
     def move(self, event):
         """Moves the player's pawn in the model(through controller) and the view.
         ----------
         Input : right click from the mouse on the "validate displacement" button
         No output"""
+
+    def click_tile(self, event):
+        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
+        ----------
+        Input : right click from the mouse on a tile of the board
+        No output"""
+        
         
     # Controller communication methods
     def app_start(self):
@@ -489,24 +495,7 @@ class GameWindow():
         ----------
         No input
         No output"""
-        
-    def click_tile(self, event):
-        """Places a cross where the player wants to move their pawn and registers the grid coordinates.
-        ----------
-        Input : right click from the mouse on a tile of the board
-        No output"""
-        
-    def confirm_move(self, event):
-        """Moves the player's pawn in model and view.
-        ----------
-        Input : left click from the mouse on the "confirm displacement" button
-        No output"""
-        
-    def anim_pawn_displacement(self, path):       
-        """Prepares the required information for the animation of the pawn. And begins the animation of the pawn
-        Input : list[tuple[int, int]]] 
-        No output"""
-
+    # Usefulmethod for animation
     def find_ident(self, color, pos):
         """Identifies a pawn circle on the canvas using its position tile and its color.
         ----------
