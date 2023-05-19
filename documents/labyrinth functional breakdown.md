@@ -13,7 +13,7 @@
 - Congratulate winner
 
 ## Data structures
- - the code was split into 5 separate python files:
+ The code was split into 5 separate python files:
    - model: this code has all the declarations of classes useful for the game and the game class in itself
    - view: this code handles all the aspects of the graphic display
    - controller: this code is used as a communication medium linking the view to its model
@@ -21,7 +21,7 @@
    - main : this code is the one initialising the game. It is the code that should be executed to start our program.
 
 ## Description of model.py
-- The model creates all the objects used in the labyrinth game and the game object in itself, which stores the state of the game.
+  The model creates all the objects used in the labyrinth game and the game object in itself, which stores the state of the game.
 ```python
 @dataclass(frozen = True)
 class Treasure:
@@ -523,11 +523,165 @@ def grid_position(pos):
 ```
 
 ## Descrition of controller.py
-- The controller establishes communication between the model and the view. It is able to communicate with both and is responsible for both their creation.
+  The controller establishes communication between the model and the view. It is able to communicate with both and is responsible for both their creation. It is represented by a class instance, calling its method allow to modify the view and the model or to get information from them.
+```python
+@dataclass
+class GameController:
+    view: GameWindow
+    model: GameData
+    game_active: bool
+    next_path: list[tuple[int, int]]
 
+    def __init__(self):
+        """Initializes the controller and its view.
+        ----------
+        No input
+        No output"""
+    
+    def insert_hand(self, insertpos: tuple[int, int]):
+        """Checks that the insertion position chosen by the player is valid (i.e. not where the hand just came from).
+        Then shifts all the tiles of the chosen row or column by one position and inserts the hand.
+        A different tile is thus pushed out of the board and becomes the new hand.
+        Finally calls the animation on the view side.
+        ----------
+        Input: insert position
+        No output"""
+
+    def validate_move(self, newpos: tuple[int, int]) -> bool:
+        """Walks through the board starting from the active player's position until the destination is reached.
+        If destination is reached, stores the path in a class attribute and returns True, else returns False.
+        ----------
+        Input: destination position
+        Output: bool"""
+
+    def apply_move(self):
+        """Moves a player's pawn from its current position on the board to the previously inputted destination,
+        then clears the path memory and starts move animation.
+        If no valid destination has been inputted, does nothing.
+        ----------
+        Input : newpos (tuple)
+        No output"""
+
+    def end_turn(self):
+        """Performs end of turn routines and calls the its view equivalent.
+        ----------
+        No input
+        No output"""
+    
+    def collect_treasure(self):
+        """Removes the current player's first objective if it is standing on the same tile.
+        ----------
+        No input
+        No output"""
+    
+    def check_win_state(self):
+        """Checks whether a player won (i.e. collected all their objectives).
+        Sets end of game state if that's the case.
+        ----------
+        No input
+        No output"""
+    
+    def rotate_players(self):
+        """Permute the players in the queue to allow for the next one to play.
+        ----------
+        No input
+        No output"""
+
+    def give_queue(self):
+        """We use this function to get the players queue.
+        ----------
+        No input
+        Output : info_dict (dictionary)"""
+    
+    def give_player_color(self):
+        """Gives the active player's color
+        ----------
+        No input
+        Output : str (color)"""
+
+    def give_player_name(self):
+        """Gives the active player's name
+        ----------
+        No input
+        Output : str (name)"""
+
+    def give_objective(self):
+        """Gives the player's current objective
+        ----------
+        No input
+        Output : str (filepath)"""
+    
+    def give_hand(self):
+        """Gives the info on the current hand
+        ----------
+        No input
+        Output :  2 str (filepath)"""
+    
+    def give_grid(self):
+        """Gives a simplified version of the grid to view
+        ----------
+        No input
+        Output : dict (the grid)"""
+    
+    def give_outpos(self):
+        """Gives the coordinates of the position the tile in hand was ejected from.
+        ----------
+        No input
+        Output : tuple (slideout_position)"""
+
+    def rotate_hand_clockwise(self):
+        """Rotates the hand clockwise in the model.
+        ----------
+        No input
+        No output"""
+
+    def rotate_hand_counterclockwise(self):
+        """Rotates the hand counterclockwise in the model.
+        ----------
+        No input
+        No output"""
+    
+    def start_game(self, playernames: list[str]):
+        """Launches the game in general.
+        ----------
+        No input
+        No output"""
+    
+    def launch(self):
+        """Launches the main game window.
+        ----------
+        No input
+        No output"""
+
+    def done(self):
+        """Verifies if someone won the game.
+        ----------
+        No input
+        Output : bool (game_active)"""
+
+```
 ## Description of main
-- Main executed and creates the controller which is in charge of distributing the tasks to view and model.
+  Main executes and creates the controller which is in charge of distributing the tasks to view and model.
 
 ## Description of utils
- - Funcitions contained: 
+  Functions contained: 
+  ```python
+def pairwise(r: Iterable[T]) -> Iterator[tuple[T, T]]:
+    """Iterates over an iterable pairwise, i.e. (0, 1), (1, 2), (2, 3), ...
+    ----------
+    Input: iterable
+    Output: iterator of tuples"""
+    
+def bfs_walk(origin: T, adjacency_fn: Callable[[T], Iterable[T]]) -> Iterator[list[T]]:
+    """Walks through a graph using breadth-first search.
+    ----------
+    Input: origin node, adjacency function
+    Output: iterator of paths"""
+
+def adjacent_coords_cw(pos: tuple[int, int], side) -> tuple[int, int]:
+    """Returns the coordinates of the tile adjacent to the given position on the given side.
+    ----------
+    Input: position (tuple[int,int]), side
+    Output: adjacent position (tuple[int,int])"""
+```
 
